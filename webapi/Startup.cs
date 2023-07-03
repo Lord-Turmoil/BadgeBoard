@@ -16,15 +16,21 @@ namespace BadgeBoard.Api
 		public void ConfigureServices(IServiceCollection services)
 		{
 			string profile = Configuration["Profile"] ?? "Default";
-			string connection = Configuration.GetConnectionString("Connection") ?? throw new Exception("Missing database connection");
+			string connection = Configuration.GetConnectionString("DefaultConnection") ?? throw new Exception("Missing database connection");
 			if ("Production".Equals(profile)) {
-				services.AddDbContext<BadgeBoardContext>(option => {
+				void action(DbContextOptionsBuilder option)
+				{
 					option.UseMySQL(connection);
-				});
+				}
+
+				services.AddDbContext<BadgeBoardContext>(action);
 			} else {
-				services.AddDbContext<BadgeBoardContext>(option => {
+				void action(DbContextOptionsBuilder option)
+				{
 					option.UseSqlite(connection);
-				});
+				}
+
+				services.AddDbContext<BadgeBoardContext>(action);
 			}
 
 			services.AddControllers();

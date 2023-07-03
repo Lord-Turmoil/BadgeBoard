@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.33808.371
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "BadgeBoard.App", "reactapp\BadgeBoard.App.esproj", "{AC9E73A4-0CE5-4AE9-927B-54884FED3341}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadgeBoard.Api", "webapi\BadgeBoard.Api.csproj", "{7245ACB1-E151-41C0-BEA2-0E70BBA79260}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{A0FBD261-BFCE-4C9B-824F-4E6678B229D7}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC9E73A4-0CE5-4AE9-927B-54884FED3341}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC9E73A4-0CE5-4AE9-927B-54884FED3341}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC9E73A4-0CE5-4AE9-927B-54884FED3341}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{AC9E73A4-0CE5-4AE9-927B-54884FED3341}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC9E73A4-0CE5-4AE9-927B-54884FED3341}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC9E73A4-0CE5-4AE9-927B-54884FED3341}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{7245ACB1-E151-41C0-BEA2-0E70BBA79260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7245ACB1-E151-41C0-BEA2-0E70BBA79260}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7245ACB1-E151-41C0-BEA2-0E70BBA79260}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7245ACB1-E151-41C0-BEA2-0E70BBA79260}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {474BDA69-1943-4CB4-8414-0AC0878D343F}
+	EndGlobalSection
+EndGlobal

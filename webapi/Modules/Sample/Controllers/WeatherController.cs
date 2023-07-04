@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BadgeBoard.Api.Modules.Sample.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/sample/")]
 public class WeatherController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
@@ -21,7 +21,8 @@ public class WeatherController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
+    [HttpGet]
+    [Route("weather")]
     public IEnumerable<Weather> Get()
     {
         return Enumerable.Range(1, 5).Select(index => new Weather

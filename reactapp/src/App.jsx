@@ -53,7 +53,7 @@ export default class App extends Component {
     }
 
     async populateWeatherData() {
-        await api.get('weather', {
+        await api.get('sample/weather', {
             params: {
             }
         }).then(res => {

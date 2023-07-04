@@ -1,4 +1,6 @@
-﻿using BadgeBoard.Api.Context;
+﻿using BadgeBoard.Api.Extensions.CORS;
+using BadgeBoard.Api.Extensions.Module;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -15,23 +17,9 @@ namespace BadgeBoard.Api
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			string profile = Configuration["Profile"] ?? "Default";
-			string connection = Configuration.GetConnectionString("DefaultConnection") ?? throw new Exception("Missing database connection");
-			if ("Production".Equals(profile)) {
-				void action(DbContextOptionsBuilder option)
-				{
-					option.UseMySQL(connection);
-				}
+			services.AddCors();
 
-				services.AddDbContext<BadgeBoardContext>(action);
-			} else {
-				void action(DbContextOptionsBuilder option)
-				{
-					option.UseSqlite(connection);
-				}
-
-				services.AddDbContext<BadgeBoardContext>(action);
-			}
+			services.RegisterModules();
 
 			services.AddControllers();
 			services.AddSwaggerGen(c => {
@@ -46,8 +34,17 @@ namespace BadgeBoard.Api
 				app.UseSwagger();
 				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SimpleToDo.Api v1"));
 			}
+			app.UseHttpsRedirection();
 			app.UseRouting();
 			app.UseAuthorization();
+
+			// Shows UseCors with CorsPolicyBuilder.
+			// Must be placed between UseRouting and UseEndpoints
+			app.UseCors(policy => {
+				policy.AllowAnyOrigin()
+					   .AllowAnyMethod()
+					   .AllowAnyHeader();
+			});
 
 			app.UseEndpoints(endpoints => {
 				endpoints.MapControllers();

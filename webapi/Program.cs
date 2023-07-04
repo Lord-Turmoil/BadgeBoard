@@ -1,3 +1,7 @@
+using IoC;
+using IoC.Features.AspNetCore;
+using System.Configuration;
+
 namespace BadgeBoard.Api
 {
 	public class Program
@@ -11,8 +15,8 @@ namespace BadgeBoard.Api
 		{
 			return Host.CreateDefaultBuilder(args)
 				.ConfigureWebHostDefaults(webBuilder => {
-					webBuilder.UseStartup<Startup>();
-				});
+				webBuilder.UseStartup<Startup>();
+			});
 		}
 	}
 }

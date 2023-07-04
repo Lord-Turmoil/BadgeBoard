@@ -1,2 +1,0 @@
-CSS Skill:
-	backdrop-filter

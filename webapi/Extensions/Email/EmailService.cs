@@ -8,9 +8,9 @@ namespace BadgeBoard.Api.Extensions.Email
 {
 	public class EmailService : IEmailService
 	{
-		private readonly EmailSettings _settings;
+		private readonly EmailOptions _settings;
 
-		public EmailService(IOptions<EmailSettings> settings)
+		public EmailService(IOptions<EmailOptions> settings)
 		{
 			_settings = settings.Value;
 		}

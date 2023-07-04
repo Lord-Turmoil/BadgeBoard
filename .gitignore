@@ -363,11 +363,9 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Custom
-/appsettings.Production.json
-/appsettings.Development.json
+/webapi/appsettings.Production.json
+/webapi/appsettings.Development.json
 /TODO.txt
 
 Migrations/
 Data/
-/webapi/appsettings.Production.json
-/webapi/appsettings.Development.json

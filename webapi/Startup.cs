@@ -1,5 +1,7 @@
 ﻿using BadgeBoard.Api.Extensions.CORS;
 using BadgeBoard.Api.Extensions.Module;
+using BadgeBoard.Api.Extensions.UnitOfWork;
+using BadgeBoard.Api.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -19,7 +21,8 @@ namespace BadgeBoard.Api
 		{
 			services.AddCors();
 
-			services.RegisterModules();
+			ConfigureDatabase<BadgeContext>(services);
+			services.AddUnitOfWork<BadgeContext>().RegisterModules();
 
 			services.AddControllers();
 			services.AddSwaggerGen(c => {
@@ -50,6 +53,25 @@ namespace BadgeBoard.Api
 				endpoints.MapControllers();
 				endpoints.MapSwagger();
 			});
+		}
+
+		private void ConfigureDatabase<TContext>(IServiceCollection services) where TContext : DbContext
+		{
+			string profile = Configuration["Profile"] ?? "Default";
+			string database = Configuration.GetConnectionString("Database") ?? throw new Exception("Missing database");
+			string connection = Configuration.GetConnectionString("DefaultConnection") ?? throw new Exception("Missing database connection");
+
+			if (database == "MySQL") {
+				services.AddDbContext<TContext>(option => {
+					option.UseMySQL(connection);
+				});
+			} else if (database == "SQLite") {
+				services.AddDbContext<TContext>(option => {
+					option.UseSqlite(connection);
+				});
+			} else {
+				throw new Exception($"Invalid database: {database}");
+			}
 		}
 	}
 }

@@ -9,10 +9,7 @@ namespace BadgeBoard.Api.Modules.Sample
 	{
 		public new IServiceCollection RegisterModule(IServiceCollection services)
 		{
-			ConfigureDatabase<SampleContext>(services);
-
-			services.AddUnitOfWork<SampleContext>()
-				.AddCustomRepository<Weather, WeatherRepository>();
+			services.AddCustomRepository<Weather, WeatherRepository>();
 
 			return services;
 		}

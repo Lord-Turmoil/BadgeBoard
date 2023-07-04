@@ -11,10 +11,7 @@ namespace BadgeBoard.Api.Modules.BadgeAccount
 	{
 		public new IServiceCollection RegisterModule(IServiceCollection services)
 		{
-			ConfigureDatabase<AccountContext>(services);
-
-			services.AddUnitOfWork<AccountContext>()
-				.AddCustomRepository<Account, AccountRepository>()
+			services.AddCustomRepository<Account, AccountRepository>()
 				.AddCustomRepository<EmailRecord, EmailRecordRepository>();
 
 			return services;

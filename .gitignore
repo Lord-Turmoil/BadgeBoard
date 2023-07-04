@@ -365,3 +365,8 @@ FodyWeavers.xsd
 # Custom
 /appsettings.Production.json
 /TODO.txt
+
+Migrations/
+*.db
+*.db-shm
+*.db-wal

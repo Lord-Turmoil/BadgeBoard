@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 {
+	public enum EmailType : int
+	{
+		Invalid,
+		Register,
+		Retrieve
+	}
+
 	public class EmailRecord
 	{
-		public enum EmailType : int
-		{
-			Invalid,
-			Register,
-			Retrieve
-		}
-
 		[Key]
 		public int Id { get; set; }
 

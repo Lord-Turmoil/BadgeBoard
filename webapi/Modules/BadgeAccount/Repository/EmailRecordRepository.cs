@@ -5,7 +5,7 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Repository
 {
     public class EmailRecordRepository : Repository<EmailRecord>
 	{
-		public EmailRecordRepository(AccountContext context) : base(context)
+		public EmailRecordRepository(BadgeContext context) : base(context)
 		{
 		}
 	}

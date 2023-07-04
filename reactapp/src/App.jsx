@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
+import api from './api';
 
 export default class App extends Component {
     static displayName = App.name;
@@ -52,8 +53,13 @@ export default class App extends Component {
     }
 
     async populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        this.setState({ forecasts: data, loading: false });
+        await api.get('weather', {
+            params: {
+            }
+        }).then(res => {
+            this.setState({ forecasts: res.data, loading: false });
+        }).catch(err => {
+            console.log(err);
+        });
     }
 }

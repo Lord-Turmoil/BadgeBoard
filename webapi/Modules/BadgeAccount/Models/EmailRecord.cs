@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 {
-	public enum EmailType : int
+	public static class EmailTypes
 	{
-		Invalid,
-		Register,
-		Retrieve
+		public const int Invalid = 0;
+		public const int Register = 1;
+		public const int Retrieve = 2;
 	}
 
 	public class EmailRecord
@@ -27,7 +27,7 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 		public string Code { get; set; } = string.Empty;
 
 		[Required]
-		public int Type { get; set; } = (int)EmailType.Invalid;
+		public int Type { get; set; } = EmailTypes.Invalid;
 
 		[Required]
 		public bool IsValid { get; set; } = true;

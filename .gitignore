@@ -367,6 +367,4 @@ FodyWeavers.xsd
 /TODO.txt
 
 Migrations/
-*.db
-*.db-shm
-*.db-wal
+Data/

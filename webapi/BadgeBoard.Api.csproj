@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Modules\User\Models\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

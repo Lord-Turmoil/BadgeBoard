@@ -1,6 +1,6 @@
-namespace webapi;
+namespace BadgeBoard.Api.Modules.Sample.Models;
 
-public class WeatherForecast
+public class Weather
 {
     public DateOnly Date { get; set; }
 

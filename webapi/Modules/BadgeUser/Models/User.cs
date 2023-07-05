@@ -9,6 +9,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		[Key]
 		[ForeignKey(nameof(UserAccount))]
 		public Guid Id { get; set; }
+
+		[ForeignKey("Id")]
 		public UserAccount Account { get; set; }
 
 		// User self fields

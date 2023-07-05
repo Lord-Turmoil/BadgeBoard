@@ -7,22 +7,22 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 	{
 		public static async Task<User?> GetUserByEmailAsync(IRepository<User> repo, string email)
 		{
-			return await repo.GetFirstOrDefaultAsync(predicate: x => x.Account.Email.Equals(email, StringComparison.Ordinal));
+			return await repo.GetFirstOrDefaultAsync(predicate: x => x.Account.Email.Equals(email));
 		}
 
 		public static User? GetUserByEmail(IRepository<User> repo, string email)
 		{
-			return repo.GetFirstOrDefault(predicate: x => x.Account.Email.Equals(email, StringComparison.Ordinal));
+			return repo.GetFirstOrDefault(predicate: x => x.Account.Email.Equals(email));
 		}
 
 		public static async Task<User?> GetUserByUsernameAsync(IRepository<User> repo, string username)
 		{
-			return await repo.GetFirstOrDefaultAsync(predicate: x => x.Username.Equals(username, StringComparison.Ordinal));
+			return await repo.GetFirstOrDefaultAsync(predicate: x => x.Username.Equals(username));
 		}
 
 		public static User? GetUserByUsername(IRepository<User> repo, string username)
 		{
-			return repo.GetFirstOrDefault(predicate: x => x.Username.Equals(username, StringComparison.Ordinal));
+			return repo.GetFirstOrDefault(predicate: x => x.Username.Equals(username));
 		}
 	}
 }

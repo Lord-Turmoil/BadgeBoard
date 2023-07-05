@@ -8,11 +8,11 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class RegisterController : BaseController
+	public class RegisterController : BaseController<RegisterController>
 	{
 		private readonly IRegisterService _service;
 
-		public RegisterController(IRegisterService service)
+		public RegisterController(ILogger<RegisterController> logger, IRegisterService service) : base(logger)
 		{
 			_service = service;
 		}

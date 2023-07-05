@@ -24,7 +24,8 @@ namespace BadgeBoard.Api
 			services.AddCors();
 
 			ConfigureDatabase<BadgeContext>(services);
-			services.AddUnitOfWork<BadgeContext>().RegisterModules();
+			services.AddUnitOfWork<BadgeContext>();
+			services.RegisterModules();
 
 			// Controllers
 			services.AddControllers();
@@ -76,11 +77,15 @@ namespace BadgeBoard.Api
 			string database = Configuration.GetConnectionString("Database") ?? throw new Exception("Missing database");
 			string connection = Configuration.GetConnectionString("DefaultConnection") ?? throw new Exception("Missing database connection");
 
-			if (database == "MySQL") {
+			Console.WriteLine($"   Profile: {profile}");
+			Console.WriteLine($"  Database: {database}");
+			Console.WriteLine($"Connection: {connection}");
+
+			if ("MySQL".Equals(database)) {
 				services.AddDbContext<TContext>(option => {
 					option.UseMySQL(connection);
 				});
-			} else if (database == "SQLite") {
+			} else if ("SQLite".Equals(database)) {
 				services.AddDbContext<TContext>(option => {
 					option.UseSqlite(connection);
 				});

@@ -5,12 +5,12 @@ namespace BadgeBoard.Api.Extensions.Module
 {
 	public class BaseModule : IModule
 	{
-		public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
+		public virtual IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
 		{
 			return endpoints;
 		}
 
-		public IServiceCollection RegisterModule(IServiceCollection services)
+		public virtual IServiceCollection RegisterModule(IServiceCollection services)
 		{
 			return services;
 		}

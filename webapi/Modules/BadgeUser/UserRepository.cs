@@ -6,28 +6,28 @@ namespace BadgeBoard.Api.Modules.BadgeUser
 {
 	public class UserRepository : Repository<User>
 	{
-		public UserRepository(DbContext dbContext) : base(dbContext)
+		public UserRepository(BadgeContext dbContext) : base(dbContext)
 		{
 		}
 	}
 
 	public class UserPreferenceRepository : Repository<UserPreference>
 	{
-		public UserPreferenceRepository(DbContext dbContext) : base(dbContext)
+		public UserPreferenceRepository(BadgeContext dbContext) : base(dbContext)
 		{
 		}
 	}
 
 	public class UserInfoRepository : Repository<UserInfo>
 	{
-		public UserInfoRepository(DbContext dbContext) : base(dbContext)
+		public UserInfoRepository(BadgeContext dbContext) : base(dbContext)
 		{
 		}
 	}
 
 	public class FavoriteUserRepository : Repository<FavoriteUser>
 	{
-		public FavoriteUserRepository(DbContext dbContext) : base(dbContext)
+		public FavoriteUserRepository(BadgeContext dbContext) : base(dbContext)
 		{
 		}
 	}

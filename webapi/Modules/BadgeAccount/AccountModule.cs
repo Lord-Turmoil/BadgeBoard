@@ -6,7 +6,7 @@ namespace BadgeBoard.Api.Modules.BadgeAccount
 {
     public class AccountModule : BaseModule
 	{
-		public new IServiceCollection RegisterModule(IServiceCollection services)
+		public override IServiceCollection RegisterModule(IServiceCollection services)
 		{
 			services.AddCustomRepository<UserAccount, AccountRepository>()
 				.AddCustomRepository<EmailRecord, EmailRecordRepository>();

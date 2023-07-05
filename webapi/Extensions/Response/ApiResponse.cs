@@ -2,9 +2,9 @@
 
 namespace BadgeBoard.Api.Extensions.Response
 {
-	public class BadgeResponse : JsonResult
+	public class ApiResponse : JsonResult
 	{
-		public BadgeResponse(int code, object? value) : base(value)
+		public ApiResponse(int code, object? value) : base(value)
 		{
 			StatusCode = code;
 		}

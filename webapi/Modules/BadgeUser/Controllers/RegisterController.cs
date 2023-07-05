@@ -18,7 +18,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 
 		[HttpPost]
 		[Route("code")]
-		public async Task<BadgeResponse> SendVerificationCode([FromBody] VerificationCodeDto dto)
+		public async Task<ApiResponse> SendVerificationCode([FromBody] VerificationCodeDto dto)
 		{
 			if (!AccountVerifier.VerifyEmail(dto.Email)) {
 				return new BadRequestResponse(new VerificationCodeEmailErrorDto());

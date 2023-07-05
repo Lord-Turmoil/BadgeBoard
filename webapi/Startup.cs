@@ -1,4 +1,6 @@
-﻿using BadgeBoard.Api.Extensions.Email;
+﻿using AutoMapper;
+using BadgeBoard.Api.Extensions.AutoMapper;
+using BadgeBoard.Api.Extensions.Email;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.UnitOfWork;
 using BadgeBoard.Api.Modules;
@@ -26,12 +28,22 @@ namespace BadgeBoard.Api
 			ConfigureDatabase<BadgeContext>(services);
 			services.AddUnitOfWork<BadgeContext>().RegisterModules();
 
+			// Controllers
 			services.AddControllers();
+
+			// Swagger service
 			services.AddSwaggerGen(c => {
 				c.SwaggerDoc("v1", new OpenApiInfo() { Title = "SimpleToDo.Api", Version = "v1" });
 			});
 
+			// Email options
 			services.Configure<EmailOptions>(options => Configuration.GetSection(EmailOptions.EmailSection).Bind(options));
+
+			// AutoMapper
+			var autoMapperConfig = new MapperConfiguration(config => {
+				config.AddProfile(new AutoMapperProfile());
+			});
+			services.AddSingleton(autoMapperConfig.CreateMapper());
 
 			Global.Services = services;
 		}
@@ -47,7 +59,6 @@ namespace BadgeBoard.Api
 			app.UseRouting();
 			app.UseAuthorization();
 
-			// Shows UseCors with CorsPolicyBuilder.
 			// Must be placed between UseRouting and UseEndpoints
 			app.UseCors(policy => {
 				policy.AllowAnyOrigin()

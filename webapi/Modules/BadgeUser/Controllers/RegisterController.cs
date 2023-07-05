@@ -1,4 +1,5 @@
-﻿using BadgeBoard.Api.Extensions.Response;
+﻿using BadgeBoard.Api.Extensions.Module;
+using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using BadgeBoard.Api.Modules.BadgeAccount.Services;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
@@ -9,13 +10,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class RegisterController : Controller
+	public class RegisterController : BadgeController
 	{
-		private readonly IServiceProvider _provider;
-
-		public RegisterController(IServiceProvider provider)
+		public RegisterController(IServiceProvider provider) : base(provider)
 		{
-			_provider = provider;
 		}
 
 		[HttpPost]

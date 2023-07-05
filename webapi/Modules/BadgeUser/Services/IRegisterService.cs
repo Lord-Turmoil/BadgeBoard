@@ -5,6 +5,6 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 {
 	public interface IRegisterService
 	{
-		public Task<ApiResponse> SendVerificationCode(VerificationCodeDto dto);
+		public ApiResponse SendCode(VerificationCodeDto dto);
 	}
 }

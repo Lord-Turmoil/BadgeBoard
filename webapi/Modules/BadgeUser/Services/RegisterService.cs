@@ -5,17 +5,17 @@ using BadgeBoard.Api.Extensions.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using BadgeBoard.Api.Modules.BadgeAccount.Services;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
-using BadgeBoard.Api.Modules.BadgeUser.Services.Utils;
+using BadgeBoard.Api.Modules.BadgeUser.Services.Impl;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Services
 {
-	public class RegisterService : BadgeService, IRegisterService
+	public class RegisterService : BaseService, IRegisterService
 	{
 		public RegisterService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork, mapper)
 		{
 		}
 
-		public async Task<ApiResponse> SendVerificationCode(VerificationCodeDto dto)
+		public ApiResponse SendCode(VerificationCodeDto dto)
 		{
 			if (!AccountVerifier.VerifyEmail(dto.Email)) {
 				return new BadRequestResponse(new VerificationCodeEmailErrorDto());
@@ -32,8 +32,11 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			// Intended to be asynchronous.
+			var impl = new EmailImpl(_provider, _unitOfWork, _mapper);
 			if (emailType == EmailTypes.Register) {
-				new EmailUtil(_provider).SendRegistrationEmailAsync("123@123", "123");
+				impl.SendVerificationCode(dto);
+			} else if (emailType == EmailTypes.Retrieve) {
+				impl.SendRetrievalCode(dto);
 			}
 
 			return new GoodResponse(new GoodDto());

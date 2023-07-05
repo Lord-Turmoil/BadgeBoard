@@ -5,10 +5,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class LoginController : BadgeController
+	public class LoginController : BaseController
 	{
-		public LoginController(IServiceProvider provider) : base(provider)
-		{
-		}
+		public LoginController() { }
 	}
 }

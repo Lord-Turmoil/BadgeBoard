@@ -7,9 +7,9 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 	public class User
 	{
 		[Key]
-		[ForeignKey(nameof(Account))]
+		[ForeignKey(nameof(UserAccount))]
 		public Guid Id { get; set; }
-		public Account Account { get; set; }
+		public UserAccount Account { get; set; }
 
 		// User self fields
 		[Column(TypeName = "varchar(63)")]

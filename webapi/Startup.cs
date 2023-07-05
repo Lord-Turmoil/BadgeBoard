@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using BadgeBoard.Api.Extensions.AutoMapper;
 using BadgeBoard.Api.Extensions.Email;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.UnitOfWork;
 using BadgeBoard.Api.Modules;
 using BadgeBoard.Api.Modules.BadgeGlobal;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace BadgeBoard.Api

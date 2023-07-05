@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 {
-	public class Account
+	public class UserAccount
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]

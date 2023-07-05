@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BadgeBoard.Api.Extensions.Module
 {
-	public class BadgeModule : IModule
+	public class BaseModule : IModule
 	{
 		public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
 		{

@@ -13,4 +13,11 @@
 		{
 		}
 	}
+
+	public class OrdinaryDto : ApiResponseDto
+	{
+		public OrdinaryDto(int status, string? message = null) : base(status, message, null)
+		{
+		}
+	}
 }

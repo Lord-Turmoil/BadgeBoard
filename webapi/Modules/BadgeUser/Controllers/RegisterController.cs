@@ -8,7 +8,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class RegisterController : BadgeController
+	public class RegisterController : BaseController
 	{
 		private readonly IRegisterService _service;
 
@@ -19,9 +19,9 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 
 		[HttpPost]
 		[Route("code")]
-		public async Task<ApiResponse> SendVerificationCode([FromBody] VerificationCodeDto dto)
+		public ApiResponse SendCode([FromBody] VerificationCodeDto dto)
 		{
-			return await _service.SendVerificationCode(dto);
+			return _service.SendCode(dto);
 		}
 	}
 }

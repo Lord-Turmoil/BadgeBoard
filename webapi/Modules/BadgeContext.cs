@@ -11,7 +11,7 @@ namespace BadgeBoard.Api.Modules
 		// public DbSet<Weather> Weathers { get; set; }
 
 		// Account Module
-		public DbSet<Account> Accounts { get; set; }
+		public DbSet<UserAccount> Accounts { get; set; }
 		public DbSet<EmailRecord> EmailRecords { get; set; }
 
 		// User Module

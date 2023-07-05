@@ -2,8 +2,8 @@
 
 namespace BadgeBoard.Api.Extensions.Module
 {
-	public class BadgeController : Controller
+	public class BaseController : Controller
 	{
-		public BadgeController() { }
+		public BaseController() { }
 	}
 }

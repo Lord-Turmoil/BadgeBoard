@@ -4,47 +4,40 @@ using Microsoft.Extensions.Options;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 {
-    public class EmailUtil
-    {
-        private const string REGISTER_HTML = "./Templates/register.html";
-        private const string RETRIEVE_HTML = "./Templates/retrieve.html";
-        private const int DEFAULT_CODE_LENGTH = 6;
+	public static class EmailUtil
+	{
+		private const string REGISTER_HTML = "./Templates/register.html";
+		private const string RETRIEVE_HTML = "./Templates/retrieve.html";
+		private const int DEFAULT_CODE_LENGTH = 6;
 
-        private readonly IServiceProvider _provider;
+		public static async Task SendRegistrationEmailAsync(IServiceProvider provider, string email, string subject)
+		{
+			var builder = new EmailRequestBuilder()
+				.SetReceiver(email)
+				.SetSubject(subject);
+			var code = CodeGenerator.GenerateCode(DEFAULT_CODE_LENGTH);
+			var html = File.ReadAllText(REGISTER_HTML);
+			builder.SetBody(html.Replace("{{code}}", code));
 
-        public EmailUtil(IServiceProvider provider)
-        {
-            _provider = provider;
-        }
+			var request = builder.Build();
+			var service = new EmailService(provider.GetRequiredService<IOptions<EmailOptions>>());
 
-        public async Task SendRegistrationEmailAsync(string email, string subject)
-        {
-            var builder = new EmailRequestBuilder()
-                .SetReceiver(email)
-                .SetSubject(subject);
-            var code = CodeGenerator.GenerateCode(DEFAULT_CODE_LENGTH);
-            var html = File.ReadAllText(REGISTER_HTML);
-            builder.SetBody(html.Replace("{{code}}", code));
+			await service.SendEmailAsync(request);
+		}
 
-            var request = builder.Build();
-            var service = new EmailService(_provider.GetRequiredService<IOptions<EmailOptions>>());
+		public static async void SendRetrievalEmailAsync(IServiceProvider provider, string email, string subject)
+		{
+			var builder = new EmailRequestBuilder()
+				.SetReceiver(email)
+				.SetSubject(subject);
+			var code = CodeGenerator.GenerateCode(DEFAULT_CODE_LENGTH);
+			var html = File.ReadAllText(RETRIEVE_HTML);
+			builder.SetBody(html.Replace("{{code}}", code));
 
-            await service.SendEmailAsync(request);
-        }
+			var request = builder.Build();
+			var service = new EmailService(provider.GetRequiredService<IOptions<EmailOptions>>());
 
-        public async void SendRetrieveEmail(string email, string subject)
-        {
-            var builder = new EmailRequestBuilder()
-                .SetReceiver(email)
-                .SetSubject(subject);
-            var code = CodeGenerator.GenerateCode(DEFAULT_CODE_LENGTH);
-            var html = File.ReadAllText(RETRIEVE_HTML);
-            builder.SetBody(html.Replace("{{code}}", code));
-
-            var request = builder.Build();
-            var service = new EmailService(_provider.GetRequiredService<IOptions<EmailOptions>>());
-
-            await service.SendEmailAsync(request);
-        }
-    }
+			await service.SendEmailAsync(request);
+		}
+	}
 }

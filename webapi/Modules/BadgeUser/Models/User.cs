@@ -1,4 +1,5 @@
-﻿using BadgeBoard.Api.Modules.BadgeAccount.Models;
+﻿using BadgeBoard.Api.Extensions.UnitOfWork;
+using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,11 +30,9 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 
 		// Foreign keys
 		[ForeignKey(nameof(UserPreference))]
-		public int PreferenceId { get; set; }
 		public UserPreference Preference { get; set; }
 
 		[ForeignKey(nameof(UserInfo))]
-		public int InfoId { get; set; }
 		public UserInfo Info { get; set; }
 	}
 
@@ -44,6 +43,11 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		public int Id { get; set; }
 
 		public bool IsDefaultPublic { get; set; } = false;
+
+		public static UserPreference Create(IRepository<UserPreference> repo)
+		{
+			return repo.Insert(new UserPreference());
+		}
 	}
 
 	public static class UserSex
@@ -62,5 +66,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		public string? Motto { get; set; }
 		public string? Birthday { get; set; }
 		public int Sex { get; set; } = UserSex.Unknown;
+
+		public static UserInfo Create(IRepository<UserInfo> repo)
+		{
+			return repo.Insert(new UserInfo());
+		}
 	}
 }

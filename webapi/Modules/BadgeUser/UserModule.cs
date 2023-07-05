@@ -1,6 +1,6 @@
 ﻿using BadgeBoard.Api.Extensions.Module;
 
-namespace BadgeBoard.Api.Modules.User
+namespace BadgeBoard.Api.Modules.BadgeUser
 {
 	public class UserModule : BadgeModule
 	{

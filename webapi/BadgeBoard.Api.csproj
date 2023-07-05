@@ -25,8 +25,8 @@
 
   <ItemGroup>
     <Folder Include="Modules\BadgeAccount\Controllers\" />
-    <Folder Include="Modules\User\Models\" />
     <Folder Include="Data\" />
+    <Folder Include="Modules\BadgeBadge\" />
     <Folder Include="Templates\" />
   </ItemGroup>
 

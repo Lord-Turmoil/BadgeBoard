@@ -6,5 +6,7 @@
 
 		public static IConfiguration Configuration { get; set; }
 		public static IServiceCollection Services { get; set; }
+
+		public static string DefaultAvatar { get; set; }
 	}
 }

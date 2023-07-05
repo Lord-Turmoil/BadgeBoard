@@ -1,6 +1,6 @@
 ﻿using BadgeBoard.Api.Extensions.Response;
 
-namespace BadgeBoard.Api.Modules.User.Responses
+namespace BadgeBoard.Api.Modules.BadgeUser.Responses
 {
 	public class CodeSentResponse : GoodResponse
 	{

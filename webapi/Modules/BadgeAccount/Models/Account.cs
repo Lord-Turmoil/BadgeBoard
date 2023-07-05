@@ -10,8 +10,8 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 		public Guid Id { get; set; }
 
 		[Column(TypeName = "varchar(63)")]
-		[Required]
 		[EmailAddress]
+		[Required]
 		public string Email { get; set; } = string.Empty;
 
 		[Column(TypeName = "varbinary(256)")]

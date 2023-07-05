@@ -1,9 +1,8 @@
 ﻿using BadgeBoard.Api.Extensions.Email;
 using BadgeBoard.Api.Modules.BadgeAccount.Services;
-using BadgeBoard.Api.Modules.BadgeGlobal;
 using Microsoft.Extensions.Options;
 
-namespace BadgeBoard.Api.Modules.User.Services
+namespace BadgeBoard.Api.Modules.BadgeUser.Services
 {
 	public class UserEmailService
 	{

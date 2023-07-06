@@ -28,12 +28,26 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		public bool IsLocked { get; set; } = false;
 		public bool IsAdmin { get; set; } = false;
 
-		// Foreign keys
-		[ForeignKey(nameof(UserPreference))]
+		// foreign key property
+		public int UserPreferenceId { get; set; }
+		// reference navigation property
+		[ForeignKey("UserPreferenceId")]
 		public UserPreference Preference { get; set; }
 
-		[ForeignKey(nameof(UserInfo))]
+		public int UserInfoId { get; set; }
+		[ForeignKey("UserInfoId")]
 		public UserInfo Info { get; set; }
+
+		public static User Create(IRepository<User> repo, string username, UserAccount account, UserPreference preference, UserInfo info)
+		{
+			return repo.Insert(new User {
+				Id = account.Id,
+				Username = username,
+				Account = account,
+				Preference = preference,
+				Info = info
+			});
+		}
 	}
 
 	public class UserPreference

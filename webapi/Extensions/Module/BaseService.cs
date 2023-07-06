@@ -9,7 +9,7 @@ namespace BadgeBoard.Api.Extensions.Module
 		protected readonly IUnitOfWork _unitOfWork;
 		protected readonly IMapper _mapper;
 
-		public BaseService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
+		protected BaseService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_provider = provider;
 			_unitOfWork = unitOfWork;

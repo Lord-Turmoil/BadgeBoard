@@ -52,7 +52,7 @@ namespace BadgeBoard.Api
 			if (env.IsDevelopment()) {
 				app.UseDeveloperExceptionPage();
 				app.UseSwagger();
-				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SimpleToDo.Api v1"));
+				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BadgeBoard.Api v1"));
 			}
 			app.UseHttpsRedirection();
 			app.UseRouting();
@@ -73,24 +73,27 @@ namespace BadgeBoard.Api
 
 		private void ConfigureDatabase<TContext>(IServiceCollection services) where TContext : DbContext
 		{
-			string profile = Configuration["Profile"] ?? "Default";
-			string database = Configuration.GetConnectionString("Database") ?? throw new Exception("Missing database");
-			string connection = Configuration.GetConnectionString("DefaultConnection") ?? throw new Exception("Missing database connection");
+			var profile = Configuration["Profile"] ?? "Default";
+			var database = Configuration.GetConnectionString("Database") ?? throw new Exception("Missing database");
+			var connection = Configuration.GetConnectionString("DefaultConnection") ?? throw new Exception("Missing database connection");
 
 			Console.WriteLine($"   Profile: {profile}");
 			Console.WriteLine($"  Database: {database}");
 			Console.WriteLine($"Connection: {connection}");
 
-			if ("MySQL".Equals(database)) {
-				services.AddDbContext<TContext>(option => {
-					option.UseMySQL(connection);
-				});
-			} else if ("SQLite".Equals(database)) {
-				services.AddDbContext<TContext>(option => {
-					option.UseSqlite(connection);
-				});
-			} else {
-				throw new Exception($"Invalid database: {database}");
+			switch (database) {
+				case "MySQL":
+					services.AddDbContext<TContext>(option => {
+						option.UseMySQL(connection);
+					});
+					break;
+				case "SQLite":
+					services.AddDbContext<TContext>(option => {
+						option.UseSqlite(connection);
+					});
+					break;
+				default:
+					throw new Exception($"Invalid database: {database}");
 			}
 		}
 	}

@@ -1,6 +1,4 @@
-using BadgeBoard.Api.Extensions.CORS;
 using BadgeBoard.Api.Modules.Sample.Models;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BadgeBoard.Api.Modules.Sample.Controllers;

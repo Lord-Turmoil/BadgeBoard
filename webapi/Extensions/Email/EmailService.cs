@@ -1,5 +1,4 @@
-﻿using AutoMapper.Internal;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -28,12 +27,11 @@ namespace BadgeBoard.Api.Extensions.Email
 				HtmlBody = request.Body
 			};
 			email.Body = builder.ToMessageBody();
-			using (var smtp = new SmtpClient()) {
-				smtp.Connect(_settings.Host, _settings.Port, SecureSocketOptions.StartTls);
-				smtp.Authenticate(_settings.Email, _settings.Password);
-				await smtp.SendAsync(email);
-				smtp.Disconnect(true);
-			}
+			using var smtp = new SmtpClient();
+			await smtp.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.StartTls);
+			await smtp.AuthenticateAsync(_settings.Email, _settings.Password);
+			await smtp.SendAsync(email);
+			await smtp.DisconnectAsync(true);
 		}
 	}
 }

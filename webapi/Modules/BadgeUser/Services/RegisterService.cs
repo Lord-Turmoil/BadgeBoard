@@ -10,7 +10,7 @@ using BadgeBoard.Api.Modules.BadgeUser.Services.Utils;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Services
 {
-    public class RegisterService : BaseService, IRegisterService
+	public class RegisterService : BaseService, IRegisterService
 	{
 		public RegisterService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork, mapper)
 		{
@@ -18,28 +18,33 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public ApiResponse SendCode(VerificationCodeDto dto)
 		{
+			if (!dto.Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
 			if (!AccountVerifier.VerifyEmail(dto.Email)) {
 				return new BadRequestResponse(new VerificationCodeEmailErrorDto());
 			}
 
-			int emailType = EmailTypes.Invalid;
-			if ("register".Equals(dto.Type)) {
-				emailType = EmailTypes.Register;
-			} else if ("retrieve".Equals(dto.Type)) {
-				emailType = EmailTypes.Retrieve;
-			}
+			var emailType = dto.Type switch {
+				"register" => EmailTypes.Register,
+				"retrieve" => EmailTypes.Retrieve,
+				_ => EmailTypes.Invalid
+			};
 			if (emailType == EmailTypes.Invalid) {
-				return new BadRequestResponse(new BadRequestDto($"Invalid type: {dto.Type ?? "null"}"));
+				return new BadRequestResponse(new BadRequestDto($"Invalid type: {dto.Type}"));
 			}
 
 			// Intended to be asynchronous.
 			var impl = new EmailImpl(_provider, _unitOfWork, _mapper);
-			if (emailType == EmailTypes.Register) {
+			switch (emailType) {
+			case EmailTypes.Register:
 				impl.SendVerificationCode(dto);
-			} else if (emailType == EmailTypes.Retrieve) {
+				break;
+			case EmailTypes.Retrieve:
 				impl.SendRetrievalCode(dto);
+				break;
 			}
-
+			
 			return new GoodResponse(new GoodDto());
 		}
 
@@ -55,10 +60,18 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				return new GoodResponse(new UserAlreadyExistsDto());
 			}
 
-			user = UserUtil.CreateUser(_unitOfWork, dto);
-			_unitOfWork.SaveChanges();
+			try {
+				user = UserUtil.CreateUser(_unitOfWork, dto);
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				Console.WriteLine(ex.ToString());
+				return new InternalServerErrorResponse(new InternalServerErrorDto("Failed to save user data"));
+			}
+			var ret = new RegisterSuccessDto {
+				User = _mapper.Map<User, UserDto>(user)
+			};
 
-			return new GoodResponse(new GoodDto("Welcome, my friend!", user));
+			return new GoodResponse(new GoodDto("Welcome, my friend!", ret));
 		}
 	}
 }

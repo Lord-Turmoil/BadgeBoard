@@ -2,10 +2,15 @@
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
-	public class VerificationCodeDto
+	public class VerificationCodeDto : ApiRequestDto
 	{
 		public string Email { get; set; }
 		public string Type { get; set; }
+
+		public override bool Verify()
+		{
+			return !(string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Type));
+		}
 	}
 
 	public class VerificationCodeSuccessDto : GoodDto

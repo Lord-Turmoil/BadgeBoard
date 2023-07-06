@@ -13,4 +13,11 @@
 		{
 		}
 	}
+
+	public class InternalServerErrorResponse : ApiResponse
+	{
+		public InternalServerErrorResponse(object? value) : base(StatusCodes.Status500InternalServerError, value)
+		{
+		}
+	}
 }

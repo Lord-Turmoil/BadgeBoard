@@ -1,5 +1,13 @@
 ﻿namespace BadgeBoard.Api.Extensions.Response
 {
+	// Dto that does have data
+	public class OrdinaryDto : ApiResponseData
+	{
+		public OrdinaryDto(int status, string? message = null) : base(status, message, null)
+		{
+		}
+	}
+
 	public class GoodDto : ApiResponseData
 	{
 		public GoodDto(string message = "Nice request", object? data = null) : base(0, message, data)
@@ -14,9 +22,9 @@
 		}
 	}
 
-	public class OrdinaryDto : ApiResponseData
+	public class InternalServerErrorDto : ApiResponseData
 	{
-		public OrdinaryDto(int status, string? message = null) : base(status, message, null)
+		public InternalServerErrorDto(string message = "Unexpected error", object? data = null) : base(-2, message, data)
 		{
 		}
 	}

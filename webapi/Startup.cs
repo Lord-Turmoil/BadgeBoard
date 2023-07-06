@@ -32,7 +32,7 @@ namespace BadgeBoard.Api
 
 			// Swagger service
 			services.AddSwaggerGen(c => {
-				c.SwaggerDoc("v1", new OpenApiInfo() { Title = "SimpleToDo.Api", Version = "v1" });
+				c.SwaggerDoc("v1", new OpenApiInfo { Title = "SimpleToDo.Api", Version = "v1" });
 			});
 
 			// Email options

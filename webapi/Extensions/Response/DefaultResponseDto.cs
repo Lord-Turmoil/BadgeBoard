@@ -8,6 +8,13 @@
 		}
 	}
 
+	public class BadDto : ApiResponseData
+	{
+		public BadDto(int status, string message = "Bad request", object? data = null) : base(status, message, data)
+		{
+		}
+	}
+
 	public class GoodDto : ApiResponseData
 	{
 		public GoodDto(string message = "Nice request", object? data = null) : base(0, message, data)

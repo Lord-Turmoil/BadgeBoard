@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/user")]
 	[ApiController]
 	public class RegisterController : BaseController<RegisterController>
 	{

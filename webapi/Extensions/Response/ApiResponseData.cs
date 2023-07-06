@@ -5,7 +5,7 @@
 		public ApiResponseMeta Meta { get; set; }
 		public object? Data { get; set; }
 
-		public ApiResponseData(int status, string? message = null, object? data = null)
+		protected ApiResponseData(int status, string? message = null, object? data = null)
 		{
 			Meta = new ApiResponseMeta(status, message);
 			Data = data;

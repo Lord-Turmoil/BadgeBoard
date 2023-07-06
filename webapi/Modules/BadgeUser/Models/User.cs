@@ -68,7 +68,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 	{
 		public const int Unknown = 0;
 		public const int Male = 1;
-		public const int Femail = 2;
+		public const int Female = 2;
 	}
 
 	public class UserInfo

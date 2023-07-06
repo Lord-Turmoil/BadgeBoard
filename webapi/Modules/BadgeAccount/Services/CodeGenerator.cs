@@ -1,11 +1,9 @@
 ﻿namespace BadgeBoard.Api.Modules.BadgeAccount.Services
 {
-	public class CodeGenerator
+	public static class CodeGenerator
 	{
 		private static readonly string CODE_CHAR_SET = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
 
-		private CodeGenerator() { }
-		
 		public static string GenerateCode(int length)
 		{
 			string code = string.Empty;

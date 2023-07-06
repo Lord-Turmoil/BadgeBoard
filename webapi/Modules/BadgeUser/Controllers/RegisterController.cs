@@ -23,5 +23,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 		{
 			return _service.SendCode(dto);
 		}
+
+		[HttpPost]
+		[Route("register")]
+		public async Task<ApiResponse> Register([FromBody] RegisterDto dto)
+		{
+			return await _service.Register(dto);
+		}
 	}
 }

@@ -1,20 +1,24 @@
 ﻿// Copyright (c) Arch team. All rights reserved.
 
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace BadgeBoard.Api.Extensions.UnitOfWork
+namespace Arch.EntityFrameworkCore.UnitOfWork
 {
-	/// <summary>
-	/// Represents the default implementation of the <see cref="IUnitOfWork"/> and <see cref="IUnitOfWork{TContext}"/> interface.
-	/// </summary>
-	/// <typeparam name="TContext">The type of the db context.</typeparam>
-	public class UnitOfWork<TContext> : IRepositoryFactory, IUnitOfWork<TContext>, IUnitOfWork where TContext : DbContext
+    /// <summary>
+    /// Represents the default implementation of the <see cref="IUnitOfWork"/> and <see cref="IUnitOfWork{TContext}"/> interface.
+    /// </summary>
+    /// <typeparam name="TContext">The type of the db context.</typeparam>
+    public class UnitOfWork<TContext> : IRepositoryFactory, IUnitOfWork<TContext>, IUnitOfWork where TContext : DbContext
     {
         private readonly TContext _context;
         private bool disposed = false;

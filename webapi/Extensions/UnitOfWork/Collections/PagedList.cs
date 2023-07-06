@@ -1,37 +1,37 @@
 ﻿// Copyright (c) Arch team. All rights reserved.
 
-namespace BadgeBoard.Api.Extensions.PagedList
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Arch.EntityFrameworkCore.UnitOfWork.Collections
 {
-	/// <summary>
-	/// Represents the default implementation of the <see cref="IPagedList{T}"/> interface.
-	/// </summary>
-	/// <typeparam name="T">The type of the data to page</typeparam>
-	public class PagedList<T> : IPagedList<T>
+    /// <summary>
+    /// Represents the default implementation of the <see cref="IPagedList{T}"/> interface.
+    /// </summary>
+    /// <typeparam name="T">The type of the data to page</typeparam>
+    public class PagedList<T> : IPagedList<T>
     {
         /// <summary>
         /// Gets or sets the index of the page.
         /// </summary>
         /// <value>The index of the page.</value>
         public int PageIndex { get; set; }
-
         /// <summary>
         /// Gets or sets the size of the page.
         /// </summary>
         /// <value>The size of the page.</value>
         public int PageSize { get; set; }
-
         /// <summary>
         /// Gets or sets the total count.
         /// </summary>
         /// <value>The total count.</value>
         public int TotalCount { get; set; }
-
         /// <summary>
         /// Gets or sets the total pages.
         /// </summary>
         /// <value>The total pages.</value>
         public int TotalPages { get; set; }
-
         /// <summary>
         /// Gets or sets the index from.
         /// </summary>
@@ -63,7 +63,7 @@ namespace BadgeBoard.Api.Extensions.PagedList
         /// <param name="pageIndex">The index of the page.</param>
         /// <param name="pageSize">The size of the page.</param>
         /// <param name="indexFrom">The index from.</param>
-        public PagedList(IEnumerable<T> source, int pageIndex, int pageSize, int indexFrom)
+        internal PagedList(IEnumerable<T> source, int pageIndex, int pageSize, int indexFrom)
         {
             if (indexFrom > pageIndex)
             {
@@ -95,7 +95,7 @@ namespace BadgeBoard.Api.Extensions.PagedList
         /// <summary>
         /// Initializes a new instance of the <see cref="PagedList{T}" /> class.
         /// </summary>
-        public PagedList() => Items = new T[0];
+        internal PagedList() => Items = new T[0];
     }
 
 
@@ -104,7 +104,7 @@ namespace BadgeBoard.Api.Extensions.PagedList
     /// </summary>
     /// <typeparam name="TSource">The type of the source.</typeparam>
     /// <typeparam name="TResult">The type of the result.</typeparam>
-    public class PagedList<TSource, TResult> : IPagedList<TResult>
+    internal class PagedList<TSource, TResult> : IPagedList<TResult>
     {
         /// <summary>
         /// Gets the index of the page.

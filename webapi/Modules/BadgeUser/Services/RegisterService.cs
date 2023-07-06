@@ -1,7 +1,7 @@
-﻿using AutoMapper;
+﻿using Arch.EntityFrameworkCore.UnitOfWork;
+using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
-using BadgeBoard.Api.Extensions.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;

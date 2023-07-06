@@ -1,11 +1,12 @@
-﻿// Copyright (c) Arch team. All rights reserved.
-
-using BadgeBoard.Api.Extensions.PagedList;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace BadgeBoard.Api.Extensions.UnitOfWork
+namespace Arch.EntityFrameworkCore.UnitOfWork.Collections
 {
-	public static class IQueryablePageListExtensions
+    public static class IQueryablePageListExtensions
     {
         /// <summary>
         /// Converts the specified source to <see cref="IPagedList{T}"/> by the specified <paramref name="pageIndex"/> and <paramref name="pageSize"/>.
@@ -19,7 +20,7 @@ namespace BadgeBoard.Api.Extensions.UnitOfWork
         /// </param>
         /// <param name="indexFrom">The start index value.</param>
         /// <returns>An instance of the inherited from <see cref="IPagedList{T}"/> interface.</returns>
-        public static async Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageIndex, int pageSize, int indexFrom = 0, CancellationToken cancellationToken = default)
+        public static async Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageIndex, int pageSize, int indexFrom = 0, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (indexFrom > pageIndex)
             {

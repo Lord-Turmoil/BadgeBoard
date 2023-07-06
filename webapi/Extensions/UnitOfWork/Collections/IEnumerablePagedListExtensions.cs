@@ -1,13 +1,14 @@
 ﻿// Copyright (c) Arch team. All rights reserved.
 
-using BadgeBoard.Api.Extensions.PagedList;
+using System;
+using System.Collections.Generic;
 
-namespace BadgeBoard.Api.Extensions.UnitOfWork
+namespace Arch.EntityFrameworkCore.UnitOfWork.Collections
 {
-	/// <summary>
-	/// Provides some extension methods for <see cref="IEnumerable{T}"/> to provide paging capability.
-	/// </summary>
-	public static class IEnumerablePagedListExtensions
+    /// <summary>
+    /// Provides some extension methods for <see cref="IEnumerable{T}"/> to provide paging capability.
+    /// </summary>
+    public static class IEnumerablePagedListExtensions
     {
         /// <summary>
         /// Converts the specified source to <see cref="IPagedList{T}"/> by the specified <paramref name="pageIndex"/> and <paramref name="pageSize"/>.

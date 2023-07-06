@@ -1,4 +1,4 @@
-﻿using BadgeBoard.Api.Extensions.UnitOfWork;
+﻿using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using BadgeBoard.Api.Modules.BadgeAccount.Services;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;

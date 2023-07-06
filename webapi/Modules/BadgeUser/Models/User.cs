@@ -1,7 +1,7 @@
-﻿using BadgeBoard.Api.Extensions.UnitOfWork;
-using BadgeBoard.Api.Modules.BadgeAccount.Models;
+﻿using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Arch.EntityFrameworkCore.UnitOfWork;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Models
 {

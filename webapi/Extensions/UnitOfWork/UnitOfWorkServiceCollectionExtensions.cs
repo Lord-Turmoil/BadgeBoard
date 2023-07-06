@@ -1,13 +1,14 @@
 ﻿// Copyright (c) Arch team. All rights reserved.
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace BadgeBoard.Api.Extensions.UnitOfWork
+namespace Arch.EntityFrameworkCore.UnitOfWork
 {
-	/// <summary>
-	/// Extension methods for setting up unit of work related services in an <see cref="IServiceCollection"/>.
-	/// </summary>
-	public static class UnitOfWorkServiceCollectionExtensions
+    /// <summary>
+    /// Extension methods for setting up unit of work related services in an <see cref="IServiceCollection"/>.
+    /// </summary>
+    public static class UnitOfWorkServiceCollectionExtensions
     {
         /// <summary>
         /// Registers the unit of work given context as a service in the <see cref="IServiceCollection"/>.

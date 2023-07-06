@@ -1,7 +1,7 @@
-﻿using AutoMapper;
+﻿using Arch.EntityFrameworkCore.UnitOfWork;
+using AutoMapper;
 using BadgeBoard.Api.Extensions.Email;
 using BadgeBoard.Api.Extensions.Module;
-using BadgeBoard.Api.Extensions.UnitOfWork;
 using BadgeBoard.Api.Modules;
 using BadgeBoard.Api.Modules.BadgeGlobal;
 using Microsoft.EntityFrameworkCore;

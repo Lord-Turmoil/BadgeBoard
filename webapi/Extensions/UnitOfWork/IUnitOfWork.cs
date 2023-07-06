@@ -1,6 +1,10 @@
-﻿// Copyright (c) Arch team. All rights reserved.
+﻿//-----------------------------------------------------------------------
+// <copyright file="IUnitOfWork.cs" company="Arch team">
+// Copyright (c) Arch team. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace BadgeBoard.Api.Extensions.UnitOfWork
+namespace Arch.EntityFrameworkCore.UnitOfWork
 {
     using System;
     using System.Linq;

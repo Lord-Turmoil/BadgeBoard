@@ -1,6 +1,10 @@
-﻿// Copyright (c) Arch team. All rights reserved.
+﻿//-----------------------------------------------------------------------
+// <copyright file="IRepositoryFactory.cs" company="Arch team">
+// Copyright (c) Arch team. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
-namespace BadgeBoard.Api.Extensions.UnitOfWork
+namespace Arch.EntityFrameworkCore.UnitOfWork
 {
     /// <summary>
     /// Defines the interfaces for <see cref="IRepository{TEntity}"/> interfaces.

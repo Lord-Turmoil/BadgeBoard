@@ -1,5 +1,5 @@
-﻿using BadgeBoard.Api.Extensions.Module;
-using BadgeBoard.Api.Extensions.UnitOfWork;
+﻿using Arch.EntityFrameworkCore.UnitOfWork;
+using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Modules.Sample.Models;
 
 namespace BadgeBoard.Api.Modules.Sample

@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using BadgeBoard.Api.Extensions.UnitOfWork;
+﻿using Arch.EntityFrameworkCore.UnitOfWork;
+using AutoMapper;
 
 namespace BadgeBoard.Api.Extensions.Module
 {

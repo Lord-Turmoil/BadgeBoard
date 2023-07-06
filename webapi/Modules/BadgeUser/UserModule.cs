@@ -1,9 +1,7 @@
-﻿using BadgeBoard.Api.Extensions.Module;
-using BadgeBoard.Api.Extensions.UnitOfWork;
-using BadgeBoard.Api.Modules.BadgeAccount.Models;
+﻿using Arch.EntityFrameworkCore.UnitOfWork;
+using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Services;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace BadgeBoard.Api.Modules.BadgeUser
 {

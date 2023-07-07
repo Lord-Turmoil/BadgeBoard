@@ -52,6 +52,23 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		{
 			return await repo.FindAsync(id);
 		}
+
+		/// <summary>
+		/// Get all related entities, since the Arch guys didn't implement this.
+		/// </summary>
+		/// <param name="unitOfWork">Global unit of work</param>
+		/// <param name="user">The user to include related entities</param>
+		/// <returns></returns>
+		public static async Task<User> IncludeAsync(IUnitOfWork unitOfWork, User user)
+		{
+			user.Account = await UserAccount.GetAsync(
+				unitOfWork.GetRepository<UserAccount>(), user.Id);
+			user.Preference = await UserPreference.GetAsync(
+				unitOfWork.GetRepository<UserPreference>(), user.UserPreferenceId);
+			user.Info = await UserInfo.GetAsync(
+				unitOfWork.GetRepository<UserInfo>(), user.UserInfoId);
+
+			return user;
 		}
 	}
 

@@ -60,7 +60,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			try {
-				UserUtil.CreateUser(_unitOfWork, dto);
+				await UserUtil.CreateUserAsync(_unitOfWork, dto);
 				await _unitOfWork.SaveChangesAsync();
 			} catch (Exception ex) {
 				Console.WriteLine(ex.ToString());

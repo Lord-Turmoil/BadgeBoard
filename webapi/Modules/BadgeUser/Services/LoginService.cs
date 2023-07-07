@@ -32,6 +32,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				return new GoodResponse(new UserNotExistsDto());
 			}
 
+			await User.IncludeAsync(_unitOfWork, user);
+
 			if (!AccountUtil.VerifyPasswordHash(dto.Password, user.Account.Salt, user.Account.Password)) {
 				return new GoodResponse(new LoginWrongPasswordDto());
 			}

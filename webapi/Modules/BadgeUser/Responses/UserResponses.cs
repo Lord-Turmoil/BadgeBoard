@@ -8,4 +8,5 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Responses
 		{
 		}
 	}
+	
 }

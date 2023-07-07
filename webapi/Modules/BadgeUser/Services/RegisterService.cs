@@ -37,14 +37,14 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			// Intended to be asynchronous.
 			var impl = new EmailImpl(_provider, _unitOfWork, _mapper);
 			switch (emailType) {
-			case EmailTypes.Register:
-				impl.SendVerificationCode(dto);
-				break;
-			case EmailTypes.Retrieve:
-				impl.SendRetrievalCode(dto);
-				break;
+				case EmailTypes.Register:
+					impl.SendVerificationCode(dto);
+					break;
+				case EmailTypes.Retrieve:
+					impl.SendRetrievalCode(dto);
+					break;
 			}
-			
+
 			return new GoodResponse(new GoodDto());
 		}
 
@@ -55,23 +55,34 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.GetUserByUsernameAsync(repo, dto.Username);
-			if (user != null) {
+			if (await UserUtil.HasUserByUsernameAsync(repo, dto.Username)) {
 				return new GoodResponse(new UserAlreadyExistsDto());
 			}
 
 			try {
-				user = UserUtil.CreateUser(_unitOfWork, dto);
+				UserUtil.CreateUser(_unitOfWork, dto);
 				await _unitOfWork.SaveChangesAsync();
 			} catch (Exception ex) {
 				Console.WriteLine(ex.ToString());
 				return new InternalServerErrorResponse(new InternalServerErrorDto("Failed to save user data"));
 			}
-			var ret = new RegisterSuccessDto {
-				User = _mapper.Map<User, UserDto>(user)
-			};
 
-			return new GoodResponse(new GoodDto("Welcome, my friend!", ret));
+			return new GoodResponse(new GoodDto("Welcome, my friend"));
+		}
+
+
+		public async Task<ApiResponse> Cancel(CancelDto dto)
+		{
+			var repo = _unitOfWork.GetRepository<User>();
+			foreach (var username in dto.Users.Where(username => !string.IsNullOrEmpty(username))) {
+				var user = await UserUtil.GetUserByUsernameAsync(repo, username);
+				if (user != null) {
+					UserUtil.EraseUser(_unitOfWork, user);
+				}
+			}
+			await _unitOfWork.SaveChangesAsync();
+
+			return new GoodResponse(new GoodDto("Users canceled"));
 		}
 	}
 }

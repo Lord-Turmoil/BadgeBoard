@@ -30,5 +30,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 		{
 			return await _service.Register(dto);
 		}
+
+		[HttpPost]
+		[Route("cancel")]
+		public async Task<ApiResponse> Cancel([FromBody] CancelDto dto)
+		{
+			return await _service.Cancel(dto);
+		}
 	}
 }

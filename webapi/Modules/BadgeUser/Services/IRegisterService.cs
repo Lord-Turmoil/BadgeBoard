@@ -8,5 +8,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public ApiResponse SendCode(VerificationCodeDto dto);
 
 		public Task<ApiResponse> Register(RegisterDto dto);
+
+		public Task<ApiResponse> Cancel(CancelDto dto);
 	}
 }

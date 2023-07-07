@@ -8,7 +8,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
     {
         public static bool VerifyPassword(string? password)
         {
-            return !string.IsNullOrEmpty(password) && Regex.IsMatch(password, @"^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{1,16}$", RegexOptions.IgnoreCase);
+	        return !string.IsNullOrEmpty(password) && Regex.IsMatch(password, @"^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{1,16}$", RegexOptions.IgnoreCase);
         }
 
         public static bool VerifyEmail(string? email)
@@ -23,7 +23,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 
         public static bool VerifyAccount(string? username, string? password, string? email = null)
         {
-            return VerifyUsername(username) && VerifyPassword(password) && VerifyEmail(email);
+	        return VerifyUsername(username) && VerifyPassword(password) && VerifyEmail(email);
+        }
+
+        public static bool VerifyAccountLoose(string? username, string? password, string? email = null)
+        {
+	        return !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
 using AutoMapper;
 using BadgeBoard.Api.Extensions.Email;
+using BadgeBoard.Api.Extensions.Jwt;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Modules;
 using BadgeBoard.Api.Modules.BadgeGlobal;
@@ -37,6 +38,9 @@ namespace BadgeBoard.Api
 
 			// Email options
 			services.Configure<EmailOptions>(options => Configuration.GetSection(EmailOptions.EmailSection).Bind(options));
+
+			// JWT options
+			services.Configure<JwtOptions>(options => Configuration.GetSection(JwtOptions.JwtSection).Bind(options));
 
 			// AutoMapper
 			var autoMapperConfig = new MapperConfiguration(config => {

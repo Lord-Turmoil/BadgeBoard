@@ -11,7 +11,7 @@ namespace BadgeBoard.Api
 {
 	public class Startup
 	{
-		public IConfiguration Configuration { get; }
+		private IConfiguration Configuration { get; }
 
 		public Startup(IConfiguration configuration)
 		{
@@ -32,7 +32,7 @@ namespace BadgeBoard.Api
 
 			// Swagger service
 			services.AddSwaggerGen(c => {
-				c.SwaggerDoc("v1", new OpenApiInfo { Title = "SimpleToDo.Api", Version = "v1" });
+				c.SwaggerDoc("v1", new OpenApiInfo { Title = "BadgeBoard.Api", Version = "v1" });
 			});
 
 			// Email options
@@ -61,8 +61,8 @@ namespace BadgeBoard.Api
 			// Must be placed between UseRouting and UseEndpoints
 			app.UseCors(policy => {
 				policy.AllowAnyOrigin()
-					   .AllowAnyMethod()
-					   .AllowAnyHeader();
+					.AllowAnyMethod()
+					.AllowAnyHeader();
 			});
 
 			app.UseEndpoints(endpoints => {

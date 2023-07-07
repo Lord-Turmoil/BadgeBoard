@@ -8,7 +8,6 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 	public class User
 	{
 		[Key]
-		[ForeignKey(nameof(UserAccount))]
 		public Guid Id { get; set; }
 
 		[ForeignKey("Id")]
@@ -41,7 +40,6 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		public static User Create(IRepository<User> repo, string username, UserAccount account, UserPreference preference, UserInfo info)
 		{
 			return repo.Insert(new User {
-				Id = account.Id,
 				Username = username,
 				Account = account,
 				Preference = preference,

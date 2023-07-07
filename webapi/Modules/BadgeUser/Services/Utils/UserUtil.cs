@@ -30,21 +30,23 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 
 		public static bool HasUserByUsername(IRepository<User> repo, string username)
 		{
-			return repo.Exists(selector: x => x.Username.Equals(username));
+			var user = repo.GetFirstOrDefault(predicate: x => x.Username.Equals(username));
+			return user != null;
 		}
 
 		public static async Task<bool> HasUserByUsernameAsync(IRepository<User> repo, string username)
 		{
-			return await repo.ExistsAsync(selector: x => x.Username.Equals(username));
+			var user = await repo.GetFirstOrDefaultAsync(predicate: x => x.Username.Equals(username));
+			return user != null;
 		}
 
-		public static User CreateUser(IUnitOfWork unitOfWork, RegisterDto dto)
+		public static async Task<User> CreateUserAsync(IUnitOfWork unitOfWork, RegisterDto dto)
 		{
 			AccountUtil.CreatePasswordHash(dto.Password, out byte[] salt, out byte[] hash);
-			var account = UserAccount.Create(unitOfWork.GetRepository<UserAccount>(), salt, hash);
-			var preference = UserPreference.Create(unitOfWork.GetRepository<UserPreference>());
-			var info = UserInfo.Create(unitOfWork.GetRepository<UserInfo>());
-			var user = User.Create(unitOfWork.GetRepository<User>(), dto.Username, account, preference, info);
+			var account = await UserAccount.CreateAsync(unitOfWork.GetRepository<UserAccount>(), salt, hash);
+			var preference = await UserPreference.CreateAsync(unitOfWork.GetRepository<UserPreference>());
+			var info = await UserInfo.CreateAsync(unitOfWork.GetRepository<UserInfo>());
+			var user = await User.CreateAsync(unitOfWork.GetRepository<User>(), dto.Username, account, preference, info);
 
 			return user;
 		}
@@ -54,6 +56,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 			unitOfWork.GetRepository<UserPreference>().Delete(user.UserPreferenceId);
 			unitOfWork.GetRepository<UserInfo>().Delete(user.UserInfoId);
 			unitOfWork.GetRepository<UserAccount>().Delete(user.Id);
+			// Cascade delete by UserAccount
 			// unitOfWork.GetRepository<User>().Delete(user);
 		}
 	}

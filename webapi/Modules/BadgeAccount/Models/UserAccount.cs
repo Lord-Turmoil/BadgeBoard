@@ -23,9 +23,15 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 		[Required]
 		public byte[] Salt { get; set; } = Array.Empty<byte>();
 
-		public static UserAccount Create(IRepository<UserAccount> repo, byte[] salt, byte[] password, string email = "")
+		public static async Task<UserAccount> CreateAsync(IRepository<UserAccount> repo, byte[] salt, byte[] password, string email = "")
 		{
-			return repo.Insert(new UserAccount { Salt = salt, Password = password, Email = email });
+			var entry = await repo.InsertAsync(new UserAccount { Salt = salt, Password = password, Email = email });
+			return entry.Entity;
+		}
+
+		public static async Task<UserAccount> GetAsync(IRepository<UserAccount> repo, Guid id)
+		{
+			return await repo.FindAsync(id);
 		}
 	}
 }

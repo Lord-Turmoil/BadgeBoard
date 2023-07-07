@@ -37,14 +37,21 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		[ForeignKey("UserInfoId")]
 		public UserInfo Info { get; set; }
 
-		public static User Create(IRepository<User> repo, string username, UserAccount account, UserPreference preference, UserInfo info)
+		public static async Task<User> CreateAsync(IRepository<User> repo, string username, UserAccount account, UserPreference preference, UserInfo info)
 		{
-			return repo.Insert(new User {
+			var entry = await repo.InsertAsync(new User {
 				Username = username,
 				Account = account,
 				Preference = preference,
 				Info = info
 			});
+			return entry.Entity;
+		}
+
+		public static async Task<User> GetAync(IRepository<User> repo, Guid id)
+		{
+			return await repo.FindAsync(id);
+		}
 		}
 	}
 
@@ -56,9 +63,15 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 
 		public bool IsDefaultPublic { get; set; } = false;
 
-		public static UserPreference Create(IRepository<UserPreference> repo)
+		public static async Task<UserPreference> CreateAsync(IRepository<UserPreference> repo)
 		{
-			return repo.Insert(new UserPreference());
+			var entry = await repo.InsertAsync(new UserPreference());
+			return entry.Entity;
+		}
+
+		public static async Task<UserPreference> GetAsync(IRepository<UserPreference> repo, int id)
+		{
+			return await repo.FindAsync(id);
 		}
 	}
 
@@ -79,9 +92,15 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		public string? Birthday { get; set; }
 		public int Sex { get; set; } = UserSex.Unknown;
 
-		public static UserInfo Create(IRepository<UserInfo> repo)
+		public static async Task<UserInfo> CreateAsync(IRepository<UserInfo> repo)
 		{
-			return repo.Insert(new UserInfo());
+			var entry = await repo.InsertAsync(new UserInfo());
+			return entry.Entity;
+		}
+
+		public static async Task<UserInfo> GetAsync(IRepository<UserInfo> repo, int id)
+		{
+			return await repo.FindAsync(id);
 		}
 	}
 }

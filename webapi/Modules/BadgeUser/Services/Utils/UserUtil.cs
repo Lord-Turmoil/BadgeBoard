@@ -75,11 +75,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 
 		public static void EraseUser(IUnitOfWork unitOfWork, User user)
 		{
+			unitOfWork.GetRepository<User>().Delete(user);
+			unitOfWork.GetRepository<UserAccount>().Delete(user.Id);
 			unitOfWork.GetRepository<UserPreference>().Delete(user.UserPreferenceId);
 			unitOfWork.GetRepository<UserInfo>().Delete(user.UserInfoId);
-			unitOfWork.GetRepository<UserAccount>().Delete(user.Id);
-			// Cascade delete by UserAccount
-			// unitOfWork.GetRepository<User>().Delete(user);
 		}
 	}
 }

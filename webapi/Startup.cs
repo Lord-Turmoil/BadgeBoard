@@ -4,7 +4,6 @@ using BadgeBoard.Api.Extensions.Email;
 using BadgeBoard.Api.Extensions.Jwt;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Modules;
-using BadgeBoard.Api.Modules.BadgeGlobal;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,7 +18,6 @@ namespace BadgeBoard.Api
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
-			Global.Configuration = configuration;
 		}
 
 		public void ConfigureServices(IServiceCollection services)
@@ -69,8 +67,6 @@ namespace BadgeBoard.Api
 				config.AddProfile(new AutoMapperProfile());
 			});
 			services.AddSingleton(autoMapperConfig.CreateMapper());
-
-			Global.Services = services;
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

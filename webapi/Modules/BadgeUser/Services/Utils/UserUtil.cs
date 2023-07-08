@@ -18,6 +18,16 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 			return repo.GetFirstOrDefault(predicate: x => x.Account.Email.Equals(email));
 		}
 
+		public static User? GetUserById(IRepository<User> repo, Guid id)
+		{
+			return repo.Find(id);
+		}
+
+		public static async Task<User?> GetUserByIdAsync(IRepository<User> repo, Guid id)
+		{
+			return await repo.FindAsync(id);
+		}
+
 		public static async Task<User?> GetUserByUsernameAsync(IRepository<User> repo, string username)
 		{
 			return await repo.GetFirstOrDefaultAsync(predicate: x => x.Username.Equals(username));
@@ -37,6 +47,18 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 		public static async Task<bool> HasUserByUsernameAsync(IRepository<User> repo, string username)
 		{
 			var user = await repo.GetFirstOrDefaultAsync(predicate: x => x.Username.Equals(username));
+			return user != null;
+		}
+
+		public static bool HasUserById(IRepository<User> repo, Guid id)
+		{
+			var user = repo.Find(id);
+			return user != null;
+		}
+
+		public static async Task<bool> HasUserByIdAsync(IRepository<User> repo, Guid id)
+		{
+			var user = await repo.FindAsync(id);
 			return user != null;
 		}
 

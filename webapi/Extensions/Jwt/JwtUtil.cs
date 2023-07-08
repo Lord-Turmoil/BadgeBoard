@@ -7,17 +7,17 @@ namespace BadgeBoard.Api.Extensions.Jwt
 {
 	public static class JwtUtil
 	{
-		public static string CreateToken(IOptions<JwtOptions> options, string username)
+		public static string CreateToken(IOptions<JwtOptions> options, string value, int expire)
 		{
 			List<Claim> claims = new List<Claim> {
-				new Claim(ClaimTypes.Name, username)
+				new Claim(ClaimTypes.Name, value)
 			};
 
 			var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(options.Value.Token));
 			var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 			var token = new JwtSecurityToken(
 				claims: claims,
-				expires: DateTime.Now.AddDays(7),
+				expires: DateTime.Now.AddDays(expire),
 				signingCredentials: credential);
 
 			return new JwtSecurityTokenHandler().WriteToken(token);

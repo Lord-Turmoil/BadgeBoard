@@ -6,5 +6,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 	public interface ILoginService
 	{
 		public Task<ApiResponse> Login(LoginDto dto);
+
+		public Task<TokenResponseData> GetToken(TokenDto dto);
 	}
 }

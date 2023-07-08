@@ -1,5 +1,6 @@
 ﻿using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
+using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,26 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 		public async Task<ApiResponse> Login([FromBody] LoginDto dto)
 		{
 			return await _service.Login(dto);
+		}
+
+		[HttpPost]
+		[Route("token")]
+		public async Task<ApiResponse> GetToken([FromBody] TokenDto dto)
+		{
+			var data = await _service.GetToken(dto);
+			if (!data.IsAuthenticated) {
+				return new ApiResponse(data.Status, new TokenFailedDto(data.Message));
+			}
+
+			SetRefreshTokenInCookie(data.RefreshToken);
+			
+			return new GoodResponse(new GoodWithDataDto(data));
+		}
+
+		private void SetRefreshTokenInCookie(string token)
+		{
+			var options = TokenUtil.GetRefreshTokenCookieOptions();
+			Response.Cookies.Append(TokenUtil.RefreshTokenName, token, options);
 		}
 	}
 }

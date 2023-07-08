@@ -38,6 +38,9 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		[ForeignKey("UserInfoId")]
 		public UserInfo Info { get; set; }
 
+		// Refresh tokens
+		public List<RefreshToken> RefreshTokens { get; set; }
+
 		public static async Task<User> CreateAsync(IRepository<User> repo, string username, UserAccount account, UserPreference preference, UserInfo info)
 		{
 			var entry = await repo.InsertAsync(new User {

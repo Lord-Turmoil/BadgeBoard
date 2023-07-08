@@ -5,8 +5,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
 	public class LoginDto : ApiRequestDto
 	{
-		public string? Username { get; set; }
-		public string? Password { get; set; }
+		public string Username { get; set; }
+		public string Password { get; set; }
 
 		public override bool Verify()
 		{
@@ -22,7 +22,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 	}
 
 	// Login success dto
-	internal class LoginSuccessData : ApiResponseData
+	public class LoginSuccessData : ApiResponseData
 	{
 		public UserDto User { get; set; }
 		public string Jwt { get; set; }

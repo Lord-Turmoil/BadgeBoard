@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using BadgeBoard.Api.Extensions.Response;
+using BadgeBoard.Api.Modules.BadgeGlobal;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
@@ -36,7 +37,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 
 	public class TokenFailedDto : OrdinaryDto
 	{
-		public TokenFailedDto(string? message = "Not authorized") : base(1, message)
+		public TokenFailedDto(string? message = "Not authorized") : base(Errors.NewTokenRejected, message)
 		{
 		}
 	}

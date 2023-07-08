@@ -1,4 +1,5 @@
 ﻿using BadgeBoard.Api.Extensions.Response;
+using BadgeBoard.Api.Modules.BadgeGlobal;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
@@ -16,7 +17,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 
 	public class LoginWrongPasswordDto : OrdinaryDto
 	{
-		public LoginWrongPasswordDto() : base(2001, "Wrong password")
+		public LoginWrongPasswordDto() : base(Errors.WrongPassword, "Wrong password")
 		{
 		}
 	}

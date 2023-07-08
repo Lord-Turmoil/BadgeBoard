@@ -1,4 +1,6 @@
+using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.Sample.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BadgeBoard.Api.Modules.Sample.Controllers;
@@ -30,5 +32,13 @@ public class WeatherController : ControllerBase
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         })
         .ToArray();
+    }
+
+    [Authorize]
+    [HttpGet]
+    [Route("secure")]
+    public ApiResponse Secure()
+    {
+	    return new GoodResponse(new GoodDto());
     }
 }

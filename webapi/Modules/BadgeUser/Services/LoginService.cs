@@ -39,11 +39,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			var options = _provider.GetRequiredService<IOptions<JwtOptions>>();
-			var jwt = JwtUtil.CreateToken(options, user.Id.ToString(), DateTime.Now.AddDays(7));
+			var jwt = JwtUtil.CreateToken(options, user.Id.ToString());
 			var userDto = _mapper.Map<User, UserDto>(user);
 
 			return new GoodResponse(new LoginSuccessDto(userDto, jwt));
 		}
-
 	}
 }

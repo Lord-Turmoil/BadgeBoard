@@ -5,7 +5,9 @@ using BadgeBoard.Api.Extensions.Jwt;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Modules;
 using BadgeBoard.Api.Modules.BadgeGlobal;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace BadgeBoard.Api
@@ -41,6 +43,26 @@ namespace BadgeBoard.Api
 
 			// JWT options
 			services.Configure<JwtOptions>(options => Configuration.GetSection(JwtOptions.JwtSection).Bind(options));
+			services.AddAuthentication(options => {
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			}).AddJwtBearer(options => {
+				options.RequireHttpsMetadata = false;
+				options.SaveToken = false;
+				options.TokenValidationParameters = new TokenValidationParameters {
+					ValidateIssuerSigningKey = true,
+					ValidateIssuer = true,
+					ValidateAudience = true,
+					ValidateLifetime = true,
+					ClockSkew = TimeSpan.Zero,
+
+					IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+						Configuration[$"{JwtOptions.JwtSection}:{JwtOptions.JwtKey}"] ??
+						throw new InvalidOperationException())),
+					ValidIssuer = Configuration[$"{JwtOptions.JwtSection}:{JwtOptions.JwtIssuer}"],
+					ValidAudience = Configuration[$"{JwtOptions.JwtSection}:{JwtOptions.JwtAudience}"]
+				};
+			});
 
 			// AutoMapper
 			var autoMapperConfig = new MapperConfiguration(config => {
@@ -60,6 +82,7 @@ namespace BadgeBoard.Api
 			}
 			app.UseHttpsRedirection();
 			app.UseRouting();
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			// Must be placed between UseRouting and UseEndpoints

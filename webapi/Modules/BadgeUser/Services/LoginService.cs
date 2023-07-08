@@ -143,8 +143,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 			var options = _provider.GetRequiredService<IOptions<JwtOptions>>();
 			data.Token = JwtUtil.CreateToken(options, user.Id.ToString());
-			data.RefreshToken = refreshToken.Token;
-			data.RefreshTokenExpiration = refreshToken.Expires;
+			data.RefreshToken = token.Token;
+			data.RefreshTokenExpiration = token.Expires;
 
 			return data;
 		}

@@ -7,9 +7,9 @@ using BadgeBoard.Api.Modules.BadgeUser.Services.Utils;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Services
 {
-	public class EditUserService : BaseService, IEditUserService
+	public class UserService : BaseService, IUserService
 	{
-		protected EditUserService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork, mapper)
+		protected UserService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork, mapper)
 		{
 		}
 

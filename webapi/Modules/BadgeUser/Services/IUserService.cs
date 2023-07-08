@@ -2,7 +2,7 @@
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Services
 {
-	public interface IUserService
+	public interface IEditUserService
 	{
 		// Get user status
 		public Task<ApiResponse> Exists(string type, string value);

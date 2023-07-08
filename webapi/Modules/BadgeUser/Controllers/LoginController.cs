@@ -60,13 +60,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 
 		private void SetRefreshTokenInCookie(string token)
 		{
-			var options = TokenUtil.GetRefreshTokenCookieOptions();
-			AddCookie(TokenUtil.RefreshTokenCookiesName, token, options);
-		}
-		
-		private void AddCookie(string name, string value, CookieOptions options)
-		{
-			Response.Cookies.Append(name, value, options);
+			Response.Cookies.Append(
+				TokenUtil.RefreshTokenCookiesName,
+				token,
+				TokenUtil.GetRefreshTokenCookieOptions());
 		}
 	}
 }

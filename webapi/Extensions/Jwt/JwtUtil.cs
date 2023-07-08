@@ -7,7 +7,7 @@ namespace BadgeBoard.Api.Extensions.Jwt
 {
 	public static class JwtUtil
 	{
-		public static string CreateToken(IOptions<JwtOptions> options, string value, int expire)
+		public static string CreateToken(IOptions<JwtOptions> options, string value, DateTime expire)
 		{
 			List<Claim> claims = new List<Claim> {
 				new Claim(ClaimTypes.Name, value)
@@ -17,7 +17,7 @@ namespace BadgeBoard.Api.Extensions.Jwt
 			var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 			var token = new JwtSecurityToken(
 				claims: claims,
-				expires: DateTime.Now.AddDays(expire),
+				expires: expire,
 				signingCredentials: credential);
 
 			return new JwtSecurityTokenHandler().WriteToken(token);

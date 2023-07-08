@@ -22,6 +22,13 @@
 		}
 	}
 
+	public class GoodWithDataDto : GoodDto
+	{
+		public GoodWithDataDto(object? data = null) : base("Nice request", data)
+		{
+		}
+	}
+
 	public class BadRequestDto : ApiResponseDto
 	{
 		public BadRequestDto(string message = "Request format error", object? data = null) : base(-1, message, data)

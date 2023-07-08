@@ -48,7 +48,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 			return entry.Entity;
 		}
 
-		public static async Task<User> GetAync(IRepository<User> repo, Guid id)
+		public static async Task<User> GetAsync(IRepository<User> repo, Guid id)
 		{
 			return await repo.FindAsync(id);
 		}
@@ -97,6 +97,11 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		public const int Unknown = 0;
 		public const int Male = 1;
 		public const int Female = 2;
+
+		public static bool IsValid(int sex)
+		{
+			return sex is >= Unknown and <= Female;
+		}
 	}
 
 	public class UserInfo

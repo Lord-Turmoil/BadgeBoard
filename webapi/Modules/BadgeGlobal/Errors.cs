@@ -8,6 +8,7 @@
 
 		// Login
 		public const int WrongPassword = 2001;
-		public const int NewTokenRejected = 2002;
+		public const int GetTokenRejected = 2002;
+		public const int RefreshTokenRejected = 2003;
 	}
 }

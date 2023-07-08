@@ -6,7 +6,7 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Services.Utils
 	public static class TokenUtil
 	{
 		public const int RefreshTokenExpire = 14;
-		public const string RefreshTokenName = "refreshToken";
+		public const string RefreshTokenCookiesName = "refreshToken";
 
 		public static RefreshToken CreateRefreshToken()
 		{

@@ -94,5 +94,59 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 			return data;
 		}
+
+		public async Task<TokenResponseData> RefreshToken(string oldToken)
+		{
+			if (string.IsNullOrWhiteSpace(oldToken)) {
+				return new TokenResponseData {
+					IsAuthenticated = false,
+					Status = StatusCodes.Status400BadRequest,
+					Message = "Request format error"
+				};
+			}
+
+			var repo = _unitOfWork.GetRepository<User>();
+
+			// Get token owner
+			var user = await repo.GetFirstOrDefaultAsync(
+				predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
+			if (user == null) {
+				return new TokenResponseData {
+					IsAuthenticated = false,
+					Message = "Token did not match any users"
+				};
+			}
+
+			// Get refresh token
+			var refreshToken = user.RefreshTokens.Single(x => x.Token == oldToken);
+			if (!refreshToken.IsActive) {
+				return new TokenResponseData {
+					IsAuthenticated = false,
+					Message = "Token not active"
+				};
+			}
+
+			// Revoke current refresh token
+			refreshToken.Revoked = DateTime.UtcNow;
+
+			// Generate a new refresh token
+			var token = TokenUtil.CreateRefreshToken();
+			user.RefreshTokens.Add(token);
+			repo.Update(user);
+			await _unitOfWork.SaveChangesAsync();
+
+			// Generate new JWT
+			var data = new TokenResponseData {
+				Id = user.Id,
+				IsAuthenticated = true
+			};
+
+			var options = _provider.GetRequiredService<IOptions<JwtOptions>>();
+			data.Token = JwtUtil.CreateToken(options, user.Id.ToString());
+			data.RefreshToken = refreshToken.Token;
+			data.RefreshTokenExpiration = refreshToken.Expires;
+
+			return data;
+		}
 	}
 }

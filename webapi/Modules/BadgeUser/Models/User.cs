@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Models
 {
@@ -72,6 +73,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		}
 	}
 
+	[Owned]
 	public class UserPreference
 	{
 		[Key]
@@ -104,6 +106,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		}
 	}
 
+	[Owned]
 	public class UserInfo
 	{
 		[Key]

@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
 
 namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 {
+	[Owned]
 	public class UserAccount
 	{
 		[Key]

@@ -11,5 +11,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public Task<TokenResponseData> GetToken(TokenDto dto);
 
 		public Task<TokenResponseData> RefreshToken(string token);
+
+		public Task<RevokeTokenData> RevokeToken(string oldToken);
 	}
 }

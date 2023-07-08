@@ -47,4 +47,18 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 		{
 		}
 	}
+
+	public class RevokeTokenData : ApiResponseData
+	{
+		public bool Succeeded { get; set; }
+		public int Status { get; set; } = StatusCodes.Status200OK;
+		public string? Message { get; set; }
+	}
+
+	public class RevokeTokenFailedDto : OrdinaryDto
+	{
+		public RevokeTokenFailedDto(string? message = "Not authorized") : base(Errors.RevokeTokenRejected, message)
+		{
+		}
+	}
 }

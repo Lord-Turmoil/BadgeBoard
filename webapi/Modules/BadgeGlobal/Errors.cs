@@ -10,5 +10,6 @@
 		public const int WrongPassword = 2001;
 		public const int GetTokenRejected = 2002;
 		public const int RefreshTokenRejected = 2003;
+		public const int RevokeTokenRejected = 2004;
 	}
 }

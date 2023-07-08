@@ -101,13 +101,13 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				return new TokenResponseData {
 					IsAuthenticated = false,
 					Status = StatusCodes.Status400BadRequest,
-					Message = "Request format error"
+					Message = "Invalid oldToken"
 				};
 			}
 
 			var repo = _unitOfWork.GetRepository<User>();
 
-			// Get token owner
+			// Get oldToken owner
 			var user = await repo.GetFirstOrDefaultAsync(
 				predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
 			if (user == null) {
@@ -117,7 +117,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				};
 			}
 
-			// Get refresh token
+			// Get refresh oldToken
 			var refreshToken = user.RefreshTokens.Single(x => x.Token == oldToken);
 			if (!refreshToken.IsActive) {
 				return new TokenResponseData {
@@ -126,10 +126,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				};
 			}
 
-			// Revoke current refresh token
+			// Revoke current refresh oldToken
 			refreshToken.Revoked = DateTime.UtcNow;
 
-			// Generate a new refresh token
+			// Generate a new refresh oldToken
 			var token = TokenUtil.CreateRefreshToken();
 			user.RefreshTokens.Add(token);
 			repo.Update(user);
@@ -147,6 +147,44 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			data.RefreshTokenExpiration = refreshToken.Expires;
 
 			return data;
+		}
+
+		public async Task<RevokeTokenData> RevokeToken(string oldToken)
+		{
+			if (string.IsNullOrWhiteSpace(oldToken)) {
+				return new RevokeTokenData {
+					Succeeded = false,
+					Message = "Invalid oldToken"
+				};
+			}
+
+			var repo = _unitOfWork.GetRepository<User>();
+
+			var user = await repo.GetFirstOrDefaultAsync(
+				predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
+			if (user == null) {
+				return new RevokeTokenData {
+					Succeeded = false,
+					Message = "Token did not match any users"
+				};
+			}
+
+			var token = user.RefreshTokens.Single(t => t.Token == oldToken);
+			if (!token.IsActive) {
+				return new RevokeTokenData {
+					Succeeded = true,
+					Message = "Token not active already"
+				};
+			}
+
+			token.Revoked = DateTime.UtcNow;
+			repo.Update(user);
+			await _unitOfWork.SaveChangesAsync();
+
+			return new RevokeTokenData {
+				Succeeded = true,
+				Message = "Token revoked"
+			};
 		}
 	}
 }

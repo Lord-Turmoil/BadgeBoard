@@ -58,6 +58,23 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 			return new GoodResponse(new GoodWithDataDto(data));
 		}
 
+		[HttpPost]
+		[Route("token/revoke")]
+		public async Task<ApiResponse> RevokeToken()
+		{
+			var refreshToken = Request.Cookies[TokenUtil.RefreshTokenCookiesName];
+			if (refreshToken == null) {
+				return new GoodResponse(new GoodDto("No cookies"));
+			}
+
+			var data = await _service.RevokeToken(refreshToken);
+			if (!data.Succeeded) {
+				return new ApiResponse(data.Status, new RevokeTokenFailedDto(data.Message));
+			}
+
+			return new GoodResponse(new GoodDto(data.Message));
+		}
+
 		private void SetRefreshTokenInCookie(string token)
 		{
 			Response.Cookies.Append(

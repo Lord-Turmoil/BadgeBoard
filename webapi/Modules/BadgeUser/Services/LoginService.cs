@@ -37,11 +37,9 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				return new GoodResponse(new LoginWrongPasswordDto());
 			}
 
-			var options = _provider.GetRequiredService<IOptions<JwtOptions>>();
-			var jwt = JwtUtil.CreateToken(options, user.Id.ToString());
 			var userDto = _mapper.Map<User, UserDto>(user);
 
-			return new GoodResponse(new LoginSuccessDto(userDto, jwt));
+			return new GoodResponse(new GoodDto("Welcome back, my friend", userDto));
 		}
 
 		public async Task<TokenResponseData> GetToken(TokenDto dto)

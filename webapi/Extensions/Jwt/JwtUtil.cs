@@ -12,7 +12,7 @@ namespace BadgeBoard.Api.Extensions.Jwt
 			List<Claim> claims = new List<Claim> {
 				new Claim(JwtRegisteredClaimNames.Name, value)
 			};
-			
+
 			var opt = options.Value;
 			var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(opt.Key));
 			var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -24,6 +24,29 @@ namespace BadgeBoard.Api.Extensions.Jwt
 				signingCredentials: credential);
 
 			return new JwtSecurityTokenHandler().WriteToken(token);
+		}
+
+		public static string? GetValueFromBearerToken(string token)
+		{
+			if (token.Length < 10) {
+				return null;
+			}
+			var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token[7..]);
+			if (jwt == null) {
+				return null;
+			}
+
+			using var it = jwt.Claims.GetEnumerator();
+			while (it.MoveNext()) {
+				var claim = it.Current;
+				if (claim is not { Type: JwtRegisteredClaimNames.Name }) {
+					continue;
+				}
+
+				return claim.Value;
+			}
+
+			return null;
 		}
 	}
 }

@@ -14,6 +14,13 @@
 		}
 	}
 
+	public class UnauthorizedResponse : ApiResponse
+	{
+		public UnauthorizedResponse(object? value) : base(StatusCodes.Status401Unauthorized, value)
+		{
+		}
+	}
+
 	public class InternalServerErrorResponse : ApiResponse
 	{
 		public InternalServerErrorResponse(object? value) : base(StatusCodes.Status500InternalServerError, value)

@@ -2,13 +2,13 @@
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
-	public class EditUserPreferenceDto
+	public class UpdateUserPreferenceDto
 	{
 		public bool? IsDefaultPublic { get; set; }
 	}
 
 
-	public class EditUserInfoDto
+	public class UpdateUserInfoDto
 	{
 		public string? Motto { get; set; }
 		public string? Birthday { get; set; }

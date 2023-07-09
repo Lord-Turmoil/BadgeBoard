@@ -5,6 +5,7 @@
 		// User status
 		public const int UserAlreadyExists = 1001;
 		public const int UserNotExists = 1002;
+		public const int BadUserJwt = 1003;
 
 		// Login
 		public const int WrongPassword = 2001;

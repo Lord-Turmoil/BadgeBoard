@@ -15,7 +15,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser
 				.AddCustomRepository<FavoriteUser, FavoriteUserRepository>();
 
 			services.AddTransient<ILoginService, LoginService>()
-				.AddTransient<IRegisterService, RegisterService>();
+				.AddTransient<IRegisterService, RegisterService>()
+				.AddTransient<IUserService, UserService>();
 
 			return services;
 		}

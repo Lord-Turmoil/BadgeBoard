@@ -13,7 +13,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 	public class UserController : BaseController<UserController>
 	{
 		private IUserService _service;
-		
+
 		public UserController(ILogger<UserController> logger, IUserService service) : base(logger)
 		{
 			_service = service;
@@ -23,7 +23,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 		[HttpPost]
 		[Route("preference")]
 		[Authorize]
-		public async Task<ApiResponse> UpdatePreference([FromHeader] string authorization, [FromBody] UpdateUserPreferenceDto dto)
+		public async Task<ApiResponse> UpdatePreference([FromHeader] string authorization,
+			[FromBody] UpdateUserPreferenceDto dto)
 		{
 			var id = JwtUtil.GetValueFromBearerToken(authorization);
 			if (id == null) {
@@ -33,7 +34,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 			return await _service.UpdatePreference(new Guid(id), dto);
 		}
 
-		
+
 		[HttpPost]
 		[Route("info")]
 		[Authorize]
@@ -47,5 +48,16 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 			return await _service.UpdateInfo(new Guid(id), dto);
 		}
 
+
+		[HttpGet]
+		[Route("user")]
+		public async Task<ApiResponse> GetUser([FromQuery] string id)
+		{
+			if (string.IsNullOrWhiteSpace(id)) {
+				return new BadRequestResponse(new BadRequestDto("Bad ID"));
+			}
+
+			return await _service.GetUser(new Guid(id));
+		}
 	}
 }

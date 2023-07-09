@@ -14,7 +14,8 @@ namespace BadgeBoard.Api.Modules
 			CreateMap<UserAccount, UserAccountDto>();
 
 			// User Module
-			CreateMap<User, UserDto>().ReverseMap();
+			CreateMap<User, UserCompleteDto>().ReverseMap();
+			CreateMap<User, UserGeneralDto>().ReverseMap();
 			CreateMap<UserPreference, UserPreferenceDto>().ReverseMap();
 			CreateMap<UserInfo, UserInfoDto>().ReverseMap();
 		}

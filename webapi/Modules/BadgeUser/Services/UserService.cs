@@ -67,11 +67,31 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				} catch (FormatException) {
 				}
 			}
-			user.Info.Sex = dto.Sex ?? user.Info.Sex;
+
+			if (dto.Sex != null) {
+				if (UserSex.IsValid((int)dto.Sex)) {
+					user.Info.Sex = dto.Sex;
+				}
+			}
+
 			repo.Update(user);
 			await _unitOfWork.SaveChangesAsync();
 
 			return new GoodResponse(new GoodWithDataDto(_mapper.Map<UserInfo, UserInfoDto>(user.Info)));
+		}
+
+		public async Task<ApiResponse> GetUser(Guid id)
+		{
+			var repo = _unitOfWork.GetRepository<User>();
+			var user = await UserUtil.GetUserByIdAsync(repo, id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			await User.IncludeAsync(_unitOfWork, user);
+			var data = _mapper.Map<User, UserGeneralDto>(user);
+
+			return new GoodResponse(new GoodWithDataDto(data));
 		}
 	}
 }

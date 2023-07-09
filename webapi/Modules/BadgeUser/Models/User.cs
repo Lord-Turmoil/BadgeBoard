@@ -116,9 +116,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 
+		[Column(TypeName = "varchar(127)")]
 		public string? Motto { get; set; }
+
+		[Column(TypeName = "varchar(15)")]
 		public string? Birthday { get; set; }
-		public int Sex { get; set; } = UserSex.Unknown;
+		public int? Sex { get; set; }
 
 		public static async Task<UserInfo> CreateAsync(IRepository<UserInfo> repo)
 		{

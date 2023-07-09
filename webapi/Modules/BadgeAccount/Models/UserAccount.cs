@@ -10,6 +10,7 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		[Column(TypeName = "char(36)")]
 		public Guid Id { get; set; }
 
 		[Column(TypeName = "varchar(63)")]

@@ -12,5 +12,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public Task<ApiResponse> UpdatePreference(Guid id, UpdateUserPreferenceDto dto);
 
 		public Task<ApiResponse> UpdateInfo(Guid id, UpdateUserInfoDto dto);
+
+		// get user properties
+		public Task<ApiResponse> GetUser(Guid id);
 	}
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -6,11 +6,12 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
+import { FormHelperText, Input } from '@mui/material';
 
-import { Input } from '@mui/material';
-
-export default function PasswordField(param) {
-    const [props, setProps] = useState(param.sx ? param.sx : {});
+// if 'error' wrapped in 'sx', its change won't be detected unless 'sx'
+// changes wholely.
+export default function PasswordField({ sx, error, hint, onChange }) {
+    const [props, setProps] = useState(sx ? sx : {});
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -23,10 +24,11 @@ export default function PasswordField(param) {
     return (
         <div className={props.class} style={{ display: "flex", alignItems: "flex-end" }}>
             {props.icon ? props.icon : <KeyRoundedIcon fontSize='large'></KeyRoundedIcon>}
-            <FormControl style={{ marginLeft: '10px' }} error={props.error} fullWidth variant="outlined">
+            <FormControl style={{ marginLeft: '10px' }} error={error} fullWidth variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-password">{props.label ? props.label : "Password"}</InputLabel>
                 <Input
                     id={props.id}
+                    ref={props.ref}
                     type={showPassword ? 'text' : 'password'}
                     endAdornment={
                         <InputAdornment position="end">
@@ -40,7 +42,14 @@ export default function PasswordField(param) {
                         </InputAdornment>
                     }
                     label={props.label ? props.label : "Password"}
+                    onChange={onChange}
                 />
+                <FormHelperText style={{
+                    position: 'absolute',
+                    top: '95%',
+                    opacity: error ? "100%" : "0%",
+                    transition: "0.3s"
+                }}>{hint}</FormHelperText>
             </FormControl>
         </div>
     );

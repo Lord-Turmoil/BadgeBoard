@@ -1,0 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.font-fancy {
+    font-family: 'Selima';
+}
+
+.font-hand {
+    font-family: 'Lucida Handwriting';
+}

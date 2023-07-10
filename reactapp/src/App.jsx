@@ -11,16 +11,14 @@ import { Component } from 'react'
 export default class App extends Component {
     render() {
         return (
-            <div>
-                <Routes>
-                    <Route exact path="/" element={<HomePage></HomePage>}></Route>
-                    <Route exact path="/register" element={<RegisterPage></RegisterPage>}></Route>
-                    <Route exact path="/signup" element={<SignUpPage></SignUpPage>}></Route>
-                    <Route exact path="/login" element={<LoginPage></LoginPage>}></Route>
-                    <Route exact path="/user/:uid" element={<UserPage></UserPage>}></Route>
-                    <Route exact path="*" element={<NotFoundPage></NotFoundPage>}></Route>
-                </Routes>
-            </div>
+            <Routes>
+                <Route exact path="/" element={<HomePage></HomePage>}></Route>
+                <Route exact path="/register" element={<RegisterPage></RegisterPage>}></Route>
+                <Route exact path="/signup" element={<SignUpPage></SignUpPage>}></Route>
+                <Route exact path="/login" element={<LoginPage></LoginPage>}></Route>
+                <Route exact path="/user/:uid" element={<UserPage></UserPage>}></Route>
+                <Route exact path="*" element={<NotFoundPage></NotFoundPage>}></Route>
+            </Routes>
         );
     }
 }

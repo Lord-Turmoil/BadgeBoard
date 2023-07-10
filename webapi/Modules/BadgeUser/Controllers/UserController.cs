@@ -1,6 +1,7 @@
 ﻿using BadgeBoard.Api.Extensions.Jwt;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
+using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -26,12 +27,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 		public async Task<ApiResponse> UpdatePreference([FromHeader] string authorization,
 			[FromBody] UpdateUserPreferenceDto dto)
 		{
-			var id = JwtUtil.GetValueFromBearerToken(authorization);
+			var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
 			if (id == null) {
 				return new UnauthorizedResponse(new BadUserJwtDto());
 			}
 
-			return await _service.UpdatePreference(new Guid(id), dto);
+			return await _service.UpdatePreference((int)id, dto);
 		}
 
 
@@ -40,24 +41,24 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 		[Authorize]
 		public async Task<ApiResponse> UpdateInfo([FromHeader] string authorization, [FromBody] UpdateUserInfoDto dto)
 		{
-			var id = JwtUtil.GetValueFromBearerToken(authorization);
+			var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
 			if (id == null) {
 				return new UnauthorizedResponse(new BadUserJwtDto());
 			}
 
-			return await _service.UpdateInfo(new Guid(id), dto);
+			return await _service.UpdateInfo((int)id, dto);
 		}
 
 
 		[HttpGet]
 		[Route("user")]
-		public async Task<ApiResponse> GetUser([FromQuery] string id)
+		public async Task<ApiResponse> GetUser([FromQuery] int id)
 		{
-			if (string.IsNullOrWhiteSpace(id)) {
+			if (id < 0) {
 				return new BadRequestResponse(new BadRequestDto("Bad ID"));
 			}
 
-			return await _service.GetUser(new Guid(id));
+			return await _service.GetUser(id);
 		}
 	}
 }

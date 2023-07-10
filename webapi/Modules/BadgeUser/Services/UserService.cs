@@ -6,6 +6,7 @@ using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Services.Utils;
+using static System.Int32;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Services
 {
@@ -22,16 +23,27 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			var repo = _unitOfWork.GetRepository<User>();
-			var data = type switch {
-				"id" => await UserUtil.HasUserByIdAsync(repo, new Guid(value)),
-				"username" => await UserUtil.HasUserByUsernameAsync(repo, value),
-				_ => await UserUtil.HasUserByUsernameAsync(repo, value)
+			bool data;
+			switch(type) {
+				case "id":
+					if (TryParse(value, out var id)) {
+						data = await UserUtil.HasUserByIdAsync(repo, id);
+					} else {
+						data = false;
+					}
+					break;
+				case "username":
+					data = await UserUtil.HasUserByUsernameAsync(repo, value);
+					break; 
+				default:
+					data = await UserUtil.HasUserByUsernameAsync(repo, value);
+					break;
 			};
 
 			return new GoodResponse(new GoodWithDataDto(data));
 		}
 
-		public async Task<ApiResponse> UpdatePreference(Guid id, UpdateUserPreferenceDto dto)
+		public async Task<ApiResponse> UpdatePreference(int id, UpdateUserPreferenceDto dto)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
 			var user = await UserUtil.GetUserByIdAsync(repo, id);
@@ -47,7 +59,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			return new GoodResponse(new GoodWithDataDto(_mapper.Map<UserPreference, UserPreferenceDto>(user.Preference)));
 		}
 
-		public async Task<ApiResponse> UpdateInfo(Guid id, UpdateUserInfoDto dto)
+		public async Task<ApiResponse> UpdateInfo(int id, UpdateUserInfoDto dto)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
 			var user = await UserUtil.GetUserByIdAsync(repo, id);
@@ -80,7 +92,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			return new GoodResponse(new GoodWithDataDto(_mapper.Map<UserInfo, UserInfoDto>(user.Info)));
 		}
 
-		public async Task<ApiResponse> GetUser(Guid id)
+		public async Task<ApiResponse> GetUser(int id)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
 			var user = await UserUtil.GetUserByIdAsync(repo, id);

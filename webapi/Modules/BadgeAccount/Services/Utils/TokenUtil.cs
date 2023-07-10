@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using BadgeBoard.Api.Extensions.Jwt;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 
 namespace BadgeBoard.Api.Modules.BadgeAccount.Services.Utils
@@ -28,6 +29,19 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Services.Utils
 				HttpOnly = true,
 				Expires = DateTime.UtcNow.AddDays(RefreshTokenExpire)
 			};
+		}
+
+		public static int? TryGetUserIdFromJwtBearerToken(string token)
+		{
+			if (token.StartsWith("bearer ")) {
+				token = token[7..];
+			}
+			var value = JwtUtil.GetValueFromBearerToken(token);
+			if (value == null) {
+				return null;
+			}
+
+			return int.TryParse(value, out var id) ? id : null;
 		}
 	}
 }

@@ -28,10 +28,7 @@ namespace BadgeBoard.Api.Extensions.Jwt
 
 		public static string? GetValueFromBearerToken(string token)
 		{
-			if (token.Length < 10) {
-				return null;
-			}
-			var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token[7..]);
+			var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
 			if (jwt == null) {
 				return null;
 			}

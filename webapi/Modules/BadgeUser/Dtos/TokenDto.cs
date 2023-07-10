@@ -7,7 +7,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
 	public class TokenDto : ApiRequestDto
 	{
-		public Guid Id { get; set; }
+		public int Id { get; set; }
 		public string Password { get; set; }
 
 		public override bool Verify()
@@ -18,7 +18,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 
 	public class TokenResponseData : ApiResponseData
 	{
-		public Guid Id { get; set; }
+		public int Id { get; set; }
 		public string Token { get; set; }
 
 		[JsonIgnore] // will not present in response

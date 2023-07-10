@@ -9,7 +9,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 	public class User
 	{
 		[Key]
-		public Guid Id { get; set; }
+		public int Id { get; set; }
 
 		[ForeignKey("Id")]
 		public UserAccount Account { get; set; }

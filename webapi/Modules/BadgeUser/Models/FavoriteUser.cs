@@ -7,7 +7,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		[Key]
 		public int Id { get; set; }
 
-		public Guid SrcId { get; set; }
-		public Guid DstId { get; set; }
+		public int SrcId { get; set; }
+		public int DstId { get; set; }
 	}
 }

@@ -10,8 +10,7 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		[Column(TypeName = "char(36)")]
-		public Guid Id { get; set; }
+		public int Id { get; set; }
 
 		[Column(TypeName = "varchar(63)")]
 		[EmailAddress]
@@ -32,7 +31,7 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 			return entry.Entity;
 		}
 
-		public static async Task<UserAccount> GetAsync(IRepository<UserAccount> repo, Guid id)
+		public static async Task<UserAccount> GetAsync(IRepository<UserAccount> repo, int id)
 		{
 			return await repo.FindAsync(id);
 		}

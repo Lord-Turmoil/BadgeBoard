@@ -1,9 +1,13 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 
-function LoginPage() {
+export default function LoginPage() {
     return (
-        <h1>Login Page</h1>
+        <div>
+            <Helmet>
+                <title>Sign in</title>
+            </Helmet>
+            <h1>Login Page</h1>
+        </div>
     );
 }
-
-export default LoginPage;

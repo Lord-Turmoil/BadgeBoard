@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
+import NavBarDev from '../parts/NavBarDev'
 
-function NotFoundPage() {
+export default function NotFoundPage() {
     return (
-        <h1>404 Not Found</h1>
+        <div>
+            <h1>404 Not Found</h1>
+            <NavBarDev></NavBarDev>
+        </div>
     );
 }
-
-export default NotFoundPage;

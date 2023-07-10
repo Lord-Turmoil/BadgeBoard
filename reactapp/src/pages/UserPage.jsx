@@ -1,11 +1,15 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import NavBarDev from '../parts/NavBarDev'
 
 function UserPage() {
     const { uid } = useParams();
 
     return (
-        <h1>User Page of {uid}</h1>
+        <div>
+            <h1>User Page of {uid}</h1>
+            <NavBarDev></NavBarDev>
+        </div>
     );
 }
 

@@ -6,6 +6,14 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Services.Utils
 {
     public static class AccountUtil
     {
+	    private const int MinUserId = 1000000000;
+        private const int MaxUserId = 2000000000;
+
+        public static int GenerateAccountId()
+        {
+	        return (int)Random.Shared.NextInt64(MinUserId, MaxUserId + 1);
+        }
+
         public static void CreatePasswordHash(string password, out byte[] salt, out byte[] hash)
         {
             using var hmac = new HMACSHA256();

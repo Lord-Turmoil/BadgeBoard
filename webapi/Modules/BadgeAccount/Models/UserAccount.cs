@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
+using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace BadgeBoard.Api.Modules.BadgeAccount.Models
@@ -9,7 +10,6 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 	public class UserAccount
 	{
 		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 
 		[Column(TypeName = "varchar(63)")]
@@ -27,7 +27,12 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 
 		public static async Task<UserAccount> CreateAsync(IRepository<UserAccount> repo, byte[] salt, byte[] password, string email = "")
 		{
-			var entry = await repo.InsertAsync(new UserAccount { Salt = salt, Password = password, Email = email });
+			var entry = await repo.InsertAsync(new UserAccount {
+				Id = AccountUtil.GenerateAccountId(),
+				Salt = salt,
+				Password = password,
+				Email = email
+			});
 			return entry.Entity;
 		}
 

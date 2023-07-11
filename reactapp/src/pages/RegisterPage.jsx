@@ -8,6 +8,8 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import _debounce from 'debounce';
 import { Button } from '@mui/material';
 import api from '../components/api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 // const PASSWORD_REGEX = new RegExp(/^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{6,16}$/);
 const PASSWORD_REGEX = new RegExp(/^[a-z0-9_-]{6,16}$/i);
@@ -77,17 +79,16 @@ export default function RegisterPage() {
     const onConfirmChange = (event) => {
         var newConfirm = event.target.value;
         setConfirmText(newConfirm);
-        setConfirm({ ...confirm, value: newConfirm });
+        setConfirm({ ...confirm, value: newConfirm, error: false });
         checkConfirm();
     }
 
+    // Bad async!!!
     const checkConfirm = () => {
         if (confirmText !== passwordText) {
-            if (!confirm.error) {
-                setConfirm({ ...confirm, error: true, hint: "Passwords inconsistent" });
-            }
-        } else if (confirm.error) {
-            setConfirm({ ...confirm, error: false });
+            setConfirm({ ...confirm, value: confirmText, error: true, hint: "Passwords inconsistent" });
+        } else {
+            setConfirm({ ...confirm, value: confirmText, error: false, hint: "" });
         }
     }
 
@@ -109,10 +110,13 @@ export default function RegisterPage() {
             return;
         }
 
+        setLoading(true);
+
         if (timer) {
             clearTimeout(timer);
         }
         if (!await checkDuplication(usernameText)) {
+            setLoading(false);
             return;
         }
 
@@ -167,6 +171,9 @@ export default function RegisterPage() {
         });
     }
 
+    // loading effect
+    const [loading, setLoading] = useState(false);
+
     return (
         <div>
             <Helmet>
@@ -213,7 +220,9 @@ export default function RegisterPage() {
                                 <Button fullWidth variant='contained' onClick={onClickReset}>Reset</Button>
                             </div>
                             <div className='submit'>
-                                <Button fullWidth variant='contained' color='success' disabled={!ready} onClick={onClickSubmit}>Submit</Button>
+                                <Button fullWidth variant='contained' color='success' disabled={!ready} onClick={loading ? null : onClickSubmit}>
+                                    {loading ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : "Sign up"}
+                                </Button>
                             </div>
                         </div>
                     </div>

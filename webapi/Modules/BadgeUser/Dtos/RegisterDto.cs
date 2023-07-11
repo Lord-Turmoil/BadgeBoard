@@ -12,8 +12,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 
 		public override bool Verify()
 		{
-			// return AccountVerifier.VerifyAccount(Username, Password);
-			return AccountVerifier.VerifyAccountLoose(Username, Password);
+			return AccountVerifier.VerifyAccount(Username, Password);
 		}
 	}
 

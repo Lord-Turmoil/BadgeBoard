@@ -29,15 +29,14 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 					if (TryParse(value, out var id)) {
 						data = await UserUtil.HasUserByIdAsync(repo, id);
 					} else {
-						data = false;
+						return new BadRequestResponse(new BadRequestDto("Bad ID"));
 					}
 					break;
 				case "username":
 					data = await UserUtil.HasUserByUsernameAsync(repo, value);
 					break; 
 				default:
-					data = await UserUtil.HasUserByUsernameAsync(repo, value);
-					break;
+					return new BadRequestResponse(new BadRequestDto("Bad type"));
 			};
 
 			return new GoodResponse(new GoodWithDataDto(data));

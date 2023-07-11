@@ -20,6 +20,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 			_service = service;
 		}
 
+		[HttpGet]
+		[Route("exists")]
+		public async Task<ApiResponse> Exists([FromQuery] string type, [FromQuery] string value)
+		{
+			return await _service.Exists(type, value);
+		}
 
 		[HttpPost]
 		[Route("preference")]

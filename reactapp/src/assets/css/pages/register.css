@@ -23,3 +23,21 @@
 .register-main .wrapper .input-wrapper .input-item {
     margin: 40px auto;
 }
+
+.register-main .wrapper .action-wrapper {
+    width: 360px;
+    display: flex;
+    flex-direction: row;
+}
+
+.register-main .wrapper .action-wrapper div {
+    margin: 0 10px;
+}
+
+.register-main .wrapper .action-wrapper .reset {
+    flex: 1;
+}
+
+.register-main .wrapper .action-wrapper .submit {
+    flex: 3;
+}

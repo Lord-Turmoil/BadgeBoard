@@ -120,14 +120,9 @@ export default function RegisterPage() {
             return;
         }
 
-        await api.post("auth/register", {
-            username: usernameText,
-            password: passwordText
-        }).then(dto => {
+        var dto = await api.post("auth/register", { username: usernameText, password: passwordText });
+        
             console.log(dto);
-        }).catch(dto => {
-            console.error(dto.response);
-        });
     }
 
     // ready

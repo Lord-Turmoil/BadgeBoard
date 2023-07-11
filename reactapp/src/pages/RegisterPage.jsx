@@ -15,21 +15,36 @@ const USERNAME_REGEX = new RegExp(/^[ a-z0-9_-]{3,20}$/);
 
 const CHECK_DELAY = 300;
 const DUP_CHECK_DELAY = 3000;
-var interval = null;    // none state variable should be declared outside...
+var timer = null;    // none state variable should be declared outside...
+
+var usernameText = "";
+var passwordText = "";
+var confirmText = "";
+
+function setUsernameText(str) {
+    usernameText = str;
+}
+function setPasswordText(str) {
+    passwordText = str;
+}
+function setConfirmText(str) {
+    confirmText = str;
+}
 
 export default function RegisterPage() {
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmRef = useRef(null);
 
-    const [password, setPassword] = useState({ value: "", error: false, hint: "" });
-    const [confirm, setConfirm] = useState({ value: "", error: false, hint: "Passwords inconsistent" });
     const [username, setUsername] = useState({ value: "", error: false, hint: "" });
-
+    const [password, setPassword] = useState({ value: "", error: false, hint: "" });
+    const [confirm, setConfirm] = useState({ value: "", error: false, hint: "" });
 
     const onUsernameChange = (event) => {
         var newUsername = event.target.value.trim();
         var good = true;
+
+        setUsernameText(newUsername);
         if ((newUsername.length > 0) && !USERNAME_REGEX.test(newUsername)) {
             setUsername({ ...username, value: newUsername, error: true, hint: "3 ~ 20 characters (a-zA-Z0-9_-)" });
             good = false;
@@ -37,36 +52,39 @@ export default function RegisterPage() {
             setUsername({ ...username, value: newUsername, error: false });
         }
 
-        if (interval) {
-            clearTimeout(interval);
+        // debounce
+        if (timer) {
+            clearTimeout(timer);
+            timer = null;
         }
         if (good && newUsername.length > 0) {
-            interval = setTimeout(function () { console.log("hello"); checkDuplication(newUsername); }, DUP_CHECK_DELAY);
+            timer = setTimeout(async function () { await checkDuplication(newUsername); }, DUP_CHECK_DELAY);
         }
     }
 
     const onPasswordChange = (event) => {
         // it is async, so won't be updated right away
         var newPassword = event.target.value.trim();
+        setPasswordText(newPassword);
         if ((newPassword.length > 0) && !PASSWORD_REGEX.test(newPassword)) {
             setPassword({ ...password, value: newPassword, error: true, hint: "6 ~ 16 characters (a-zA-Z0-9_-)" });
         } else {
             setPassword({ ...password, value: newPassword, error: false });
         }
+        checkConfirm();
     }
 
     const onConfirmChange = (event) => {
-        setConfirm({ ...confirm, value: event.target.value });
+        var newConfirm = event.target.value;
+        setConfirmText(newConfirm);
+        setConfirm({ ...confirm, value: newConfirm });
+        checkConfirm();
     }
 
-    useEffect(() => {
-        checkConfirm();
-    }, [password, confirm]);
-
     const checkConfirm = () => {
-        if (confirm.value !== password.value) {
+        if (confirmText !== passwordText) {
             if (!confirm.error) {
-                setConfirm({ ...confirm, error: true });
+                setConfirm({ ...confirm, error: true, hint: "Passwords inconsistent" });
             }
         } else if (confirm.error) {
             setConfirm({ ...confirm, error: false });
@@ -75,6 +93,9 @@ export default function RegisterPage() {
 
     // action button
     const onClickReset = (event) => {
+        setUsernameText("");
+        setPasswordText("");
+        setConfirmText("");
         setUsername({ ...username, value: "", error: false });
         setPassword({ ...password, value: "", error: false });
         setConfirm({ ...confirm, value: "", error: false });
@@ -83,19 +104,25 @@ export default function RegisterPage() {
         confirmRef.current.getElementsByTagName("input")[0].value = "";
     }
 
-    const onClickSubmit = (event) => {
+    const onClickSubmit = async (event) => {
         if (!isReady()) {
             return;
         }
 
-        api.post("auth/register", {
-            username: username.value,
-            password: "a"
-        }).then(res => {
-            var dto = res.data;
+        if (timer) {
+            clearTimeout(timer);
+        }
+        if (!await checkDuplication(usernameText)) {
+            return;
+        }
+
+        await api.post("auth/register", {
+            username: usernameText,
+            password: passwordText
+        }).then(dto => {
             console.log(dto);
-        }).catch(err => {
-            console.error(err);
+        }).catch(dto => {
+            console.error(dto.response);
         });
     }
 
@@ -120,26 +147,23 @@ export default function RegisterPage() {
 
     // user name duplication check
     const checkDuplication = async (name) => {
-        var status = await isExist(name);
-        console.log(status);
-        if (status) {
-            setUsername({ ...username, error: true, hint: "Username already exists" });
+        var result = await isExist(name);
+        if (result.status) {
+            setUsername({ ...username, error: result.status, hint: result.message });
+            return false;
         }
+        // return operation succeeded or not, not existence
+        return true;
     }
 
     const isExist = async (name) => {
         return await api.get('user/exists', {
-            params: {
-                type: 'username',
-                value: name
-            }
-        }).then(res => {
-            var dto = res.data;
-            console.log(dto);
-            return dto.data;
-        }).catch(err => {
-            console.error(err);
-            return false;
+            type: 'username',
+            value: name
+        }).then(dto => {
+            return { status: dto.data, message: dto.data ? "Username already occupied" : "" };
+        }).catch(dto => {
+            return { status: true, message: "Server error, please stand by" };
         });
     }
 
@@ -153,7 +177,7 @@ export default function RegisterPage() {
                 <div className="wrapper">
                     <div className="dialog">
                         <div className="title">
-                            <h1 className='font-hand'>Sign Up</h1>
+                            <h1 className="font-hand">Sign Up</h1>
                         </div>
                         <div className="input-wrapper">
                             <div className="input-item">

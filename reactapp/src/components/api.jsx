@@ -80,7 +80,7 @@ class API {
     }
 
     async get(url, params) {
-        var dto = this._get(url, params);
+        var dto = await this._get(url, params);
         if (dto.meta.status != 401) {
             return dto;
         }

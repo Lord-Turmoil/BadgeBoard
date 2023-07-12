@@ -1,16 +1,14 @@
 import axios from 'axios';
 
-// auth
-axios.interceptors.request.use(config => {
-    config.headers.Authorization = window.localStorage.getItem('token');
-    return config
-})
-
 class API {
     constructor() {
         this._api = axios.create({
             baseURL: 'http://localhost:5168/api/'
         });
+        this._api.interceptors.request.use(config => {
+            config.headers.Authorization = window.localStorage.getItem('token');
+            return config
+        })
     }
 
     axios() {
@@ -35,7 +33,7 @@ class API {
     async refresh() {
         var dto = await this._post("auth/token/refresh");
         if (dto.meta.status == 0) {
-            window.localStorage.setItem("token", dto.data.token);
+            this.saveToken();
             window.localStorage.setItem("uid", dto.data.id);
             return dto.data;
         }
@@ -90,6 +88,10 @@ class API {
         }
 
         return await this._get(url, params);
+    }
+
+    saveToken(token) {
+        window.localStorage.setItem("token", "bearer " + token);
     }
 }
 

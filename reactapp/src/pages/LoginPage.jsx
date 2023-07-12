@@ -35,6 +35,8 @@ function setPasswordText(str) {
     passwordText = str;
 }
 
+var user = null;
+
 export default function LoginPage() {
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
@@ -76,8 +78,6 @@ export default function LoginPage() {
         notifier.info("All cleared!😀", true);
     }
 
-    var navigate = useNavigate();
-
     const onClickSubmit = async (event) => {
         if (!isReady()) {
             return;
@@ -93,10 +93,26 @@ export default function LoginPage() {
         notifier.auto(dto.meta);
         setLoading(false);
 
+        user = dto.data;
+        window.localStorage.setItem("uid", user.account.id);
+
         if (dto.meta.status == 0) {
-            setTimeout(() => {
-                navigate("/");
-            }, 1000);
+            login();
+        }
+    }
+
+    var navigate = useNavigate();
+    const login = async () => {
+        var dto = await api.post("auth/token/get", {
+            id: user.account.id,
+            password: passwordText
+        });
+        console.log(dto);
+        notifier.auto(dto.meta);
+
+        if (dto.meta.status == 0) {
+            api.saveToken(dto.data.token);
+            setTimeout(() => { navigate(-1) }, 1000);
         }
     }
 

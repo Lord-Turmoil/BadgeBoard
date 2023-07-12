@@ -3,7 +3,7 @@
 import _debounce from 'debounce';
 import { Helmet } from 'react-helmet';
 
-import { Button } from '@mui/material';
+import { Button, Grid, Link } from '@mui/material';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
@@ -129,8 +129,8 @@ export default function RegisterPage() {
             username: usernameText,
             password: passwordText
         }), 1000);
-
         console.log(dto);
+
         setLoading(false);
     }
 
@@ -188,7 +188,7 @@ export default function RegisterPage() {
                 <div className="wrapper">
                     <div className="dialog">
                         <div className="title">
-                            <h1 className="font-hand">Sign Up</h1>
+                            <h1 className="font-hand">Sign up</h1>
                         </div>
                         <div className="input-wrapper">
                             <div className="input-item">
@@ -234,7 +234,13 @@ export default function RegisterPage() {
                             </div>
                         </div>
 
-                        <div className="login"></div>
+                        <Grid container width={340} mt={2} justifyContent="flex-end">
+                            <Grid item>
+                                <Link href="/login" variant="body2">
+                                    Already have an account? Sign in
+                                </Link>
+                            </Grid>
+                        </Grid>
                     </div>
                 </div>
             </div>

@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 import api from '../components/api';
+import User from '../components/user';
 import stall from '../components/stall';
 import notifier from '../components/notifier';
 import BackNavBar from '../components/form/BackNavBar';
@@ -17,7 +18,7 @@ import PlainTextField from '../components/form/PlainTextField';
 
 import '../assets/css/pages/form.css';
 import { useNavigate } from 'react-router-dom';
-import User from '../components/user';
+
 
 // const PASSWORD_REGEX = new RegExp(/^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{6,16}$/);
 const PASSWORD_REGEX = new RegExp(/^[a-z0-9_-]{6,16}$/i);
@@ -37,6 +38,8 @@ function setPasswordText(str) {
 }
 
 export default function LoginPage() {
+    const navigate = useNavigate();
+
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
 
@@ -99,7 +102,6 @@ export default function LoginPage() {
         setLoading(false);
     }
 
-    var navigate = useNavigate();
     const login = async () => {
         var user = User.get();
         if (user == null) {
@@ -116,7 +118,7 @@ export default function LoginPage() {
 
         if (dto.meta.status == 0) {
             api.saveToken(dto.data.token);
-            setTimeout(() => { navigate(-1) }, 1000);
+            setTimeout(() => { navigate(-1); }, 1000);
         }
     }
 

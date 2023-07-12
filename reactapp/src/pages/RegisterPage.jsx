@@ -2,6 +2,7 @@
 
 import _debounce from 'debounce';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
 
 import { Button, Grid, Link } from '@mui/material';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -41,6 +42,8 @@ function setConfirmText(str) {
 }
 
 export default function RegisterPage() {
+    const navigate = useNavigate();
+
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmRef = useRef(null);
@@ -133,6 +136,10 @@ export default function RegisterPage() {
         }), 500);
         console.log(dto);
         notifier.auto(dto.meta);
+
+        if (dto.meta.status == 0) {
+            setTimeout(() => { navigate("/login") }, 1000);
+        }
 
         setLoading(false);
     }

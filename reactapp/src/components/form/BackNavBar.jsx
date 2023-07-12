@@ -5,8 +5,8 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 
 export default function BackNavBar() {
-    var navigate = useNavigate();
-
+    const navigate = useNavigate();
+    
     return (
         <div style={{ width: '90%', margin: '10px auto' }}>
             <Fab size="medium" color="primary" onClick={() => { navigate(-1); }}>

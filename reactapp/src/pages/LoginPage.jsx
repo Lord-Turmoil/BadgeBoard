@@ -17,6 +17,7 @@ import PlainTextField from '../components/form/PlainTextField';
 
 import '../assets/css/pages/form.css';
 import { useNavigate } from 'react-router-dom';
+import User from '../components/user';
 
 // const PASSWORD_REGEX = new RegExp(/^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{6,16}$/);
 const PASSWORD_REGEX = new RegExp(/^[a-z0-9_-]{6,16}$/i);
@@ -34,8 +35,6 @@ function setUsernameText(str) {
 function setPasswordText(str) {
     passwordText = str;
 }
-
-var user = null;
 
 export default function LoginPage() {
     const usernameRef = useRef(null);
@@ -91,18 +90,23 @@ export default function LoginPage() {
         }), 500);
         console.log(dto);
         notifier.auto(dto.meta);
-        setLoading(false);
-
-        user = dto.data;
-        window.localStorage.setItem("uid", user.account.id);
-
+        
         if (dto.meta.status == 0) {
+            User.save(dto.data);
             login();
         }
+        
+        setLoading(false);
     }
 
     var navigate = useNavigate();
     const login = async () => {
+        var user = User.get();
+        if (user == null) {
+            notifier.error("Local storage error");
+            return;
+        }
+
         var dto = await api.post("auth/token/get", {
             id: user.account.id,
             password: passwordText

@@ -16,6 +16,7 @@ import PasswordField from '../components/form/PasswordField';
 import PlainTextField from '../components/form/PlainTextField';
 
 import '../assets/css/pages/form.css';
+import { useNavigate } from 'react-router-dom';
 
 // const PASSWORD_REGEX = new RegExp(/^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{6,16}$/);
 const PASSWORD_REGEX = new RegExp(/^[a-z0-9_-]{6,16}$/i);
@@ -75,6 +76,8 @@ export default function LoginPage() {
         notifier.info("All cleared!😀", true);
     }
 
+    var navigate = useNavigate();
+
     const onClickSubmit = async (event) => {
         if (!isReady()) {
             return;
@@ -88,8 +91,13 @@ export default function LoginPage() {
         }), 500);
         console.log(dto);
         notifier.auto(dto.meta);
-
         setLoading(false);
+
+        if (dto.meta.status == 0) {
+            setTimeout(() => {
+                navigate("/");
+            }, 1000);
+        }
     }
 
     // ready

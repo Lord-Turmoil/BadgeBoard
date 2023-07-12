@@ -1,16 +1,21 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
-import '../assets/css/pages/register.css'
-import { Helmet } from 'react-helmet';
-import PasswordField from '../components/form/PasswordField';
-import PlainTextField from '../components/form/PlainTextField'
-import BackNavBar from '../components/form/BackNavBar';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+
 import _debounce from 'debounce';
+import { Helmet } from 'react-helmet';
+
 import { Button } from '@mui/material';
-import api from '../components/api';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+
+import api from '../components/api';
 import stall from '../components/stall';
+import BackNavBar from '../components/form/BackNavBar';
+import PasswordField from '../components/form/PasswordField';
+import PlainTextField from '../components/form/PlainTextField';
+
+import '../assets/css/pages/form.css';
+
 
 // const PASSWORD_REGEX = new RegExp(/^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{6,16}$/);
 const PASSWORD_REGEX = new RegExp(/^[a-z0-9_-]{6,16}$/i);
@@ -178,7 +183,7 @@ export default function RegisterPage() {
             <Helmet>
                 <title>Sign up</title>
             </Helmet>
-            <div className="register-main">
+            <div className="form-main">
                 <BackNavBar></BackNavBar>
                 <div className="wrapper">
                     <div className="dialog">
@@ -217,6 +222,7 @@ export default function RegisterPage() {
                                     sx={{ id: 'confirm', ref: confirmRef, label: 'Confirm Password' }} />
                             </div>
                         </div>
+
                         <div className="action-wrapper">
                             <div className='reset'>
                                 <Button fullWidth variant='contained' onClick={loading ? null : onClickReset}>Reset</Button>
@@ -227,6 +233,8 @@ export default function RegisterPage() {
                                 </Button>
                             </div>
                         </div>
+
+                        <div className="login"></div>
                     </div>
                 </div>
             </div>

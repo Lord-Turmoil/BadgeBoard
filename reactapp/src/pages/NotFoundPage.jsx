@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import NavBarDev from '../parts/NavBarDev'
 
 export default function NotFoundPage() {

@@ -29,6 +29,7 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-router-dom": "^6.14.1",
+    "react-slider-verify": "^0.2.1",
     "strip-ansi": "^7.1.0",
     "supports-color": "^9.4.0",
     "yallist": "^4.0.0"

@@ -5,7 +5,7 @@ import TextFieldsRoundedIcon from '@mui/icons-material/TextFieldsRounded';
 
 import { FormHelperText, Input } from '@mui/material';
 
-export default function PlainTextField({ sx, error, hint, onChange }) {
+export default function PlainTextField({ sx, error, hint, disabled, onChange }) {
     const [props, setProps] = useState(sx ? sx : {});
 
     return (
@@ -19,6 +19,7 @@ export default function PlainTextField({ sx, error, hint, onChange }) {
                     type='text'
                     label={props.label ? props.label : "Text"}
                     onChange={onChange}
+                    disabled={disabled}
                 />
                 <FormHelperText style={{
                     position: 'absolute',

@@ -10,7 +10,7 @@ import { FormHelperText, Input } from '@mui/material';
 
 // if 'error' wrapped in 'sx', its change won't be detected unless 'sx'
 // changes wholely.
-export default function PasswordField({ sx, error, hint, onChange }) {
+export default function PasswordField({ sx, error, disabled, hint, onChange }) {
     const [props, setProps] = useState(sx ? sx : {});
 
     const [showPassword, setShowPassword] = useState(false);
@@ -43,6 +43,7 @@ export default function PasswordField({ sx, error, hint, onChange }) {
                     }
                     label={props.label ? props.label : "Password"}
                     onChange={onChange}
+                    disabled={disabled}
                 />
                 <FormHelperText style={{
                     position: 'absolute',

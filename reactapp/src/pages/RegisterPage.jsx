@@ -10,10 +10,11 @@ import { Button } from '@mui/material';
 import api from '../components/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import stall from '../components/stall';
 
 // const PASSWORD_REGEX = new RegExp(/^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{6,16}$/);
 const PASSWORD_REGEX = new RegExp(/^[a-z0-9_-]{6,16}$/i);
-const USERNAME_REGEX = new RegExp(/^[ a-z0-9_-]{3,20}$/);
+const USERNAME_REGEX = new RegExp(/^[ a-z0-9_-]{3,20}$/i);
 
 const CHECK_DELAY = 300;
 const DUP_CHECK_DELAY = 3000;
@@ -119,10 +120,13 @@ export default function RegisterPage() {
             setLoading(false);
             return;
         }
+        var dto = await stall(api.post("auth/register", {
+            username: usernameText,
+            password: passwordText
+        }), 1000);
 
-        var dto = await api.post("auth/register", { username: usernameText, password: passwordText });
-        
-            console.log(dto);
+        console.log(dto);
+        setLoading(false);
     }
 
     // ready
@@ -187,6 +191,7 @@ export default function RegisterPage() {
                                     error={username.error}
                                     hint={username.hint}
                                     onChange={_debounce(onUsernameChange, CHECK_DELAY)}
+                                    disabled={loading}
                                     sx={{
                                         id: 'username', ref: usernameRef, label: 'Username',
                                         icon: <AccountCircleRoundedIcon fontSize='large' />
@@ -197,6 +202,7 @@ export default function RegisterPage() {
                                     error={password.error}
                                     hint={password.hint}
                                     onChange={_debounce(onPasswordChange, CHECK_DELAY)}
+                                    disabled={loading}
                                     sx={{
                                         id: 'password',
                                         ref: passwordRef
@@ -207,12 +213,13 @@ export default function RegisterPage() {
                                     error={confirm.error}
                                     hint={confirm.hint}
                                     onChange={_debounce(onConfirmChange, CHECK_DELAY)}
+                                    disabled={loading}
                                     sx={{ id: 'confirm', ref: confirmRef, label: 'Confirm Password' }} />
                             </div>
                         </div>
                         <div className="action-wrapper">
                             <div className='reset'>
-                                <Button fullWidth variant='contained' onClick={onClickReset}>Reset</Button>
+                                <Button fullWidth variant='contained' onClick={loading ? null : onClickReset}>Reset</Button>
                             </div>
                             <div className='submit'>
                                 <Button fullWidth variant='contained' color='success' disabled={!ready} onClick={loading ? null : onClickSubmit}>

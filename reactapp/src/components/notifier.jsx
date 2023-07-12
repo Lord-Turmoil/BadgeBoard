@@ -9,18 +9,24 @@ const NOTIFY_WAIT = 1.5;
 alertify.set('notifier', 'delay', NOTIFY_WAIT);
 alertify.set('notifier', 'position', 'top-center');
 
-const EMOJI = ["😀😁😃😄😆😊😉😋😚🤗🤩🙂"];
+const EMOJI_HAPPY = ["😀", "😁", "😃", "😄", "😆", "😊", "😉", "😋", "😚", "🤗", "🤩", "🙂", "😍", "🥰", "😘", "🥳"];
+const EMOJI_GOOD = ["🙂", "🙂", "😌", "🤠", "🤪", "😝", "😜", "😛", "🤨"];
+const EMOJI_BAD = ["😶", "😥", "😫", "😓", "😣", "😖", "😩", "😰", "😱", "😵", "😵‍💫", "🥴", "🤕", "🤒"];
+
+function getRandom(arr) {
+    return arr[Math.min(Math.floor(Math.random() * arr.length), arr.length)]
+}
 
 class Notifier {
     success(msg, dismiss = false, wait = NOTIFY_WAIT) {
-        var a = alertify.notify(msg, "c-success", wait);
+        var a = alertify.notify(msg + getRandom(EMOJI_HAPPY), "c-success", wait);
         if (dismiss) {
             a.dismissOthers();
         }
     }
 
     info(msg, dismiss = false, wait = NOTIFY_WAIT) {
-        var a = alertify.notify(msg, "c-info", wait);
+        var a = alertify.notify(msg + getRandom(EMOJI_GOOD), "c-info", wait);
         if (dismiss) {
             a.dismissOthers();
         }
@@ -34,7 +40,7 @@ class Notifier {
     }
 
     error(msg, dismiss = false, wait = NOTIFY_WAIT) {
-        var a = alertify.notify(msg, "c-error", wait);
+        var a = alertify.notify(msg + getRandom(EMOJI_BAD), "c-error", wait);
         if (dismiss) {
             a.dismissOthers();
         }

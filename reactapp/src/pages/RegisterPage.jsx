@@ -10,6 +10,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 import api from '../components/api';
 import stall from '../components/stall';
+import notifier from '../components/notifier';
 import BackNavBar from '../components/form/BackNavBar';
 import PasswordField from '../components/form/PasswordField';
 import PlainTextField from '../components/form/PlainTextField';
@@ -109,6 +110,7 @@ export default function RegisterPage() {
         usernameRef.current.getElementsByTagName("input")[0].value = "";
         passwordRef.current.getElementsByTagName("input")[0].value = "";
         confirmRef.current.getElementsByTagName("input")[0].value = "";
+        notifier.info("All cleared!", true);
     }
 
     const onClickSubmit = async (event) => {
@@ -128,8 +130,9 @@ export default function RegisterPage() {
         var dto = await stall(api.post("auth/register", {
             username: usernameText,
             password: passwordText
-        }), 1000);
+        }), 500);
         console.log(dto);
+        notifier.auto(dto.meta);
 
         setLoading(false);
     }

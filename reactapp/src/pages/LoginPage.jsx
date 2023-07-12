@@ -10,12 +10,12 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 import api from '../components/api';
 import stall from '../components/stall';
+import notifier from '../components/notifier';
 import BackNavBar from '../components/form/BackNavBar';
 import PasswordField from '../components/form/PasswordField';
 import PlainTextField from '../components/form/PlainTextField';
 
 import '../assets/css/pages/form.css';
-
 
 // const PASSWORD_REGEX = new RegExp(/^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{6,16}$/);
 const PASSWORD_REGEX = new RegExp(/^[a-z0-9_-]{6,16}$/i);
@@ -43,7 +43,6 @@ export default function LoginPage() {
 
     const onUsernameChange = (event) => {
         var newUsername = event.target.value.trim();
-        var good = true;
 
         setUsernameText(newUsername);
         if ((newUsername.length > 0) && !USERNAME_REGEX.test(newUsername)) {
@@ -73,6 +72,7 @@ export default function LoginPage() {
         setPassword({ ...password, value: "", error: false });
         usernameRef.current.getElementsByTagName("input")[0].value = "";
         passwordRef.current.getElementsByTagName("input")[0].value = "";
+        notifier.info("All cleared!😀", true);
     }
 
     const onClickSubmit = async (event) => {
@@ -85,8 +85,9 @@ export default function LoginPage() {
         var dto = await stall(api.post("auth/login", {
             username: usernameText,
             password: passwordText
-        }), 1000);
+        }), 500);
         console.log(dto);
+        notifier.auto(dto.meta);
 
         setLoading(false);
     }
@@ -152,7 +153,7 @@ export default function LoginPage() {
 
                         <div className="action-wrapper">
                             <div className='reset'>
-                                <Button fullWidth variant='contained' onClick={loading ? null : onClickReset}>Reset</Button>
+                                <Button fullWidth variant='contained' disabled={loading} onClick={onClickReset}>Reset</Button>
                             </div>
                             <div className='submit'>
                                 <Button fullWidth variant='contained' color='success' disabled={!ready} onClick={loading ? null : onClickSubmit}>

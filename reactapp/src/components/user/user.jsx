@@ -2,8 +2,9 @@ import api from "../api";
 class User {
     static get() {
         var str = window.localStorage.getItem("user");
-        console.log("get user");
-        return (str == null) ? null : JSON.parse(str);
+        var user = (str == null) ? null : JSON.parse(str);
+        console.log("🚀 ~ file: user.jsx:6 ~ User ~ get ~ user:", user);
+        return user;
     }
 
     static getPreference() {
@@ -43,7 +44,7 @@ class User {
     }
 
     static async fetch(uid) {
-        console.log("fetch user: " + uid);
+        console.log("🚀 ~ file: user.jsx:46 ~ User ~ fetch ~ uid:", uid)
         if (uid == null) {
             return null;
         }

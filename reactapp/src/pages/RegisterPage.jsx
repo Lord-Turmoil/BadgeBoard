@@ -134,7 +134,7 @@ export default function RegisterPage() {
             username: usernameText,
             password: passwordText
         }), 500);
-        console.log(dto);
+        console.log("🚀 ~ file: RegisterPage.jsx:138 ~ onClickSubmit ~ dto:", dto)
         notifier.auto(dto.meta);
 
         if (dto.meta.status == 0) {

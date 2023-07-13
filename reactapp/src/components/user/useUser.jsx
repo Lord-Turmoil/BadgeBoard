@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api";
-import User from "./user";
+import User from "./User";
 
 export const useLocalUser = () => {
     const [data, setData] = useState(null);

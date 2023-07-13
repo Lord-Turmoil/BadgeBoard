@@ -35,10 +35,6 @@ export default function UserPageMobile() {
         setExpandOn(!expandOn);
     }
 
-    useEffect(() => {
-        console.log(expandOn);
-    }, [expandOn]);
-
     return (
         <div>
             <div className="nav-wrapper">

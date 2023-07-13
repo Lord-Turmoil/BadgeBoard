@@ -11,7 +11,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 import api from '../components/api';
 import stall from '../components/stall';
-import User from '../components/user/user';
+import User from '../components/user/User';
 import notifier from '../components/notifier';
 import BackNavBar from '../components/form/BackNavBar';
 import PasswordField from '../components/form/PasswordField';
@@ -90,7 +90,7 @@ export default function LoginPage() {
             username: usernameText,
             password: passwordText
         }), 500);
-        console.log(dto);
+        console.log("🚀 ~ file: LoginPage.jsx:94 ~ onClickSubmit ~ dto:", dto)
         notifier.auto(dto.meta);
 
         if (dto.meta.status == 0) {
@@ -112,7 +112,7 @@ export default function LoginPage() {
             id: user.account.id,
             password: passwordText
         });
-        console.log(dto);
+        console.log("🚀 ~ file: LoginPage.jsx:116 ~ login ~ dto:", dto)
         notifier.auto(dto.meta);
 
         if (dto.meta.status == 0) {

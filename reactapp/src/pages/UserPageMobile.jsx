@@ -21,10 +21,23 @@ export default function UserPageMobile() {
         error: userError
     } = useUser(uid ? uid : (visitor ? visitor.account.id : null));
 
+    // expand toggle 
+    const [expandOn, setExpandOn] = useState(false);
+    const toggleExpand = () => {
+        setExpandOn(!expandOn);
+    }
+
+    useEffect(() => {
+        console.log(expandOn);
+    }, [expandOn]);
+
     return (
         <div>
-            <InflateBox sx={{backgroundColor: 'red'}} overflow>
-                <h1>User Page Mobile</h1>
+            <div className="nav-wrapper">
+                <ExpandFab onClick={toggleExpand} />
+                <div className="nav"></div>
+            </div>
+            <InflateBox sx={{ backgroundColor: 'lightBlue' }} overflow>
             </InflateBox>
         </div>
     );

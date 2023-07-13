@@ -1,16 +1,12 @@
 import React from 'react';
-
-import { useParams } from 'react-router-dom';
-
-import NavBarDev from '../parts/NavBarDev'
+import { isMobile } from 'react-device-detect';
+import UserPageMobile from './UserPageMobile';
+import UserPagePC from './UserPagePC';
 
 function UserPage() {
-    const { uid } = useParams();
-
     return (
         <div>
-            <h1>User Page of {uid}</h1>
-            <NavBarDev></NavBarDev>
+            {isMobile ? <UserPageMobile /> : <UserPagePC />}
         </div>
     );
 }

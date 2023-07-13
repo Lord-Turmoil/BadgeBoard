@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react";
 import api from "../api";
+import User from "./user";
 
-const useUser = (uid) => {
+export const useLocalUser = () => {
+    const [data, setData] = useState(null);
+    useEffect(() => {
+        setData(User.get());
+    }, []);
+
+    return { data };
+}
+
+export const useUser = (uid) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         let didCancel = false;
-        
+
         setError(null);
         if (uid) {
             (async () => {
@@ -19,6 +29,7 @@ const useUser = (uid) => {
                         throw new Error(dto.meta.message);
                     }
                     setData(dto.data);
+                    console.log("🚀 ~ file: useUser.jsx:32 ~ dto.data:", dto.data)
                 } catch (err) {
                     setError(err);
                 } finally {
@@ -36,5 +47,3 @@ const useUser = (uid) => {
 
     return { data, loading, error };
 }
-
-export default useUser;

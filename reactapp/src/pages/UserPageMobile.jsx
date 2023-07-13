@@ -6,13 +6,19 @@ import User from '../components/user/user';
 import useUser from "../components/user/useUser";
 import InflateBox from "../components/layout/inflate";
 
+/*
+Parent could not get states of child component, but can use callback
+to update their copy in parent.
+*/
 export default function UserPageMobile() {
     const navigate = useNavigate();
 
     const { uid } = useParams('uid');
 
     // current logged in user
-    const [visitor, setVisitor] = useState(User.get());
+    const {
+        data: visitor
+    } = useLocalUser();
 
     // current visiting user
     const {

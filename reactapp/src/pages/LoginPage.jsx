@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import _debounce from 'debounce';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
 
 import { Button, Grid, Link } from '@mui/material';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -9,16 +10,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 import api from '../components/api';
-import User from '../components/user';
 import stall from '../components/stall';
+import User from '../components/user/user';
 import notifier from '../components/notifier';
 import BackNavBar from '../components/form/BackNavBar';
 import PasswordField from '../components/form/PasswordField';
 import PlainTextField from '../components/form/PlainTextField';
 
 import '../assets/css/pages/form.css';
-import { useNavigate } from 'react-router-dom';
-
 
 // const PASSWORD_REGEX = new RegExp(/^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{6,16}$/);
 const PASSWORD_REGEX = new RegExp(/^[a-z0-9_-]{6,16}$/i);

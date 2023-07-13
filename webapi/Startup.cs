@@ -40,6 +40,8 @@ namespace BadgeBoard.Api
 			services.Configure<EmailOptions>(options => Configuration.GetSection(EmailOptions.EmailSection).Bind(options));
 
 			// JWT options
+			var jwtOptions = new JwtOptions();
+			Configuration.GetRequiredSection(JwtOptions.JwtSection).Bind(jwtOptions);
 			services.Configure<JwtOptions>(options => Configuration.GetSection(JwtOptions.JwtSection).Bind(options));
 			services.AddAuthentication(options => {
 				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,11 +56,9 @@ namespace BadgeBoard.Api
 					ValidateLifetime = true,
 					ClockSkew = TimeSpan.Zero,
 
-					IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-						Configuration[$"{JwtOptions.JwtSection}:{JwtOptions.JwtKey}"] ??
-						throw new InvalidOperationException())),
-					ValidIssuer = Configuration[$"{JwtOptions.JwtSection}:{JwtOptions.JwtIssuer}"],
-					ValidAudience = Configuration[$"{JwtOptions.JwtSection}:{JwtOptions.JwtAudience}"]
+					IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtOptions.Key)),
+					ValidIssuer = jwtOptions.Issuer,
+					ValidAudience = jwtOptions.Audience
 				};
 			});
 

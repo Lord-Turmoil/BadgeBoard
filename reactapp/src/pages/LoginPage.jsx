@@ -93,12 +93,12 @@ export default function LoginPage() {
         }), 500);
         console.log(dto);
         notifier.auto(dto.meta);
-        
+
         if (dto.meta.status == 0) {
             User.save(dto.data);
             login();
         }
-        
+
         setLoading(false);
     }
 
@@ -118,7 +118,7 @@ export default function LoginPage() {
 
         if (dto.meta.status == 0) {
             api.saveToken(dto.data.token);
-            setTimeout(() => { navigate(-1); }, 1000);
+            setTimeout(() => { navigate("/user/" + user.account.id); }, 1000);
         }
     }
 

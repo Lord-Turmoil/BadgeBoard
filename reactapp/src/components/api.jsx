@@ -16,6 +16,25 @@ class API {
     }
 
     _getDto(err) {
+        if (!Object.hasOwn(err, 'response')) {
+            return {
+                meta: {
+                    status: 101,
+                    message: err.name
+                },
+                data: err.message
+            }
+        }
+        if (!Object.hasOwn(err.response, 'data')) {
+            return {
+                meta: {
+                    status: 66,
+                    message: "Unknown error"
+                },
+                data: err.response
+            }
+        }
+
         var data = err.response.data;
         if (Object.hasOwn(data, 'meta')) {
             return data;

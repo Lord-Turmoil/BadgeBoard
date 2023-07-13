@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 
-import User from '../components/user/user';
-import useUser from "../components/user/useUser";
 import InflateBox from "../components/layout/inflate";
+import ExpandFab from "../components/utility/ExpandFab";
+import { useLocalUser, useUser } from "../components/user/useUser";
+
+import '../assets/css/pages/user/user.mobile.css'
 
 /*
 Parent could not get states of child component, but can use callback
@@ -19,7 +21,7 @@ export default function UserPageMobile() {
     const {
         data: visitor
     } = useLocalUser();
-
+    
     // current visiting user
     const {
         data: user,

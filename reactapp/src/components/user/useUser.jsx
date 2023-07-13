@@ -29,7 +29,7 @@ export const useUser = (uid) => {
                         throw new Error(dto.meta.message);
                     }
                     setData(dto.data);
-                    console.log("🚀 ~ file: useUser.jsx:32 ~ dto.data:", dto.data)
+                    console.log("🚀 > dto.data:", dto.data);
                 } catch (err) {
                     setError(err);
                 } finally {

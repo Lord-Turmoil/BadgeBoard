@@ -3,7 +3,7 @@ class User {
     static get() {
         var str = window.localStorage.getItem("user");
         var user = (str == null) ? null : JSON.parse(str);
-        console.log("🚀 ~ file: user.jsx:6 ~ User ~ get ~ user:", user);
+        console.log("🚀 > User > get > user:", user);
         return user;
     }
 
@@ -44,7 +44,7 @@ class User {
     }
 
     static async fetch(uid) {
-        console.log("🚀 ~ file: user.jsx:46 ~ User ~ fetch ~ uid:", uid)
+        console.log("🚀 > User > fetch > uid:", uid);
         if (uid == null) {
             return null;
         }

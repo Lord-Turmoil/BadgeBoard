@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import User from '../components/user/user';
 import useUser from "../components/user/useUser";
+import InflateBox from "../components/layout/inflate";
 
 export default function UserPageMobile() {
     const navigate = useNavigate();
@@ -22,19 +23,9 @@ export default function UserPageMobile() {
 
     return (
         <div>
-            <h1>User Page Mobile {uid}</h1>
-            { userError ? <div>{JSON.stringify(userError.message)}</div> : null }
-            {userLoading ? <div>Loading...</div> :
-                <div>
-                    <div>
-                        {JSON.stringify(user)}
-                    </div>
-                    <div>
-
-                        {JSON.stringify(visitor)}
-                    </div>
-                </div>
-            }
+            <InflateBox sx={{backgroundColor: 'red'}} overflow>
+                <h1>User Page Mobile</h1>
+            </InflateBox>
         </div>
     );
 }

@@ -3,8 +3,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Avatar, Button, Divider, Grid } from '@mui/material';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import api from '../components/api';
+import stall from '../components/stall';
 import User from '../components/user/User';
 import notifier from '../components/notifier';
 import AvatarUrl from '../components/user/avatarUrl';
@@ -128,20 +131,36 @@ export default function UserPageMobile() {
         return !(mottoError.err || usernameError.err);
     }
 
+    const [onSubmitting, setOnSubmitting] = useState(false);
     const submitEdit = async (event) => {
         event.preventDefault();
 
         if (!isReady()) {
             return;
         }
+
+        setOnSubmitting(true);
+        var status = await stall(submitAll(), 500);
+        if (status) {
+            notifier.success("Profile updated!");
+        }
+        setOnSubmitting(false);
+
+        if (status) {
+            turnOffEdit();
+        }
+    }
+
+    const submitAll = async () => {
         var status = await submitUserInfo();
         if (!status) {
-            notifier.error("Failed to update info");
-            return;
+            return false;
         }
-
-        notifier.success("Profile updated!");
-        turnOffEdit();
+        status = await submitUsername();
+        if (!status) {
+            return false;
+        }
+        return true;
     }
 
     const submitUserInfo = async () => {
@@ -158,6 +177,23 @@ export default function UserPageMobile() {
         setShadow({ ...shadow, ...dto.data });
         user.info = dto.data;
         visitor.info = dto.data;
+        return true;
+    }
+
+    const submitUsername = async () => {
+        if (shadow.username == user.username) {
+            return true;
+        }
+
+        var dto = await api.post("user/username", { username: shadow.username });
+        console.log("🚀 > submitUsername > dto:", dto);
+        if (dto.meta.status != 0) {
+            notifier.error(dto.meta.message);
+            return false;
+        }
+        setShadow({ ...shadow, username: dto.data });
+        user.username = dto.data;
+        visitor.username = dto.data;
         return true;
     }
 
@@ -212,7 +248,9 @@ export default function UserPageMobile() {
                                     <Button fullWidth variant='contained' color='error' onClick={turnOffEdit}>Cancel</Button>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Button disabled={!isReady()} fullWidth variant='contained' color='success' onClick={submitEdit}>Done</Button>
+                                    <Button disabled={!isReady() || onSubmitting} fullWidth variant='contained' color='success' onClick={submitEdit}>
+                                        {onSubmitting ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : "Done"}
+                                    </Button>
                                 </Grid>
                             </Grid>
                             : <Button fullWidth variant="contained" onClick={turnOnEdit}>Edit</Button>

@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 
+import isEqual from 'lodash.isequal';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import moment from 'moment/moment';
 import { Avatar, Button, Divider, Grid } from '@mui/material';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 
 import api from '../components/api';
 import stall from '../components/stall';
@@ -172,6 +176,14 @@ export default function UserPageMobile() {
     }
 
     const submitUserInfo = async () => {
+        if (isEqual(user.info, {
+            motto: shadow.motto,
+            birthday: shadow.birthday,
+            sex: shadow.sex
+        })) {
+            return true;
+        }
+
         var dto = await api.post("user/info", {
             motto: (shadow.motto == user.info.motto) ? null : shadow.motto,
             birthday: (shadow.birthday == user.info.motto) ? null : shadow.birthday,
@@ -206,12 +218,13 @@ export default function UserPageMobile() {
     }
 
     // data format
-    const formatBirthday = (u) => {
-        var birthday = User.birthday(u);
-        if ((birthday == null) || (birthday == '')) {
+    const formatBirthday = (day) => {
+        if (day == null) {
             return null;
+        } else if (day == "") {
+            return moment();
         }
-        return birthday;
+        return moment(day, "YYYY-MM-DD");
     }
 
     return (
@@ -225,7 +238,7 @@ export default function UserPageMobile() {
                     <div className="avatar">
                         <Avatar sx={{ width: 100, height: 100 }} src={AvatarUrl.get(shadow && shadow.avatarUrl)} />
                     </div>
-                    <div className="info-wrapper">
+                    <div className={`info-wrapper${enableEdit ? " active" : ""}`}>
                         <SubtleInput
                             cls='username'
                             error={usernameError.err}
@@ -235,19 +248,33 @@ export default function UserPageMobile() {
                             defaultValue={shadow && shadow.username}
                             onChange={onUsernameChange}
                         />
-                        <Divider />
-                        <SubtleInput
-                            error={mottoError.err}
-                            helperText={mottoError.hint}
-                            placeholder='Personalized signature'
-                            multiline
-                            enabled={enableEdit}
-                            defaultValue={shadow && shadow.motto}
-                            onChange={onMottoChange} />
+                        {(!shadow || !shadow.birthday) && !isOwner() ?
+                            <div className="birthday" style={{ textAlign: "center" }}>A long time ago, in a galaxy far far away...</div>
+                            :
+                            <div className="birthday">
+                                <LocalizationProvider dateAdapter={AdapterMoment}>
+                                    <MobileDatePicker
+                                        disableFuture
+                                        readOnly={!enableEdit}
+                                        value={formatBirthday(shadow ? shadow.birthday : null)}
+                                        onChange={(newValue) => { setShadow({ ...shadow, birthday: newValue.format("YYYY-MM-DD") }) }}
+                                        label="Birthday" />
+                                </LocalizationProvider>
+                            </div>
+                        }
                     </div>
                 </div>
-                <div className="username"></div>
-                <div className="motto"></div>
+                <Divider sx={{ margin: "5px 0" }} />
+                <div style={{ padding: "5px 10px" }}>
+                    <SubtleInput
+                        error={mottoError.err}
+                        helperText={mottoError.hint}
+                        placeholder='Personalized signature'
+                        multiline
+                        enabled={enableEdit}
+                        defaultValue={shadow && shadow.motto}
+                        onChange={onMottoChange} />
+                </div>
                 {isOwner() ?
                     <div className="edit">
                         {enableEdit ?

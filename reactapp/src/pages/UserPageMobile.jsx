@@ -99,7 +99,7 @@ export default function UserPageMobile() {
 
     const checkMotto = (str) => {
         if (str.length > 66) {
-            setMottoError({ err: true, hint: `Too long! (${str.length}/66)` });
+            setMottoError({ err: true, hint: `A little shorter? (${str.length}/66)` });
             return false;
         } else {
             setMottoError({ ...mottoError, err: false });
@@ -114,8 +114,10 @@ export default function UserPageMobile() {
 
     const checkUsername = (str) => {
         if (str.length > 16) {
-            setUsernameError({ err: true, hint: "No more than 10 characters" });
+            setUsernameError({ err: true, hint: `Too long for a name (${str.length}/16)` });
             return false;
+        } else if (str.length < 3) {
+            setUsernameError({ err: true, hint: `Too short for a name (${str.length}/3)` });
         } else {
             setUsernameError({ ...usernameError, err: false });
             return true;

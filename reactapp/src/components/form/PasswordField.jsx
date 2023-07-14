@@ -22,10 +22,10 @@ export default function PasswordField({ sx, error, disabled, hint, onChange }) {
     };
 
     return (
-        <div className={props.class} style={{ display: "flex", alignItems: "flex-end" }}>
+        <div className={props.class} style={{ display: 'flex', alignItems: 'flex-end' }}>
             {props.icon ? props.icon : <KeyRoundedIcon fontSize='large'></KeyRoundedIcon>}
             <FormControl style={{ marginLeft: '10px' }} error={error} fullWidth variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">{props.label ? props.label : "Password"}</InputLabel>
+                <InputLabel htmlFor="outlined-adornment-password">{props.label ? props.label : 'Password'}</InputLabel>
                 <Input
                     id={props.id}
                     ref={props.ref}
@@ -41,15 +41,15 @@ export default function PasswordField({ sx, error, disabled, hint, onChange }) {
                             </IconButton>
                         </InputAdornment>
                     }
-                    label={props.label ? props.label : "Password"}
+                    label={props.label ? props.label : 'Password'}
                     onChange={onChange}
                     disabled={disabled}
                 />
                 <FormHelperText style={{
                     position: 'absolute',
                     top: '95%',
-                    opacity: error ? "100%" : "0%",
-                    transition: "0.3s"
+                    opacity: error ? '100%' : '0%',
+                    transition: '0.3s'
                 }}>{hint}</FormHelperText>
             </FormControl>
         </div>

@@ -29,7 +29,7 @@ class API {
             return {
                 meta: {
                     status: 66,
-                    message: "Unknown error"
+                    message: 'Unknown error'
                 },
                 data: err.response
             }
@@ -50,10 +50,10 @@ class API {
     }
 
     async refresh() {
-        var dto = await this._post("auth/token/refresh");
+        var dto = await this._post('auth/token/refresh');
         if (dto.meta.status == 0) {
             this.saveToken();
-            window.localStorage.setItem("uid", dto.data.id);
+            window.localStorage.setItem('uid', dto.data.id);
             return dto.data;
         }
 
@@ -110,7 +110,7 @@ class API {
     }
 
     saveToken(token) {
-        window.localStorage.setItem("token", "bearer " + token);
+        window.localStorage.setItem('token', 'bearer ' + token);
     }
 }
 

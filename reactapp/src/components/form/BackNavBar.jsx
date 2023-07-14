@@ -12,7 +12,7 @@ export default function BackNavBar() {
             <Fab size="medium" color="primary" onClick={() => { navigate(-1); }}>
                 <ArrowBackIosRoundedIcon />
             </Fab>
-            <Fab size="medium" sx={{ marginLeft: '10px' }} color="primary" onClick={() => { navigate("/"); }}>
+            <Fab size="medium" sx={{ marginLeft: '10px' }} color="primary" onClick={() => { navigate('/'); }}>
                 <HomeRoundedIcon />
             </Fab>
         </div>

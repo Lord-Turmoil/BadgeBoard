@@ -1,6 +1,6 @@
-import { ExpandLessRounded, ExpandMoreRounded } from "@mui/icons-material";
-import { Fab } from "@mui/material";
-import { useState } from "react";
+import { ExpandLessRounded, ExpandMoreRounded } from '@mui/icons-material';
+import { Fab } from '@mui/material';
+import { useState } from 'react';
 
 export default function ExpandFab({ onClick = null }) {
     const [expandOn, setExpandOn] = useState(false);
@@ -14,7 +14,7 @@ export default function ExpandFab({ onClick = null }) {
         <Fab color="primary" onClick={toggleOn}>
             <ExpandMoreRounded fontSize="large" sx={{
                 transition: 'transform 0.3s',
-                transform: expandOn ? "rotate(0deg)" : "rotate(180deg)"
+                transform: expandOn ? 'rotate(0deg)' : 'rotate(180deg)'
             }} />
         </Fab>
     );

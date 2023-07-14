@@ -83,6 +83,6 @@
 }
 
 .user-main .panel .edit {
-    height: 50px;
+    padding: 10px 20px;
     background-color: crimson;
 }

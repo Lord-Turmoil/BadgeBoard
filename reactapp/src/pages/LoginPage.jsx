@@ -25,8 +25,8 @@ const USERNAME_REGEX = new RegExp(/^[ a-z0-9_-]{3,20}$/i);
 
 const CHECK_DELAY = 300;
 
-var usernameText = "";
-var passwordText = "";
+var usernameText = '';
+var passwordText = '';
 
 function setUsernameText(str) {
     usernameText = str;
@@ -42,15 +42,15 @@ export default function LoginPage() {
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
 
-    const [username, setUsername] = useState({ value: "", error: false, hint: "" });
-    const [password, setPassword] = useState({ value: "", error: false, hint: "" });
+    const [username, setUsername] = useState({ value: '', error: false, hint: '' });
+    const [password, setPassword] = useState({ value: '', error: false, hint: '' });
 
     const onUsernameChange = (event) => {
         var newUsername = event.target.value.trim();
 
         setUsernameText(newUsername);
         if ((newUsername.length > 0) && !USERNAME_REGEX.test(newUsername)) {
-            setUsername({ ...username, value: newUsername, error: true, hint: "3 ~ 20 characters (a-zA-Z0-9_-)" });
+            setUsername({ ...username, value: newUsername, error: true, hint: '3 ~ 20 characters (a-zA-Z0-9_-)' });
             good = false;
         } else {
             setUsername({ ...username, value: newUsername, error: false });
@@ -62,7 +62,7 @@ export default function LoginPage() {
         var newPassword = event.target.value.trim();
         setPasswordText(newPassword);
         if ((newPassword.length > 0) && !PASSWORD_REGEX.test(newPassword)) {
-            setPassword({ ...password, value: newPassword, error: true, hint: "6 ~ 16 characters (a-zA-Z0-9_-)" });
+            setPassword({ ...password, value: newPassword, error: true, hint: '6 ~ 16 characters (a-zA-Z0-9_-)' });
         } else {
             setPassword({ ...password, value: newPassword, error: false });
         }
@@ -70,13 +70,13 @@ export default function LoginPage() {
 
     // action button
     const onClickReset = (event) => {
-        setUsernameText("");
-        setPasswordText("");
-        setUsername({ ...username, value: "", error: false });
-        setPassword({ ...password, value: "", error: false });
-        usernameRef.current.getElementsByTagName("input")[0].value = "";
-        passwordRef.current.getElementsByTagName("input")[0].value = "";
-        notifier.info("All cleared!😀", true);
+        setUsernameText('');
+        setPasswordText('');
+        setUsername({ ...username, value: '', error: false });
+        setPassword({ ...password, value: '', error: false });
+        usernameRef.current.getElementsByTagName('input')[0].value = '';
+        passwordRef.current.getElementsByTagName('input')[0].value = '';
+        notifier.info('All cleared!😀', true);
     }
 
     const onClickSubmit = async (event) => {
@@ -86,11 +86,11 @@ export default function LoginPage() {
 
         setLoading(true);
 
-        var dto = await stall(api.post("auth/login", {
+        var dto = await stall(api.post('auth/login', {
             username: usernameText,
             password: passwordText
         }), 500);
-        console.log("🚀 > onClickSubmit > dto:", dto);
+        console.log('🚀 > onClickSubmit > dto:', dto);
         notifier.auto(dto.meta);
 
         if (dto.meta.status == 0) {
@@ -104,20 +104,20 @@ export default function LoginPage() {
     const login = async () => {
         var user = User.get();
         if (user == null) {
-            notifier.error("Local storage error");
+            notifier.error('Local storage error');
             return;
         }
 
-        var dto = await api.post("auth/token/get", {
+        var dto = await api.post('auth/token/get', {
             id: user.account.id,
             password: passwordText
         });
-        console.log("🚀 > login > dto:", dto);
+        console.log('🚀 > login > dto:', dto);
         notifier.auto(dto.meta);
 
         if (dto.meta.status == 0) {
             api.saveToken(dto.data.token);
-            setTimeout(() => { navigate("/user/" + user.account.id); }, 1000);
+            setTimeout(() => { navigate('/user/' + user.account.id); }, 1000);
         }
     }
 
@@ -186,7 +186,7 @@ export default function LoginPage() {
                             </div>
                             <div className='submit'>
                                 <Button fullWidth variant='contained' color='success' disabled={!ready} onClick={loading ? null : onClickSubmit}>
-                                    {loading ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : "Sign in"}
+                                    {loading ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : 'Sign in'}
                                 </Button>
                             </div>
                         </div>

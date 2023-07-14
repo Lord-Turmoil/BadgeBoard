@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import api from "../api";
-import User from "./User";
+import { useEffect, useState } from 'react';
+import api from '../api';
+import User from './User';
 
 export const useLocalUser = () => {
     const [data, setData] = useState(null);
@@ -24,12 +24,12 @@ export const useUser = (uid, callback = null) => {
             (async () => {
                 try {
                     setLoading(true);
-                    var dto = await api.get("user/user", { id: uid });
+                    var dto = await api.get('user/user', { id: uid });
                     if (dto.meta.status != 0) {
                         throw new Error(dto.meta.message);
                     }
                     setData(dto.data);
-                    console.log("🚀 > dto.data:", dto.data);
+                    console.log('🚀 > dto.data:', dto.data);
                 } catch (err) {
                     setError(err);
                     callback && callback();

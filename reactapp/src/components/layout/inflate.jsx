@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 // Anything between opening and closing tags goes into children prop.
 export default function InflateBox({ children, overflow=false, sx={} }) {
-    const [height, setHeight] = useState(overflow ? "auto" : "100%");
-    const [minHeight, setMinHeight] = useState("100%");
+    const [height, setHeight] = useState(overflow ? 'auto' : '100%');
+    const [minHeight, setMinHeight] = useState('100%');
 
     function onResize() {
-        var newHeight = window.innerHeight + "px";
+        var newHeight = window.innerHeight + 'px';
         setMinHeight(newHeight);
-        setHeight(overflow ? "auto" : newHeight);
+        setHeight(overflow ? 'auto' : newHeight);
     }
 
     useEffect(() => {

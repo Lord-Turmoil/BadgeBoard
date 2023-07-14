@@ -27,9 +27,9 @@ const CHECK_DELAY = 300;
 const DUP_CHECK_DELAY = 3000;
 var timer = null;    // none state variable should be declared outside...
 
-var usernameText = "";
-var passwordText = "";
-var confirmText = "";
+var usernameText = '';
+var passwordText = '';
+var confirmText = '';
 
 function setUsernameText(str) {
     usernameText = str;
@@ -48,9 +48,9 @@ export default function RegisterPage() {
     const passwordRef = useRef(null);
     const confirmRef = useRef(null);
 
-    const [username, setUsername] = useState({ value: "", error: false, hint: "" });
-    const [password, setPassword] = useState({ value: "", error: false, hint: "" });
-    const [confirm, setConfirm] = useState({ value: "", error: false, hint: "" });
+    const [username, setUsername] = useState({ value: '', error: false, hint: '' });
+    const [password, setPassword] = useState({ value: '', error: false, hint: '' });
+    const [confirm, setConfirm] = useState({ value: '', error: false, hint: '' });
 
     const onUsernameChange = (event) => {
         var newUsername = event.target.value.trim();
@@ -58,7 +58,7 @@ export default function RegisterPage() {
 
         setUsernameText(newUsername);
         if ((newUsername.length > 0) && !USERNAME_REGEX.test(newUsername)) {
-            setUsername({ ...username, value: newUsername, error: true, hint: "3 ~ 20 characters (a-zA-Z0-9_-)" });
+            setUsername({ ...username, value: newUsername, error: true, hint: '3 ~ 20 characters (a-zA-Z0-9_-)' });
             good = false;
         } else {
             setUsername({ ...username, value: newUsername, error: false });
@@ -79,7 +79,7 @@ export default function RegisterPage() {
         var newPassword = event.target.value.trim();
         setPasswordText(newPassword);
         if ((newPassword.length > 0) && !PASSWORD_REGEX.test(newPassword)) {
-            setPassword({ ...password, value: newPassword, error: true, hint: "6 ~ 16 characters (a-zA-Z0-9_-)" });
+            setPassword({ ...password, value: newPassword, error: true, hint: '6 ~ 16 characters (a-zA-Z0-9_-)' });
         } else {
             setPassword({ ...password, value: newPassword, error: false });
         }
@@ -96,24 +96,24 @@ export default function RegisterPage() {
     // Bad async!!!
     const checkConfirm = () => {
         if (confirmText !== passwordText) {
-            setConfirm({ ...confirm, value: confirmText, error: true, hint: "Passwords inconsistent" });
+            setConfirm({ ...confirm, value: confirmText, error: true, hint: 'Passwords inconsistent' });
         } else {
-            setConfirm({ ...confirm, value: confirmText, error: false, hint: "" });
+            setConfirm({ ...confirm, value: confirmText, error: false, hint: '' });
         }
     }
 
     // action button
     const onClickReset = (event) => {
-        setUsernameText("");
-        setPasswordText("");
-        setConfirmText("");
-        setUsername({ ...username, value: "", error: false });
-        setPassword({ ...password, value: "", error: false });
-        setConfirm({ ...confirm, value: "", error: false });
-        usernameRef.current.getElementsByTagName("input")[0].value = "";
-        passwordRef.current.getElementsByTagName("input")[0].value = "";
-        confirmRef.current.getElementsByTagName("input")[0].value = "";
-        notifier.info("All cleared!", true);
+        setUsernameText('');
+        setPasswordText('');
+        setConfirmText('');
+        setUsername({ ...username, value: '', error: false });
+        setPassword({ ...password, value: '', error: false });
+        setConfirm({ ...confirm, value: '', error: false });
+        usernameRef.current.getElementsByTagName('input')[0].value = '';
+        passwordRef.current.getElementsByTagName('input')[0].value = '';
+        confirmRef.current.getElementsByTagName('input')[0].value = '';
+        notifier.info('All cleared!', true);
     }
 
     const onClickSubmit = async (event) => {
@@ -130,15 +130,15 @@ export default function RegisterPage() {
             setLoading(false);
             return;
         }
-        var dto = await stall(api.post("auth/register", {
+        var dto = await stall(api.post('auth/register', {
             username: usernameText,
             password: passwordText
         }), 500);
-        console.log("🚀 > onClickSubmit > dto:", dto);
+        console.log('🚀 > onClickSubmit > dto:', dto);
         notifier.auto(dto.meta);
 
         if (dto.meta.status == 0) {
-            setTimeout(() => { navigate("/login") }, 1000);
+            setTimeout(() => { navigate('/login') }, 1000);
         }
 
         setLoading(false);
@@ -179,9 +179,9 @@ export default function RegisterPage() {
             type: 'username',
             value: name
         }).then(dto => {
-            return { status: dto.data, message: dto.data ? "Username already occupied" : "" };
+            return { status: dto.data, message: dto.data ? 'Username already occupied' : '' };
         }).catch(dto => {
-            return { status: true, message: "Server error, please stand by" };
+            return { status: true, message: 'Server error, please stand by' };
         });
     }
 
@@ -239,7 +239,7 @@ export default function RegisterPage() {
                             </div>
                             <div className='submit'>
                                 <Button fullWidth variant='contained' color='success' disabled={!ready} onClick={loading ? null : onClickSubmit}>
-                                    {loading ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : "Sign up"}
+                                    {loading ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : 'Sign up'}
                                 </Button>
                             </div>
                         </div>

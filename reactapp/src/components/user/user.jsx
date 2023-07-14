@@ -1,9 +1,9 @@
-import api from "../api";
+import api from '../api';
 class User {
     static get() {
-        var str = window.localStorage.getItem("user");
+        var str = window.localStorage.getItem('user');
         var user = (str == null) ? null : JSON.parse(str);
-        console.log("🚀 > User > get > user:", user);
+        console.log('🚀 > User > get > user:', user);
         return user;
     }
 
@@ -18,8 +18,8 @@ class User {
     }
 
     static save(user) {
-        window.localStorage.setItem("uid", user.account.id);
-        window.localStorage.setItem("user", JSON.stringify(user));
+        window.localStorage.setItem('uid', user.account.id);
+        window.localStorage.setItem('user', JSON.stringify(user));
     }
 
     static savePreference(preference) {
@@ -39,17 +39,17 @@ class User {
     }
 
     static drop() {
-        window.localStorage.removeItem("uid");
-        window.localStorage.removeItem("user");
+        window.localStorage.removeItem('uid');
+        window.localStorage.removeItem('user');
     }
 
     static async fetch(uid) {
-        console.log("🚀 > User > fetch > uid:", uid);
+        console.log('🚀 > User > fetch > uid:', uid);
         if (uid == null) {
             return null;
         }
 
-        var dto = await api.get("user/user", { id: uid })
+        var dto = await api.get('user/user', { id: uid })
         if (dto.meta.status == 0) {
             return dto.data;
         } else {

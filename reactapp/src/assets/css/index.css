@@ -14,4 +14,11 @@ a {
 .font-hand {
     font-family: 'Lucida Handwriting';
 }
-    
+
+.font-ui {
+    font-family: 'Segoe UI';
+}
+
+#root {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

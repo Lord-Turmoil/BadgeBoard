@@ -11,7 +11,7 @@ export const useLocalUser = () => {
     return { data };
 }
 
-export const useUser = (uid) => {
+export const useUser = (uid, callback = null) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -32,6 +32,7 @@ export const useUser = (uid) => {
                     console.log("🚀 > dto.data:", dto.data);
                 } catch (err) {
                     setError(err);
+                    callback && callback();
                 } finally {
                     setLoading(false);
                 }
@@ -39,6 +40,7 @@ export const useUser = (uid) => {
         } else {
             setData(null);
             setLoading(false);
+            callback && callback();
         }
         return () => {
             didCancel = true;

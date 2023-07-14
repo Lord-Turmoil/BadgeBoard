@@ -1,5 +1,12 @@
+.user-main .user-mobile-main {
+    --nav-height: 60px;
+    --nav-radius: 15px;
+    --nav-margin: 10px;
+    --panel-margin-top: 80px;
+}
+
 .user-main .nav-wrapper {
-    position: absolute;
+    position: fixed;
     width: calc(100% - var(--nav-margin) * 2);
     height: var(--nav-height);
     margin: var(--nav-margin);
@@ -7,6 +14,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    z-index: 100;
 }
 
 .user-main .nav-wrapper .drop {
@@ -21,6 +29,60 @@
     height: 100%;
     margin-left: var(--nav-margin);
     border-radius: var(--nav-radius);
-    box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12);
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
     background-color: rgba(0, 200, 0, 0.5);
+}
+
+.user-main .panel {
+    position: fixed;
+    width: calc(100% - var(--nav-margin) * 2);
+    margin: 0 var(--nav-margin);
+    margin-top: var(--panel-margin-top);
+    border-radius: var(--nav-radius);
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    transform: translate(0, -100%);
+    transition: cubic-bezier(1, 0, 0, 1) 0.3s;
+    z-index: 50;
+    background-color: rgba(0, 0, 200, 0.3);
+    overflow: hidden;
+}
+
+.user-main .panel.active {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+.user-main .panel .primary {
+    display: flex;
+    background-color: lightcoral;
+}
+
+.user-main .panel .primary .avatar {
+    padding: 10px;
+    background-color: azure;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.user-main .panel .primary .info-wrapper {
+    flex: 1;
+    background-color: brown;
+}
+
+.user-main .panel .primary .info-wrapper .username {
+    padding: 10px 0;
+    text-align: center;
+    background-color: chartreuse;
+}
+
+.user-main .panel .motto {
+    height: 80px;
+    background-color: aqua;
+}
+
+.user-main .panel .edit {
+    height: 50px;
+    background-color: crimson;
 }

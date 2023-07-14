@@ -48,14 +48,15 @@ export default function UserPageMobile() {
     }
 
     // edit
+    const [shadow, setShadow] = useState(null);
     const [enableEdit, setEnableEdit] = useState(false);
     const toggleEnableEdit = () => {
         setEnableEdit(!enableEdit);
+        if (enableEdit) {
+            // ... set shadow
+        }
     }
-    useEffect(() => {
-        console.log('🚀 > useEffect > enableEdit:', enableEdit);
-    }, [enableEdit]);
-
+    
     // data format
     const formatBirthday = (u) => {
         var birthday = User.birthday(u);

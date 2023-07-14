@@ -59,33 +59,15 @@ class User {
 
     // detailed getter and setter
     static username(user, username) {
-        if (user == null) {
-            return null;
-        }
-        if (username != null) {
-            user.username = username;
-        }
-        return user.username;
+        return user ? user.username : null;
     }
 
-    static motto(user, motto) {
-        if (user == null) {
-            return null;
-        }
-        if (motto != null) {
-            user.info.motto = motto;
-        }
-        return user.info.motto;
+    static motto(user) {
+        return user ? user.info.motto : null;
     }
 
     static birthday(user, birthday) {
-        if (user == null) {
-            return null;
-        }
-        if (birthday != null) {
-            user.info.birthday = birthday;
-        }
-        return user.info.birthday;
+       return user ? user.info.birthday : null;
     }
 }
 

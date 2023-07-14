@@ -33,7 +33,7 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Services.Utils
 
 		public static int? TryGetUserIdFromJwtBearerToken(string token)
 		{
-			if (token.StartsWith("bearer ")) {
+			if (token.StartsWith("bearer ", StringComparison.OrdinalIgnoreCase)) {
 				token = token[7..];
 			}
 			var value = JwtUtil.GetValueFromBearerToken(token);

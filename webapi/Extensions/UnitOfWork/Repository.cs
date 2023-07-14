@@ -385,7 +385,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// <param name="ignoreQueryFilters">Ignore query filters</param>
         /// <returns>An <see cref="IPagedList{TEntity}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
         /// <remarks>This method default no-tracking query.</remarks>
-        public virtual TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate = null,
+        public virtual TEntity? GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate = null,
                                          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
                                          Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
                                          bool disableTracking = true,
@@ -425,7 +425,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
 
 
         /// <inheritdoc />
-        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null,
+        public virtual async Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true,
@@ -565,14 +565,14 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// </summary>
         /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
         /// <returns>The found entity or null.</returns>
-        public virtual TEntity Find(params object[] keyValues) => _dbSet.Find(keyValues);
+        public virtual TEntity? Find(params object[] keyValues) => _dbSet.Find(keyValues);
 
         /// <summary>
         /// Finds an entity with the given primary key values. If found, is attached to the context and returned. If no entity is found, then null is returned.
         /// </summary>
         /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
         /// <returns>A <see cref="Task{TEntity}" /> that represents the asynchronous insert operation.</returns>
-        public virtual ValueTask<TEntity> FindAsync(params object[] keyValues) => _dbSet.FindAsync(keyValues);
+        public virtual ValueTask<TEntity?> FindAsync(params object[] keyValues) => _dbSet.FindAsync(keyValues);
 
         /// <summary>
         /// Finds an entity with the given primary key values. If found, is attached to the context and returned. If no entity is found, then null is returned.
@@ -580,7 +580,7 @@ namespace Arch.EntityFrameworkCore.UnitOfWork
         /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         /// <returns>A <see cref="Task{TEntity}"/> that represents the asynchronous find operation. The task result contains the found entity or null.</returns>
-        public virtual ValueTask<TEntity> FindAsync(object[] keyValues, CancellationToken cancellationToken) => _dbSet.FindAsync(keyValues, cancellationToken);
+        public virtual ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken) => _dbSet.FindAsync(keyValues, cancellationToken);
 
         /// <summary>
         /// Gets the count based on a predicate.

@@ -15,4 +15,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 		public int? Sex { get; set; }
 	}
 
+	public class UpdateUsernameDto
+	{
+		public string? Username { get; set; }
+	}
 }

@@ -6,7 +6,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
 	public class UserAlreadyExistsDto : OrdinaryDto
 	{
-		public UserAlreadyExistsDto() : base(Errors.UserAlreadyExists, "User already exists")
+		public UserAlreadyExistsDto(string? message = "User already exists") : base(Errors.UserAlreadyExists, message)
 		{
 		}
 	}

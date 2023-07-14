@@ -24,7 +24,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 			var repo = _unitOfWork.GetRepository<User>();
 			bool data;
-			switch(type) {
+			switch (type) {
 				case "id":
 					if (TryParse(value, out var id)) {
 						data = await UserUtil.HasUserByIdAsync(repo, id);
@@ -34,7 +34,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 					break;
 				case "username":
 					data = await UserUtil.HasUserByUsernameAsync(repo, value);
-					break; 
+					break;
 				default:
 					return new BadRequestResponse(new BadRequestDto("Bad type"));
 			};
@@ -91,6 +91,32 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			return new GoodResponse(new GoodWithDataDto(_mapper.Map<UserInfo, UserInfoDto>(user.Info)));
 		}
 
+		public async Task<ApiResponse> UpdateUsername(int id, UpdateUsernameDto dto)
+		{
+			var repo = _unitOfWork.GetRepository<User>();
+			var user = await UserUtil.GetUserByIdAsync(repo, id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			if (!AccountVerifier.VerifyUsername(dto.Username)) {
+				return new BadRequestResponse(new BadRequestDto("Bad username"));
+			}
+
+			if (user.Username == dto.Username) {
+				return new GoodResponse(new GoodWithDataDto(user.Username));
+			}
+
+			if (await UserUtil.HasUserByUsernameAsync(repo, dto.Username)) {
+				return new GoodResponse(new UserAlreadyExistsDto("Duplicated username"));
+			}
+
+			user.Username = dto.Username ?? user.Username;
+			await _unitOfWork.SaveChangesAsync();
+
+			return new GoodResponse(new GoodWithDataDto(user.Username));
+		}
+
 		public async Task<ApiResponse> GetUser(int id)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
@@ -114,7 +140,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			await User.IncludeAsync(_unitOfWork, user);
-			var data= _mapper.Map<User, UserCompleteDto>(user);
+			var data = _mapper.Map<User, UserCompleteDto>(user);
 
 			return new GoodResponse(new GoodWithDataDto(data));
 		}

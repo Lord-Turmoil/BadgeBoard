@@ -13,6 +13,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public Task<ApiResponse> UpdateInfo(int id, UpdateUserInfoDto dto);
 
+		public Task<ApiResponse> UpdateUsername(int id, UpdateUsernameDto dto);
+
 		// get user properties
 		public Task<ApiResponse> GetUser(int id);
 

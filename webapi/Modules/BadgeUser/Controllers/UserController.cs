@@ -56,6 +56,22 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 		}
 
 
+		[HttpPost]
+		[Route("username")]
+		[Authorize]
+		public async Task<ApiResponse> UpdateUsername(
+			[FromHeader] string authorization,
+			[FromBody] UpdateUsernameDto dto)
+		{
+			var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
+			if (id == null) {
+				return new UnauthorizedResponse(new BadUserJwtDto());
+			}
+
+			return await _service.UpdateUsername((int)id, dto);
+		}
+
+
 		[HttpGet]
 		[Route("user")]
 		public async Task<ApiResponse> GetUser([FromQuery] int id)

@@ -152,15 +152,14 @@ export default function UserPageMobile() {
     }
 
     const submitAll = async () => {
-        var status = await submitUserInfo();
-        if (!status) {
-            return false;
+        var ret = true;
+        if (!await submitUserInfo()) {
+            ret = false;
         }
-        status = await submitUsername();
-        if (!status) {
-            return false;
+        if (!await submitUsername()) {
+            ret = false;
         }
-        return true;
+        return ret;
     }
 
     const submitUserInfo = async () => {

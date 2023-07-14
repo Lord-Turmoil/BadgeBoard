@@ -15,5 +15,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		// get user properties
 		public Task<ApiResponse> GetUser(int id);
+
+		// get current user
+		public Task<ApiResponse> GetCurrentUser(int id);
 	}
 }

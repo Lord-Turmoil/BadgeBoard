@@ -66,5 +66,18 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 
 			return await _service.GetUser(id);
 		}
+
+		[HttpGet]
+		[Route("current")]
+		[Authorize]
+		public async Task<ApiResponse> GetCurrentUser([FromHeader] string authorization)
+		{
+			var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
+			if (id == null) {
+				return new UnauthorizedResponse(new BadUserJwtDto());
+			}
+
+			return await _service.GetCurrentUser((int)id);
+		}
 	}
 }

@@ -2,13 +2,37 @@ import { useEffect, useState } from 'react';
 import api from '../api';
 import User from './User';
 
-export const useLocalUser = () => {
+export const useLocalUser = (update = null, callback = null) => {
     const [data, setData] = useState(null);
-    useEffect(() => {
-        setData(User.get());
-    }, []);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    return { data };
+    useEffect(() => {
+        let didCancel = false;
+
+        setError(null);
+        (async () => {
+            try {
+                setLoading(true);
+                var dto = await api.get('user/current');
+                if (dto.meta.status != 0) {
+                    throw new Error(dto.meta.message);
+                }
+                setData(dto.data);
+                console.log('🚀 > dto.data:', dto.data);
+            } catch (err) {
+                setError(err);
+                callback && callback();
+            } finally {
+                setLoading(false);
+            }
+        })();
+        return () => {
+            didCancel = true;
+        }
+    }, [update]);
+
+    return { data, loading, error };
 }
 
 export const useUser = (uid, callback = null) => {

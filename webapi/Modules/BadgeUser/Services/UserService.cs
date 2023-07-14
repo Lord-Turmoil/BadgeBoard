@@ -104,5 +104,19 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 			return new GoodResponse(new GoodWithDataDto(data));
 		}
+
+		public async Task<ApiResponse> GetCurrentUser(int id)
+		{
+			var repo = _unitOfWork.GetRepository<User>();
+			var user = await UserUtil.GetUserByIdAsync(repo, id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			await User.IncludeAsync(_unitOfWork, user);
+			var data= _mapper.Map<User, UserCompleteDto>(user);
+
+			return new GoodResponse(new GoodWithDataDto(data));
+		}
 	}
 }

@@ -57,8 +57,17 @@ class User {
         }
     }
 
+    // get flat user
+    static flat(user) {
+        return user ? {
+            ...user.info,
+            username: user.username,
+            avatarUrl: user.avatarUrl
+        } : null;
+    }
+
     // detailed getter and setter
-    static username(user, username) {
+    static username(user) {
         return user ? user.username : null;
     }
 
@@ -66,8 +75,8 @@ class User {
         return user ? user.info.motto : null;
     }
 
-    static birthday(user, birthday) {
-       return user ? user.info.birthday : null;
+    static birthday(user) {
+        return user ? user.info.birthday : null;
     }
 }
 

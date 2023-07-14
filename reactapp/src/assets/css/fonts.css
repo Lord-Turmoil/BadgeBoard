@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'Selima';
-    src: url('/res/fonts/Selima.eot');
-    src: url('/res/fonts/Selima.eot?#iefix') format('embedded-opentype'),
-        url('/res/fonts/Selima.woff2') format('woff2'),
-        url('/res/fonts/Selima.woff') format('woff'),
-        url('/res/fonts/Selima.svg#Selima') format('svg');
+    src: url('/static/fonts/Selima.eot');
+    src: url('/static/fonts/Selima.eot?#iefix') format('embedded-opentype'),
+        url('/static/fonts/Selima.woff2') format('woff2'),
+        url('/static/fonts/Selima.woff') format('woff'),
+        url('/static/fonts/Selima.svg#Selima') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -12,11 +12,11 @@
 
 @font-face {
     font-family: 'Lucida Handwriting';
-    src: url('/res/fonts/LucidaHandwriting-Italic.eot');
-    src: url('/res/fonts/LucidaHandwriting-Italic.eot?#iefix') format('embedded-opentype'),
-        url('/res/fonts/LucidaHandwriting-Italic.woff2') format('woff2'),
-        url('/res/fonts/LucidaHandwriting-Italic.woff') format('woff'),
-        url('/res/fonts/LucidaHandwriting-Italic.svg#LucidaHandwriting-Italic') format('svg');
+    src: url('/static/fonts/LucidaHandwriting-Italic.eot');
+    src: url('/static/fonts/LucidaHandwriting-Italic.eot?#iefix') format('embedded-opentype'),
+        url('/static/fonts/LucidaHandwriting-Italic.woff2') format('woff2'),
+        url('/static/fonts/LucidaHandwriting-Italic.woff') format('woff'),
+        url('/static/fonts/LucidaHandwriting-Italic.svg#LucidaHandwriting-Italic') format('svg');
     font-weight: normal;
     font-style: italic;
     font-display: swap;
@@ -24,11 +24,11 @@
 
 @font-face {
     font-family: 'Consolas';
-    src: url('/res/fonts/Consolas.eot');
-    src: url('/res/fonts/Consolas.eot?#iefix') format('embedded-opentype'),
-        url('/res/fonts/Consolas.woff2') format('woff2'),
-        url('/res/fonts/Consolas.woff') format('woff'),
-        url('/res/fonts/Consolas.svg#Consolas') format('svg');
+    src: url('/static/fonts/Consolas.eot');
+    src: url('/static/fonts/Consolas.eot?#iefix') format('embedded-opentype'),
+        url('/static/fonts/Consolas.woff2') format('woff2'),
+        url('/static/fonts/Consolas.woff') format('woff'),
+        url('/static/fonts/Consolas.svg#Consolas') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: swap;

@@ -42,11 +42,23 @@ export default function UserPageMobile() {
         data: user,
         loading: userLoading,
         error: userError
-    } = useUser(uid ? uid : (visitor ? visitor.account.id : null), () => { navigate('/404'); });
+    } = useUser(uid ? uid : (visitor ? visitor.account.id : null), () => {
+        // waiting for visitor to complete loading
+        if (visitorLoading) {
+            navigate('/404');
+        }
+    });
 
     useEffect(() => {
         console.log("🚀 > useEffect > user:", user);
     }, [user]);
+
+    useEffect(() => {
+        if (userError) {
+            notifier.error(userError.message);
+            setTimeout(() => { navigate(-1) }, 1000);
+        }
+    }, [userError]);
 
     const isOwner = () => {
         if ((visitor == null) || (user == null)) {

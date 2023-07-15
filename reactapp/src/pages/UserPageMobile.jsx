@@ -346,7 +346,6 @@ export default function UserPageMobile() {
                             helperText={mottoError.err ? mottoError.hint : ""}
                             placeholder='Personalized signature'
                             multiline
-                            enabled={enableEdit}
                             defaultValue={shadow && shadow.motto}
                             onChange={onMottoChange}
                             variant='outlined'

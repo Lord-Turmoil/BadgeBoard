@@ -89,7 +89,7 @@ export default function LoginPage() {
         var dto = await stall(api.post('auth/login', {
             username: usernameText,
             password: passwordText
-        }), 500);
+        }));
         console.log('🚀 > onClickSubmit > dto:', dto);
         notifier.auto(dto.meta);
 

@@ -197,7 +197,7 @@ export default function UserPageMobile() {
         }
 
         setOnSubmitting(true);
-        var status = await stall(submitAll(), 500);
+        var status = await stall(submitAll());
         if (status) {
             notifier.success("Profile updated!");
             turnOffEdit();

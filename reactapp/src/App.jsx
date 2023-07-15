@@ -15,7 +15,6 @@ export default class App extends Component {
                 <Route exact path="/register" element={<RegisterPage></RegisterPage>}></Route>
                 <Route exact path="/login" element={<LoginPage></LoginPage>}></Route>
                 <Route exact path="/user/:uid" element={<UserPage></UserPage>}></Route>
-                <Route exact path="/user" element={<UserPage></UserPage>}></Route>
                 <Route exact path="*" element={<NotFoundPage></NotFoundPage>}></Route>
             </Routes>
         );

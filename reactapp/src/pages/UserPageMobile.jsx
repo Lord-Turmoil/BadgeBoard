@@ -4,11 +4,16 @@ import isEqual from 'lodash.isequal';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import moment from 'moment/moment';
-import { Avatar, Button, Divider, Grid } from '@mui/material';
+import CakeRoundedIcon from '@mui/icons-material/CakeRounded';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import MaleRoundedIcon from '@mui/icons-material/MaleRounded';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import FemaleRoundedIcon from '@mui/icons-material/FemaleRounded';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
+import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
+import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
+import { Avatar, Button, Divider, FormControl, FormControlLabel, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material';
 
 import api from '../components/api';
 import stall from '../components/stall';
@@ -78,7 +83,28 @@ export default function UserPageMobile() {
     }
 
     // edit
+    const getSexText = (no) => {
+        switch (no) {
+            case 1: return "Male";
+            case 2: return "Female";
+            default: return "Unknown";
+        }
+    }
+
+    const getSexNo = (text) => {
+        if (text == null) {
+            return 0;
+        }
+        switch (text.toLowerCase()) {
+            case "male": return 1;
+            case "female": return 2;
+            default: return 0;
+        }
+    }
+
     const [shadow, setShadow] = useState({});
+    const [sex, setSex] = useState(getSexText(shadow.sex));
+
     useEffect(() => {
         setShadow(User.flat(user));
         console.log("🚀 > useEffect > getShadow(user):", User.flat(user));
@@ -87,7 +113,9 @@ export default function UserPageMobile() {
     const [enableEdit, setEnableEdit] = useState(false);
 
     const turnOnEdit = () => {
-        setShadow(User.flat(user));
+        var flat = User.flat(user);
+        setShadow(flat);
+        setSex(getSexText(flat.sex));
         setEnableEdit(true);
     }
 
@@ -126,6 +154,13 @@ export default function UserPageMobile() {
         }
     }
 
+    const getMotto = (str) => {
+        if (str == null || str.length == 0) {
+            return <span style={{ color: "rgba(0, 0, 0, 0.5)" }}>Nothing to say...</span>
+        } else {
+            return str;
+        }
+    }
     const onUsernameChange = (event) => {
         event.preventDefault();
         setShadow({ ...shadow, username: event.target.value.trim().replace(/[\r\n]/g, '') });
@@ -142,6 +177,12 @@ export default function UserPageMobile() {
             return true;
         }
     }
+
+    useEffect(() => {
+        setShadow({ ...shadow, sex: getSexNo(sex) });
+    }, [sex]);
+
+    // Submitting
 
     const isReady = () => {
         return !(mottoError.err || usernameError.err);
@@ -227,6 +268,14 @@ export default function UserPageMobile() {
         return moment(day, "YYYY-MM-DD");
     }
 
+    const getBirthday = (str) => {
+        if (str == null || str.length == 0) {
+            return <span style={{ color: "rgba(0, 0, 0, 0.5)" }}>????-??-??</span>
+        } else {
+            return str;
+        }
+    }
+    
     return (
         <div className="user-mobile-main">
             <div className="nav-wrapper">
@@ -238,43 +287,79 @@ export default function UserPageMobile() {
                     <div className="avatar">
                         <Avatar sx={{ width: 100, height: 100 }} src={AvatarUrl.get(shadow && shadow.avatarUrl)} />
                     </div>
-                    <div className={`info-wrapper${enableEdit ? " active" : ""}`}>
+                    <div className="info-wrapper">
                         <SubtleInput
                             cls='username'
+                            sx={enableEdit ? { marginTop: "15px" } : null}
                             error={usernameError.err}
                             helperText={usernameError.hint}
                             placeholder='Username'
                             enabled={enableEdit}
                             defaultValue={shadow && shadow.username}
                             onChange={onUsernameChange}
+                            variant='outlined'
+                            label='Username'
                         />
-                        {(!shadow || !shadow.birthday) && !isOwner() ?
-                            <div className="birthday" style={{ textAlign: "center" }}>A long time ago, in a galaxy far far away...</div>
-                            :
-                            <div className="birthday">
-                                <LocalizationProvider dateAdapter={AdapterMoment}>
-                                    <MobileDatePicker
-                                        disableFuture
-                                        readOnly={!enableEdit}
-                                        value={formatBirthday(shadow ? shadow.birthday : null)}
-                                        onChange={(newValue) => { setShadow({ ...shadow, birthday: newValue.format("YYYY-MM-DD") }) }}
-                                        label="Birthday" />
-                                </LocalizationProvider>
+                        <Divider sx={{ height: "1px", display: enableEdit ? "none" : "block" }} />
+                        <div className="info">
+                            {
+                                (enableEdit ?
+                                    <div className="birthday">
+                                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                                            <MobileDatePicker
+                                                disableFuture
+                                                sx={enableEdit ? { marginTop: "15px" } : null}
+                                                readOnly={!enableEdit}
+                                                value={formatBirthday(shadow ? shadow.birthday : null)}
+                                                onChange={(newValue) => { setShadow({ ...shadow, birthday: newValue.format("YYYY-MM-DD") }) }}
+                                                label="Birthday" />
+                                        </LocalizationProvider>
+                                    </div>
+                                    :
+                                    <div className='birthday'>
+                                        <CakeRoundedIcon sx={{ verticalAlign: 'bottom' }} />{getBirthday(shadow && shadow.birthday)}
+                                    </div>)
+                            }
+                            <div className="motto" style={{ display: enableEdit ? "none" : "block" }}>
+                                <DriveFileRenameOutlineRoundedIcon sx={{ verticalAlign: 'bottom' }} />{getMotto(shadow && shadow.motto)}
                             </div>
-                        }
+                        </div>
+                        <div style={{ display: enableEdit ? "block" : "none" }}>
+                            <FormControl fullWidth sx={enableEdit ? { marginTop: "5px" } : null}>
+                                <FormLabel sx={{ fontSize: '0.8rem', paddingLeft: '14px' }}>Gender</FormLabel>
+                                <RadioGroup row sx={{ justifyContent: 'center' }} value={sex} onChange={(event) => { setSex(event.target.value); }}>
+                                    <FormControlLabel value="Unknown" control={<Radio color='error' />} label={<QuestionMarkRoundedIcon color='error' />} />
+                                    <FormControlLabel value="Male" control={<Radio color='primary' />} label={<MaleRoundedIcon color='primary' />} />
+                                    <FormControlLabel sx={{ marginRight: '0' }} value="Female" control={<Radio color='secondary' />} label={<FemaleRoundedIcon color='secondary' />} />
+                                </RadioGroup>
+                            </FormControl>
+                        </div>
                     </div>
                 </div>
-                <Divider sx={{ margin: "5px 0" }} />
-                <div style={{ padding: "5px 10px" }}>
-                    <SubtleInput
-                        error={mottoError.err}
-                        helperText={mottoError.hint}
-                        placeholder='Personalized signature'
-                        multiline
-                        enabled={enableEdit}
-                        defaultValue={shadow && shadow.motto}
-                        onChange={onMottoChange} />
-                </div>
+                <Divider />
+                {enableEdit ?
+                    <div style={{ padding: "5px 10px" }}>
+                        <TextField
+                            fullWidth
+                            sx={{ marginTop: "15px" }}
+                            error={mottoError.err}
+                            helperText={mottoError.err ? mottoError.hint : ""}
+                            placeholder='Personalized signature'
+                            multiline
+                            enabled={enableEdit}
+                            defaultValue={shadow && shadow.motto}
+                            onChange={onMottoChange}
+                            variant='outlined'
+                            label='Personalized Signature'
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position='end'>
+                                        <DriveFileRenameOutlineRoundedIcon />
+                                    </InputAdornment>
+                                )
+                            }} />
+                    </div> : null
+                }
                 {isOwner() ?
                     <div className="edit">
                         {enableEdit ?

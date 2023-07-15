@@ -1,7 +1,19 @@
 import { TextField } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 
-export default function SubtleInput({ sx, placeholder = "", error = false, helperText = "", multiline = false, cls = '', defaultValue = '', enabled = true, onChange = null }) {
+export default function SubtleInput({
+    sx = null,
+    cls = '',
+    placeholder = "",
+    error = false,
+    helperText = "",
+    multiline = false,
+    defaultValue = '',
+    enabled = true,
+    onChange = null,
+    variant = "standard",
+    label = null
+}) {
     let inputRef = useRef();
     const [text, setText] = useState(defaultValue);
 
@@ -26,7 +38,8 @@ export default function SubtleInput({ sx, placeholder = "", error = false, helpe
                 multiline={multiline}
                 maxRows={5}
                 ref={inputRef}
-                variant="standard"
+                variant={variant}
+                label={label}
                 sx={enabled ? null : { display: 'none' }}
                 onChange={onChange} />
         </div>

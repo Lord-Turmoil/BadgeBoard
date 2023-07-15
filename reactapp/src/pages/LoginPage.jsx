@@ -51,7 +51,6 @@ export default function LoginPage() {
         setUsernameText(newUsername);
         if ((newUsername.length > 0) && !USERNAME_REGEX.test(newUsername)) {
             setUsername({ ...username, value: newUsername, error: true, hint: '3 ~ 20 characters (a-zA-Z0-9_-)' });
-            good = false;
         } else {
             setUsername({ ...username, value: newUsername, error: false });
         }

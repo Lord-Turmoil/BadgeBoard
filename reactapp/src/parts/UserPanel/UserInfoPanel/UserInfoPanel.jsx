@@ -40,7 +40,8 @@ export default function UserInfoPanel({
     visitor = {},
     onUserChange = null,
     onVisitorChange = null,
-    disabled = true
+    disabled = true,
+    onClose = null
 }) {
     // user related
     const isOwner = () => {

@@ -76,6 +76,7 @@ export default function UserPageMobile() {
                 onUserChange={onUserChange}
                 onVisitorChange={onVisitorChange}
                 disabled={!expandOn}
+                onClose={() => { setExpandOn(false) }}
             />
             <InflateBox sx={{ backgroundColor: 'lightBlue' }} overflow>
                 <h1>Hello</h1>

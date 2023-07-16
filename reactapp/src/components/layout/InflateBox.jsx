@@ -6,7 +6,7 @@ export default function InflateBox({ children, overflow=false, sx={} }) {
     const [minHeight, setMinHeight] = useState('100%');
 
     function onResize() {
-        var newHeight = window.innerHeight + 'px';
+        const newHeight = window.innerHeight + 'px';
         setMinHeight(newHeight);
         setHeight(overflow ? 'auto' : newHeight);
     }

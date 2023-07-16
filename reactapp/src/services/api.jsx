@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-class API {
+class Api {
     constructor() {
         this._api = axios.create({
             baseURL: 'http://localhost:5168/api/'
@@ -8,7 +8,7 @@ class API {
         this._api.interceptors.request.use(config => {
             config.headers.Authorization = window.localStorage.getItem('token');
             return config
-        })
+        });
     }
 
     axios() {
@@ -35,7 +35,7 @@ class API {
             }
         }
 
-        var data = err.response.data;
+        const data = err.response.data;
         if (Object.hasOwn(data, 'meta')) {
             return data;
         } else {
@@ -50,7 +50,7 @@ class API {
     }
 
     async refresh() {
-        var dto = await this._post('auth/token/refresh');
+        const dto = await this._post('auth/token/refresh');
         if (dto.meta.status == 0) {
             this.saveToken();
             window.localStorage.setItem('uid', dto.data.id);
@@ -72,7 +72,7 @@ class API {
 
     // post with retry
     async post(url, body) {
-        var dto = await this._post(url, body);
+        const dto = await this._post(url, body);
 
         // no need for retry
         if (dto.meta.status != 401) {
@@ -97,7 +97,7 @@ class API {
     }
 
     async get(url, params) {
-        var dto = await this._get(url, params);
+        const dto = await this._get(url, params);
         if (dto.meta.status != 401) {
             return dto;
         }
@@ -114,6 +114,6 @@ class API {
     }
 }
 
-var api = new API();
+var api = new Api();
 
 export default api;

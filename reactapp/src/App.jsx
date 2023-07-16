@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
 
-import HomePage from './pages/HomePage'
-import RegisterPage from './pages/RegisterPage'
-import LoginPage from './pages/LoginPage'
-import UserPage from './pages/UserPage'
-import NotFoundPage from './pages/NotFoundPage'
+import HomePage from '~/pages/HomePage'
+import RegisterPage from '~/pages/sign/RegisterPage'
+import LoginPage from '~/pages/sign/LoginPage'
+import UserPage from '~/pages/user/UserPage'
+import NotFoundPage from '~/pages/NotFoundPage'
 import { Component } from 'react'
 
 export default class App extends Component {

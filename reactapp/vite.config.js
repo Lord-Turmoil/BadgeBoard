@@ -3,7 +3,7 @@ import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
 import fs from 'fs';
-import path from 'path';
+import * as path from 'path';
 
 const baseFolder =
     process.env.APPDATA !== undefined && process.env.APPDATA !== ''
@@ -25,9 +25,7 @@ const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
 export default defineConfig({
     plugins: [plugin()],
     resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
-        }
+        alias: [{ find: "~", replacement: path.resolve(__dirname, "src") }]
     },
     server: {
         proxy: {

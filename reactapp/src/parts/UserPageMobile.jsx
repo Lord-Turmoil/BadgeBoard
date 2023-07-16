@@ -15,12 +15,12 @@ import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
 import { Avatar, Button, Divider, FormControl, FormControlLabel, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material';
 
-import api from '../components/api';
-import stall from '../components/stall';
+import api from '../services/api';
+import stall from '../services/stall';
 import User from '../components/user/User';
-import notifier from '../components/notifier';
+import notifier from '../services/notifier';
 import AvatarUrl from '../components/user/avatarUrl';
-import InflateBox from '../components/layout/inflate';
+import InflateBox from '../components/layout/InflateBox';
 import ExpandFab from '../components/utility/ExpandFab';
 import SubtleInput from '../components/form/SubtleInput';
 import { useLocalUser, useUser } from '../components/user/useUser';

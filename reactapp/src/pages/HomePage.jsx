@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Helmet } from 'react-helmet';
 
-import NavBarDev from '../parts/NavBarDev'
+import NavBarDev from '~/parts/NavBarDev'
 
 export default function HomePage() {
     return (

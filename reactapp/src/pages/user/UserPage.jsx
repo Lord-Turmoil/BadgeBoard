@@ -2,14 +2,14 @@ import React from 'react';
 
 import { isMobile } from 'react-device-detect';
 
-import UserPagePC from './UserPagePC';
-import UserPageMobile from './UserPageMobile';
+import UserPagePC from './pc/UserPagePC';
+import UserPageMobile from './mobile/UserPageMobile';
 
-import '../assets/css/pages/user/user.css'
+import './user.css'
 
 function UserPage() {
     return (
-        <div className='user-main'>
+        <div className="user-main">
             {isMobile ? <UserPageMobile /> : <UserPagePC />}
         </div>
     );

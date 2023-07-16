@@ -10,6 +10,16 @@ export default function PopupModal({
     title = "Dialog",
     children
 }) {
+    const onCancelInner = () => {
+        onCancel && onCancel();
+        onClose && onClose();
+    }
+
+    const onConfirmInner = () => {
+        onConfirm && onConfirm();
+        onClose && onClose();
+    }
+
     return (
         <Dialog open={open} onClose={onClose} scroll={scroll}>
             <DialogTitle>{title}</DialogTitle>
@@ -17,8 +27,8 @@ export default function PopupModal({
                 {children}
             </DialogContent>
             <DialogActions>
-                <Button autoFocus onClick={onCancel ?? onClose}>Cancel</Button>
-                <Button onClick={onConfirm ?? onClose}>OK</Button>
+                <Button autoFocus onClick={onCancelInner}>Cancel</Button>
+                <Button onClick={onConfirmInner}>OK</Button>
             </DialogActions>
         </Dialog>
     );

@@ -15,25 +15,18 @@ export default function AvatarField({
     // propertied
     const [imageUrl, setImageUrl] = useState(src);
     const [imageData, setImageData] = useState(src);
+    const [oldImageData, setOldImageData] = useState(src);
     const [showDialog, setShowDialog] = useState(false);
-
-    useEffect(() => {
-        console.log("🚀 > useEffect > imageUrl:", imageUrl);
-    }, [imageUrl]);
-
-    useEffect(() => {
-        console.log("🚀 > useEffect > imageData:", imageData);
-    }, [imageData]);
 
     const onClickUpload = (event) => {
         const input = document.createElement('input')
         input.type = 'file'
         input.accept = 'image/*'
-        input.addEventListener('change', handleFileSelect)
+        input.addEventListener('change', handleFileSelection)
         input.click();
     }
 
-    const handleFileSelect = async (event) => {
+    const handleFileSelection = async (event) => {
         event.preventDefault();
         try {
             let files;
@@ -47,6 +40,7 @@ export default function AvatarField({
                 return;
             }
             reader.onload = () => {
+                setOldImageData(imageData);
                 setImageData(reader.result?.toString());
                 setShowDialog(true);
             };
@@ -56,6 +50,10 @@ export default function AvatarField({
         }
     }
 
+    const onCancelSelection = () => {
+        setImageData(oldImageData ?? src);
+    }
+    
     return (
         <div className="AvatarField">
             <Avatar sx={{ width: size, height: size }} src={AvatarUrl.get(imageData)} alt="Avatar" />
@@ -68,6 +66,7 @@ export default function AvatarField({
                 open={showDialog}
                 title="Edit Avatar"
                 onClose={() => { setShowDialog(false) }}
+                onCancel={onCancelSelection}
             >
                 <div>Hello there!</div>
             </PopupModal>

@@ -21,6 +21,10 @@
 }
 
 .AvatarField .AvatarField__mask.AvatarField__active {
+    cursor: pointer;
+}
+
+.AvatarField .AvatarField__mask.AvatarField__active:hover {
     opacity: 1.0;
 }
 

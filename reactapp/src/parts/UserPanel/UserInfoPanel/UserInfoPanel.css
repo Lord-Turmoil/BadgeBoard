@@ -24,7 +24,7 @@
 }
 
 .UserInfoPanel .primary .avatar {
-    padding: 5px;
+    padding: 10px;
     background-color: azure;
     display: flex;
     flex-direction: column;

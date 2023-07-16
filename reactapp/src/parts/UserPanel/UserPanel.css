@@ -4,3 +4,10 @@
     --nav-margin: 10px;
     --panel-margin-top: 80px;
 }
+
+.UserPanel.UserPanel__mobile {
+    --nav-height: 60px;
+    --nav-radius: 15px;
+    --nav-margin: 10px;
+    --panel-margin-top: 80px;
+}

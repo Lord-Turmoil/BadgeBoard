@@ -5,8 +5,6 @@ import { isMobile } from 'react-device-detect';
 import UserPagePC from './pc/UserPagePC';
 import UserPageMobile from './mobile/UserPageMobile';
 
-import './user.css'
-
 function UserPage() {
     return (
         <div className="user-main">

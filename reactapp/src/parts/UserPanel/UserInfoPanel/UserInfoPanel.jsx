@@ -14,14 +14,16 @@ import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
 import { Avatar, Button, Divider, FormControl, FormControlLabel, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material';
 
+import SubtleInput from '~/components/form/SubtleInput';
+
 import api from '~/services/api';
 import stall from '~/services/stall';
 import User from '~/services/user/user';
 import notifier from '~/services/notifier';
-import AvatarUrl from '~/components/user/avatarUrl';
-import SubtleInput from '~/components/form/SubtleInput';
+import AvatarUrl from '~/services/user/avatarUrl';
 
-import '../UserPanel.css'
+// Required in parent component
+// import '~/assets/css/user.panel.define.css'
 import './UserInfoPanel.css'
 
 const MOTTO_MAX_LENGTH = 66;
@@ -34,10 +36,10 @@ Parent could not get states of child component, but can use callback
 to update their copy in parent.
 */
 export default function UserInfoPanel({
-    user,
-    visitor,
-    onUserChange,
-    onVisitorChange,
+    user = {},
+    visitor = {},
+    onUserChange = null,
+    onVisitorChange = null,
     disabled = true
 }) {
     // user related
@@ -54,8 +56,35 @@ export default function UserInfoPanel({
     }
 
     // editing
+    const [enableEdit, setEnableEdit] = useState(false);
+    const turnOnEdit = () => {
+        var flat = User.flat(user);
+        setShadow(flat);
+        setSex(User.getSexText(flat.sex));
+        setEnableEdit(true);
+    }
+    const turnOffEdit = () => {
+        setShadow(User.flat(user));
+        setEnableEdit(false);
+    }
+
+    useEffect(() => {
+        if (disabled) {
+            turnOffEdit();
+        }
+    }, [disabled]);
+
+    // edit properties
     const [shadow, setShadow] = useState({});
-    const [sex, setSex] = useState(getSexText(shadow.sex));
+    const [sex, setSex] = useState(User.getSexText(shadow.sex));
+
+    useEffect(() => {
+        if (user) {
+            var flat = User.flat(user);
+            setShadow(flat);
+            setSex(User.getSexText(flat.sex));
+        }
+    }, [user]);
 
     useEffect(() => {
         shadow && validateMotto(shadow.motto);
@@ -79,6 +108,11 @@ export default function UserInfoPanel({
     const [usernameError, setUsernameError] = useState({ err: false, hint: "" });
 
     const validateMotto = (str) => {
+        if (str == null) {
+            setMottoError({ ...mottoError, err: false });
+            return true;
+        }
+
         if (str.length > MOTTO_MAX_LENGTH) {
             setMottoError({ err: true, hint: `A little shorter? (${str.length}/${MOTTO_MAX_LENGTH})` });
             return false;
@@ -89,6 +123,10 @@ export default function UserInfoPanel({
     }
 
     const validateUsername = (str) => {
+        if (str == null) {
+            setUsernameError({ ...usernameError, err: false });
+            return true;
+        }
         if (str.length > USERNAME_MAX_LENGTH) {
             setUsernameError({ err: true, hint: `Too long for a name (${str.length}/${USERNAME_MAX_LENGTH})` });
             return false;
@@ -147,7 +185,7 @@ export default function UserInfoPanel({
             return false;
         }
         setShadow({ ...shadow, ...dto.data });
-        onUserChangeInner({ type: "info", data: dto.data });
+        onUserChangeInner({ key: "info", value: dto.data });
         return true;
     }
 
@@ -163,7 +201,7 @@ export default function UserInfoPanel({
             return false;
         }
         setShadow({ ...shadow, username: dto.data });
-        onUserChangeInner({ type: "username", data: dto.data });
+        onUserChangeInner({ key: "username", value: dto.data });
         return true;
     }
 
@@ -194,7 +232,7 @@ export default function UserInfoPanel({
     }
 
     return (
-        <div className="{`UserInfo UserInfoPanel${expandOn ? ' active' : ''}`}">
+        <div className={`UserInfoPanel${disabled ? '' : ' active'}`}>
             <div className="primary">
                 <div className="avatar">
                     <Avatar sx={{ width: 100, height: 100 }} src={AvatarUrl.get(shadow && shadow.avatarUrl)} />
@@ -214,26 +252,25 @@ export default function UserInfoPanel({
                     />
                     <Divider sx={{ height: "1px", display: enableEdit ? "none" : "block" }} />
                     <div className="info">
-                        {
-                            (enableEdit ?
-                                <div className="birthday">
-                                    <LocalizationProvider dateAdapter={AdapterMoment}>
-                                        <MobileDatePicker
-                                            disableFuture
-                                            sx={enableEdit ? { marginTop: "15px" } : null}
-                                            readOnly={!enableEdit}
-                                            value={formatBirthday(shadow ? shadow.birthday : null)}
-                                            onChange={(newValue) => { setShadow({ ...shadow, birthday: newValue.format("YYYY-MM-DD") }) }}
-                                            label="Birthday" />
-                                    </LocalizationProvider>
-                                </div>
-                                :
-                                <div className='birthday'>
-                                    <CakeRoundedIcon sx={{ verticalAlign: 'bottom' }} />{getBirthday(shadow && shadow.birthday)}
-                                </div>)
+                        {enableEdit ?
+                            <div className="birthday">
+                                <LocalizationProvider dateAdapter={AdapterMoment}>
+                                    <MobileDatePicker
+                                        disableFuture
+                                        sx={enableEdit ? { marginTop: "15px" } : null}
+                                        readOnly={!enableEdit}
+                                        value={formatBirthday(shadow ? shadow.birthday : null)}
+                                        onChange={(newValue) => { setShadow({ ...shadow, birthday: newValue.format("YYYY-MM-DD") }) }}
+                                        label="Birthday" />
+                                </LocalizationProvider>
+                            </div>
+                            :
+                            <div className='birthday'>
+                                <CakeRoundedIcon sx={{ verticalAlign: 'bottom' }} />{renderBirthday(shadow && shadow.birthday)}
+                            </div>
                         }
                         <div className="motto" style={{ display: enableEdit ? "none" : "block" }}>
-                            <DriveFileRenameOutlineRoundedIcon sx={{ verticalAlign: 'bottom' }} />{getMotto(shadow && shadow.motto)}
+                            <DriveFileRenameOutlineRoundedIcon sx={{ verticalAlign: 'bottom' }} />{renderMotto(shadow && shadow.motto)}
                         </div>
                     </div>
                     <div style={{ display: enableEdit ? "block" : "none" }}>
@@ -279,7 +316,7 @@ export default function UserInfoPanel({
                                 <Button fullWidth variant='contained' color='error' onClick={turnOffEdit}>Cancel</Button>
                             </Grid>
                             <Grid item xs={6}>
-                                <Button disabled={!isReady() || onSubmitting} fullWidth variant='contained' color='success' onClick={submitEdit}>
+                                <Button disabled={!isReady() || onSubmitting} fullWidth variant='contained' color='success' onClick={onClickSubmit}>
                                     {onSubmitting ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : "Done"}
                                 </Button>
                             </Grid>

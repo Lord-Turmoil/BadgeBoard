@@ -1,4 +1,4 @@
-.UserInfoPanel .panel {
+.UserInfoPanel {
     position: fixed;
     width: calc(100% - var(--nav-margin) * 2);
     margin: 0 var(--nav-margin);
@@ -13,17 +13,17 @@
     overflow: hidden;
 }
 
-.UserInfoPanel .panel.active {
+.UserInfoPanel.active {
     opacity: 1;
     transform: translate(0, 0);
 }
 
-.UserInfoPanel .panel .primary {
+.UserInfoPanel .primary {
     display: flex;
     background-color: lightcoral;
 }
 
-.UserInfoPanel .panel .primary .avatar {
+.UserInfoPanel .primary .avatar {
     padding: 5px;
     background-color: azure;
     display: flex;
@@ -31,14 +31,14 @@
     justify-content: center;
 }
 
-.UserInfoPanel .panel .primary .info-wrapper {
+.UserInfoPanel .primary .info-wrapper {
     flex: 1;
     padding: 5px 5px 0 5px;
     display: flex;
     flex-direction: column;
 }
 
-.UserInfoPanel .panel .primary .info-wrapper .username .cover {
+.UserInfoPanel .primary .info-wrapper .username .cover {
     width: 100%;
     padding: 5px 0;
     text-align: center;
@@ -46,7 +46,7 @@
     font-weight: bold;
 }
 
-.UserInfoPanel .panel .primary .info-wrapper .info {
+.UserInfoPanel .primary .info-wrapper .info {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -54,6 +54,6 @@
     padding: 5px 0;
 }
 
-.UserInfoPanel .panel .edit {
+.UserInfoPanel .edit {
     padding: 10px 20px;
 }

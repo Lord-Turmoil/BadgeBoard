@@ -94,7 +94,8 @@ export default function LoginPage() {
 
         if (dto.meta.status == 0) {
             User.save(dto.data);
-            login();
+            await login();
+            return;
         }
 
         setLoading(false);
@@ -184,7 +185,7 @@ export default function LoginPage() {
                                 <Button fullWidth variant='contained' disabled={loading} onClick={onClickReset}>Reset</Button>
                             </div>
                             <div className='submit'>
-                                <Button fullWidth variant='contained' color='success' disabled={!ready} onClick={loading ? null : onClickSubmit}>
+                                <Button fullWidth variant='contained' color='success' disabled={!ready || loading} onClick={loading ? null : onClickSubmit}>
                                     {loading ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : 'Sign in'}
                                 </Button>
                             </div>

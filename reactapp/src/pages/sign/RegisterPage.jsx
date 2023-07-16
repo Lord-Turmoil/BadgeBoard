@@ -138,6 +138,7 @@ export default function RegisterPage() {
 
         if (dto.meta.status == 0) {
             setTimeout(() => { navigate('/login') }, 1000);
+            return;
         }
 
         setLoading(false);
@@ -237,7 +238,7 @@ export default function RegisterPage() {
                                 <Button fullWidth variant='contained' onClick={loading ? null : onClickReset}>Reset</Button>
                             </div>
                             <div className='submit'>
-                                <Button fullWidth variant='contained' color='success' disabled={!ready} onClick={loading ? null : onClickSubmit}>
+                                <Button fullWidth variant='contained' color='success' disabled={!ready || loading} onClick={loading ? null : onClickSubmit}>
                                     {loading ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : 'Sign up'}
                                 </Button>
                             </div>

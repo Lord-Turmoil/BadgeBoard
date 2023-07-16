@@ -57,15 +57,18 @@ export default function UserInfoPanel({
 
     // editing
     const [enableEdit, setEnableEdit] = useState(false);
+    const [editKey, setEditKey] = useState(0);
     const turnOnEdit = () => {
         var flat = User.flat(user);
         setShadow(flat);
         setSex(User.getSexText(flat.sex));
         setEnableEdit(true);
+        setEditKey(editKey + 1);
     }
     const turnOffEdit = () => {
         setShadow(User.flat(user));
         setEnableEdit(false);
+        setEditKey(editKey + 1);
     }
 
     useEffect(() => {
@@ -235,7 +238,7 @@ export default function UserInfoPanel({
     }
 
     return (
-        <div className={`UserInfoPanel${disabled ? '' : ' active'}`}>
+        <div className={`UserInfoPanel${disabled ? '' : ' active'}`} key={editKey}>
             <div className="primary">
                 <div className="avatar">
                     <AvatarField

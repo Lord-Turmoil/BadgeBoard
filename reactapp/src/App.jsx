@@ -1,11 +1,12 @@
-import { Routes, Route } from 'react-router-dom'
+import { Component } from 'react'
+
+import { Route, Routes } from 'react-router-dom'
 
 import HomePage from '~/pages/HomePage'
-import RegisterPage from '~/pages/sign/RegisterPage'
-import LoginPage from '~/pages/sign/LoginPage'
 import UserPage from '~/pages/user/UserPage'
+import LoginPage from '~/pages/sign/LoginPage'
 import NotFoundPage from '~/pages/NotFoundPage'
-import { Component } from 'react'
+import RegisterPage from '~/pages/sign/RegisterPage'
 
 export default class App extends Component {
     render() {

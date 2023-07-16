@@ -2,7 +2,7 @@ const defaultAvatar = "/static/img/default.svg"
 
 class AvatarUrl {
     static get(url = null) {
-        return (url == null) ? defaultAvatar : url;
+        return (url == null || url == "") ? defaultAvatar : url;
     }
 }
 

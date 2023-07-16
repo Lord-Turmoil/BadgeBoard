@@ -12,7 +12,7 @@ import FemaleRoundedIcon from '@mui/icons-material/FemaleRounded';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
-import { Avatar, Button, Divider, FormControl, FormControlLabel, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material';
+import { Button, Divider, FormControl, FormControlLabel, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material';
 
 import SubtleInput from '~/components/form/SubtleInput';
 
@@ -20,11 +20,11 @@ import api from '~/services/api';
 import stall from '~/services/stall';
 import User from '~/services/user/user';
 import notifier from '~/services/notifier';
-import AvatarUrl from '~/services/user/avatarUrl';
 
 // Required in parent component
 // import '~/assets/css/user.panel.define.css'
 import './UserInfoPanel.css'
+import AvatarField from '~/components/form/AvatarField/AvatarField';
 
 const MOTTO_MAX_LENGTH = 66;
 const MOTTO_MIN_LENGTH = 0;
@@ -115,6 +115,9 @@ export default function UserInfoPanel({
 
         if (str.length > MOTTO_MAX_LENGTH) {
             setMottoError({ err: true, hint: `A little shorter? (${str.length}/${MOTTO_MAX_LENGTH})` });
+            return false;
+        } else if (str.length < MOTTO_MIN_LENGTH) {
+            setMottoError({ err: true, hint: `A little longer? (${str.length}/${MOTTO_MIN_LENGTH})` });
             return false;
         } else {
             setMottoError({ ...mottoError, err: false });
@@ -235,7 +238,11 @@ export default function UserInfoPanel({
         <div className={`UserInfoPanel${disabled ? '' : ' active'}`}>
             <div className="primary">
                 <div className="avatar">
-                    <Avatar sx={{ width: 100, height: 100 }} src={AvatarUrl.get(shadow && shadow.avatarUrl)} />
+                    <AvatarField
+                        size={100}
+                        src={shadow && shadow.avatarUrl}
+                        disabled={!enableEdit}
+                    />
                 </div>
                 <div className="info-wrapper">
                     <SubtleInput

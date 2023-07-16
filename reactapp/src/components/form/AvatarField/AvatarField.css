@@ -1,0 +1,30 @@
+.AvatarField {
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.AvatarField .AvatarField__mask {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.AvatarField .AvatarField__mask.AvatarField__active {
+    opacity: 1.0;
+}
+
+.AvatarField .AvatarField__mask svg {
+    color: whitesmoke;
+    font-size: 3em;
+}

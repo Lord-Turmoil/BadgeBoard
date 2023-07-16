@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import api from '../../services/api';
+import api from '~/services/api'
 
 // User
 class User {
@@ -80,6 +80,26 @@ class User {
 
     static birthday(user) {
         return user ? user.info.birthday : null;
+    }
+
+    // data format
+    static getSexText(no) {
+        switch (no) {
+            case 1: return "Male";
+            case 2: return "Female";
+            default: return "Unknown";
+        }
+    }
+
+    static getSexNo(text) {
+        if (text == null) {
+            return 0;
+        }
+        switch (text.toLowerCase()) {
+            case "male": return 1;
+            case "female": return 2;
+            default: return 0;
+        }
     }
 }
 

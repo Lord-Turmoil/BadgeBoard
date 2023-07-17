@@ -138,7 +138,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			user.AvatarUrl = avatarUrl;
 			await _unitOfWork.SaveChangesAsync();
 
-			return new GoodResponse(new GoodWithDataDto(user.AvatarUrl));
+			return new GoodResponse(new GoodDto("Nice avatar!", user.AvatarUrl));
 		}
 
 		public async Task<ApiResponse> GetUser(int id)

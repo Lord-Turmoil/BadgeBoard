@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import notifier from '~/services/notifier';
 import ExpandFab from '~/components/utility/ExpandFab';
 import InflateBox from '~/components/layout/InflateBox';
-import { useLocalUser, useUser } from '~/services/user/user';
+import { useLocalUser, useUser } from '~/services/user/UserUtil';
 
 import UserInfoPanel from '~/parts/UserPanel/UserInfoPanel/UserInfoPanel';
 

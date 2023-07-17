@@ -11,7 +11,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 import api from '~/services/api';
 import stall from '~/services/stall';
-import User from '~/services/user/user';
+import UserUtil from '~/services/user/UserUtil';
 import notifier from '~/services/notifier';
 import BackNavBar from '~/components/form/BackNavBar';
 import PasswordField from '~/components/form/PasswordField';
@@ -93,7 +93,7 @@ export default function LoginPage() {
         notifier.auto(dto.meta);
 
         if (dto.meta.status == 0) {
-            User.save(dto.data);
+            UserUtil.save(dto.data);
             await login();
             return;
         }
@@ -102,7 +102,7 @@ export default function LoginPage() {
     }
 
     const login = async () => {
-        var user = User.get();
+        var user = UserUtil.get();
         if (user == null) {
             notifier.error('Local storage error');
             return;

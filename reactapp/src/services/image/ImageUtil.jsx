@@ -1,5 +1,5 @@
 class ImageUtil {
-    createImage(url) {
+    static createImage(url) {
         return new Promise((resolve, reject) => {
             const image = new Image();
             image.addEventListener("load", () => resolve(image));
@@ -9,12 +9,12 @@ class ImageUtil {
         });
     }
 
-    getRadianAngle(degreeValue) {
+    static getRadianAngle(degreeValue) {
         return (degreeValue * Math.PI) / 180;
     }
 
     static async getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
-        const image = await createImage(imageSrc);
+        const image = await this.createImage(imageSrc);
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
 
@@ -28,7 +28,7 @@ class ImageUtil {
 
         // translate canvas context to a central location on image to allow rotating around the center.
         ctx.translate(safeArea / 2, safeArea / 2);
-        ctx.rotate(getRadianAngle(rotation));
+        ctx.rotate(this.getRadianAngle(rotation));
         ctx.translate(-safeArea / 2, -safeArea / 2);
 
         // draw rotated image and store data.
@@ -61,3 +61,5 @@ class ImageUtil {
         });
     }
 }
+
+export default ImageUtil;

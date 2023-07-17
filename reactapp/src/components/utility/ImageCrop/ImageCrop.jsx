@@ -10,27 +10,27 @@ import './ImageCrop.css'
 const ZOOM_RATIO = 100;
 
 export default function ImageCrop({
-    image = null
+    image = null,
+    onCroppedAreaChange = null
 }) {
     const [crop, setCrop] = useState({ x: 0, y: 0 })
     const [zoom, setZoom] = useState(1)
     const [sliderValue, setSliderValue] = useState(100);
 
-    const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-        // console.log(croppedArea, croppedAreaPixels)
-    }, []);
-
     const onSliderValueChange = (event, value) => {
         setSliderValue(value);
-        setZoom(value / ZOOM_RATIO);    // max 5 times
-        console.log("🚀 > onSliderValueChange > value:", value);
+        setZoom(value / ZOOM_RATIO);
     }
 
     const onCropperZoomChange = (value) => {
         setZoom(value);
         setSliderValue(value * ZOOM_RATIO);
-        console.log("🚀 > onCropperZoomChange > value:", value);
     }
+
+    const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+        // area is floating number, pixels are integral
+        onCroppedAreaChange && onCroppedAreaChange(croppedAreaPixels);
+    }, []);
 
     return (
         <div className="ImageCrop">

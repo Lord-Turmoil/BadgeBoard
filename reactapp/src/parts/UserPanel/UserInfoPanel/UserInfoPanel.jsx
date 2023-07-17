@@ -18,7 +18,7 @@ import SubtleInput from '~/components/form/SubtleInput';
 
 import api from '~/services/api';
 import stall from '~/services/stall';
-import User from '~/services/user/user';
+import UserUtil from '~/services/user/UserUtil';
 import notifier from '~/services/notifier';
 
 // Required in parent component
@@ -60,14 +60,14 @@ export default function UserInfoPanel({
     const [enableEdit, setEnableEdit] = useState(false);
     const [editKey, setEditKey] = useState(0);
     const turnOnEdit = () => {
-        var flat = User.flat(user);
+        var flat = UserUtil.flat(user);
         setShadow(flat);
-        setSex(User.getSexText(flat.sex));
+        setSex(UserUtil.getSexText(flat.sex));
         setEnableEdit(true);
         setEditKey(editKey + 1);
     }
     const turnOffEdit = () => {
-        setShadow(User.flat(user));
+        setShadow(UserUtil.flat(user));
         setEnableEdit(false);
         setEditKey(editKey + 1);
     }
@@ -80,13 +80,13 @@ export default function UserInfoPanel({
 
     // edit properties
     const [shadow, setShadow] = useState({});
-    const [sex, setSex] = useState(User.getSexText(shadow.sex));
+    const [sex, setSex] = useState(UserUtil.getSexText(shadow.sex));
 
     useEffect(() => {
         if (user) {
-            var flat = User.flat(user);
+            var flat = UserUtil.flat(user);
             setShadow(flat);
-            setSex(User.getSexText(flat.sex));
+            setSex(UserUtil.getSexText(flat.sex));
         }
     }, [user]);
 
@@ -96,7 +96,7 @@ export default function UserInfoPanel({
     }, [shadow]);
 
     useEffect(() => {
-        setShadow({ ...shadow, sex: User.getSexNo(sex) });
+        setShadow({ ...shadow, sex: UserUtil.getSexNo(sex) });
     }, [sex]);
 
     const onMottoChange = (event) => {
@@ -236,6 +236,11 @@ export default function UserInfoPanel({
         } else {
             return str;
         }
+    }
+
+    // avatar
+    const onAvatarChange = (avatarUrl) => {
+        onUserChangeInner({ key: "avatarUrl", data: avatarUrl });
     }
 
     return (

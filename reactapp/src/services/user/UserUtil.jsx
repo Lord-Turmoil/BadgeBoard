@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import api from '~/services/api'
 
 // User
-class User {
+class UserUtil {
     static get() {
         var str = window.localStorage.getItem('user');
         var user = (str == null) ? null : JSON.parse(str);
@@ -103,7 +103,7 @@ class User {
     }
 }
 
-export default User;
+export default UserUtil;
 
 
 // useUser

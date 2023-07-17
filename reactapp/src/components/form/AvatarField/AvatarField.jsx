@@ -4,7 +4,7 @@ import { Avatar } from "@mui/material";
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 
 import notifier from "~/services/notifier";
-import AvatarUrl from "~/services/user/AvatarUrl";
+import AvatarUtil from "~/services/user/AvatarUtil";
 import ImageUtil from '~/services/image/ImageUtil'
 import PopupModal from "~/components/layout/PopupModal";
 import ImageCrop from "~/components/utility/ImageCrop/ImageCrop";
@@ -107,7 +107,7 @@ export default function AvatarField({
 
     return (
         <div className="AvatarField">
-            <Avatar sx={{ width: size, height: size }} src={AvatarUrl.get(imageData)} alt="Avatar" />
+            <Avatar sx={{ width: size, height: size }} src={AvatarUtil.getUrl(imageData)} alt="Avatar" />
             <div className={`AvatarField__mask${disabled ? "" : " AvatarField__active"}`}>
                 <div className="AvatarField__upload" onClick={disabled ? null : onClickUpload}>
                     <CameraAltRoundedIcon />

@@ -1,8 +1,8 @@
 const defaultAvatar = "/static/img/default.svg"
 const defaultBaseUrl = "http://localhost:5168/"
 
-class AvatarUrl {
-    static get(url = null) {
+class AvatarUtil {
+    static getUrl(url = null) {
         if (url == null || url == "") {
             return defaultAvatar;
         }
@@ -13,4 +13,4 @@ class AvatarUrl {
     }
 }
 
-export default AvatarUrl;
+export default AvatarUtil;

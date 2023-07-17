@@ -29,6 +29,7 @@
     <Folder Include="Data\" />
     <Folder Include="Modules\BadgeBadge\" />
     <Folder Include="Templates\" />
+    <Folder Include="wwwroot\static\avatar\" />
   </ItemGroup>
 
 </Project>

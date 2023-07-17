@@ -81,6 +81,9 @@ namespace BadgeBoard.Api
 			app.UseAuthentication();
 			app.UseAuthorization();
 
+			// Enable static files.
+			app.UseStaticFiles();
+
 			// Must be placed between UseRouting and UseEndpoints
 			app.UseCors(policy => {
 				policy.AllowAnyOrigin()

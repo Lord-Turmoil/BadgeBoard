@@ -1,6 +1,7 @@
 .ImageCrop .ImageCrop__cropper {
     position: relative;
     width: 100%;
+    /* ReSharper disable once CssNotResolved */
     aspect-ratio: 1 / 1;
     background-color: rgba(0, 0, 0, 0.2);
 }

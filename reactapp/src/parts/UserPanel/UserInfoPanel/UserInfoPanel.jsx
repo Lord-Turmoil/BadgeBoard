@@ -64,12 +64,9 @@ export default function UserInfoPanel({
         setShadow(flat);
         setSex(UserUtil.getSexText(flat.sex));
         setEnableEdit(true);
-        setEditKey(editKey + 1);
     }
     const turnOffEdit = () => {
-        setShadow(UserUtil.flat(user));
         setEnableEdit(false);
-        setEditKey(editKey + 1);
     }
 
     useEffect(() => {
@@ -93,6 +90,7 @@ export default function UserInfoPanel({
     useEffect(() => {
         shadow && validateMotto(shadow.motto);
         shadow && validateUsername(shadow.username);
+        setEditKey(editKey + 1);
     }, [shadow]);
 
     useEffect(() => {
@@ -251,6 +249,7 @@ export default function UserInfoPanel({
                         size={100}
                         src={shadow && shadow.avatarUrl}
                         disabled={!enableEdit}
+                        onAvatarChange={onAvatarChange}
                     />
                 </div>
                 <div className="info-wrapper">

@@ -10,6 +10,7 @@ import PopupModal from "~/components/layout/PopupModal";
 import ImageCrop from "~/components/utility/ImageCrop/ImageCrop";
 
 import './AvatarField.css';
+import api from "~/services/api";
 
 export default function AvatarField({
     size = 100,
@@ -76,23 +77,31 @@ export default function AvatarField({
 
     const onConfirmSelection = async () => {
         setShowDialog(false);
-        
+
         const data = await getCroppedImage();
         if (data == null) {
             notifier.error("Failed to crop avatar");
             return;
         }
-
         setImageData(data);
         var ret = await uploadAvatar(data);
         console.log("🚀 > onConfirmSelection > ret:", ret);
     }
 
     const uploadAvatar = async (data) => {
-        return {
-            err: false,
-            hint: "Good"
+        var dto = await api.post("user/avatar", {
+            extension: "jpeg",
+            data: data
+        });
+        notifier.auto(dto.meta);
+        if (dto.meta.status != 0) {
+            onCancelSelection();
+            return null;
         }
+
+        onAvatarChange && onAvatarChange(dto.data);
+        
+        return dto.data;
     }
 
     return (

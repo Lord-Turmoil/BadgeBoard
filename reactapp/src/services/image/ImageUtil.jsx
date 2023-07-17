@@ -31,6 +31,10 @@ class ImageUtil {
         ctx.rotate(this.getRadianAngle(rotation));
         ctx.translate(-safeArea / 2, -safeArea / 2);
 
+        // draw white background
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         // draw rotated image and store data.
         ctx.drawImage(
             image,
@@ -51,14 +55,14 @@ class ImageUtil {
         );
 
         // As Base64 string
-        // return canvas.toDataURL('image/jpeg');
+        return canvas.toDataURL('image/jpeg', 0.5);
 
         // As a blob
-        return new Promise((resolve) => {
-            canvas.toBlob((file) => {
-                resolve(URL.createObjectURL(file));
-            }, "image/jpeg");
-        });
+        // return new Promise((resolve) => {
+        //     canvas.toBlob((file) => {
+        //         resolve(URL.createObjectURL(file));
+        //     }, "image/jpeg");
+        // });
     }
 }
 

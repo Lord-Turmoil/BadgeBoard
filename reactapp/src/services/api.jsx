@@ -28,16 +28,14 @@ class Api {
                 }
             }
         }
-        if (!Object.hasOwn(err.response, 'data')) {
-            return {
-                meta: {
-                    status: 66,
-                    message: 'Unknown error'
-                },
-                data: err.response
-            }
-        }
+        const response = err.response;
+        var ret = { meta: { status: response.status ?? 66, message: err.message }, data: null }
 
+        // no data
+        if (!response.data || response.data == "") {
+            return ret;
+        }
+        
         const data = err.response.data;
         if (Object.hasOwn(data, 'meta')) {
             return data;

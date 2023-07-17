@@ -12,12 +12,10 @@ export default function PopupModal({
 }) {
     const onCancelInner = () => {
         onCancel && onCancel();
-        onClose && onClose();
     }
 
     const onConfirmInner = () => {
         onConfirm && onConfirm();
-        onClose && onClose();
     }
 
     return (

@@ -1,10 +1,13 @@
+import { useEffect, useState } from "react";
+
 import { Avatar } from "@mui/material";
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 
 import AvatarUrl from "~/services/user/avatarUrl";
-import './AvatarField.css';
-import { useEffect, useState } from "react";
 import PopupModal from "~/components/layout/PopupModal";
+
+import './AvatarField.css';
+import ImageCrop from "~/components/utility/ImageCrop/ImageCrop";
 
 export default function AvatarField({
     size = 100,
@@ -52,8 +55,13 @@ export default function AvatarField({
 
     const onCancelSelection = () => {
         setImageData(oldImageData ?? src);
+        setShowDialog(false);
     }
-    
+
+    const onConfirmSelection = () => {
+        setShowDialog(false);
+    }
+
     return (
         <div className="AvatarField">
             <Avatar sx={{ width: size, height: size }} src={AvatarUrl.get(imageData)} alt="Avatar" />
@@ -65,10 +73,11 @@ export default function AvatarField({
             <PopupModal
                 open={showDialog}
                 title="Edit Avatar"
-                onClose={() => { setShowDialog(false) }}
+                onClose={onCancelSelection}
                 onCancel={onCancelSelection}
+                onConfirm={onConfirmSelection}
             >
-                <div>Hello there!</div>
+                <ImageCrop image={imageData}/>
             </PopupModal>
         </div>
     );

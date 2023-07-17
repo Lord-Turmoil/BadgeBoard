@@ -1,0 +1,14 @@
+.ImageCrop .ImageCrop__cropper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+/* override default styles */
+.ImageCrop .ImageCrop__cropper .reactEasyCrop_Container {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.ImageCrop .ImageCrop__cropper .reactEasyCrop_CropArea {
+    box-shadow: none;
+}

@@ -239,8 +239,8 @@ export default function UserInfoPanel({
     }
 
     return (
-        <div className={`UserInfoPanel${disabled ? '' : ' active'}`} key={editKey}>
-            <div className="primary">
+        <div className={`UserInfoPanel${disabled ? '' : ' active'}`}>
+            <div className="primary" key={editKey}>
                 <div className="avatar">
                     <AvatarField
                         size={100}

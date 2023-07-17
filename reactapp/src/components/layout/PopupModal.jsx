@@ -21,7 +21,7 @@ export default function PopupModal({
     }
 
     return (
-        <Dialog open={open} onClose={onClose} scroll={scroll}>
+        <Dialog open={open} onClose={onClose} scroll={scroll} fullWidth>
             <DialogTitle>{title}</DialogTitle>
             <DialogContent dividers>
                 {children}

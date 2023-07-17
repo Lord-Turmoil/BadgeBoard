@@ -84,8 +84,10 @@ export default function AvatarField({
             return;
         }
         setImageData(data);
-        var ret = await uploadAvatar(data);
-        console.log("🚀 > onConfirmSelection > ret:", ret);
+        var avatarUrl = await uploadAvatar(data);
+        if (avatarUrl) {
+            onAvatarChange && onAvatarChange(avatarUrl);
+        }
     }
 
     const uploadAvatar = async (data) => {
@@ -94,13 +96,12 @@ export default function AvatarField({
             data: data
         });
         notifier.auto(dto.meta);
+        
         if (dto.meta.status != 0) {
             onCancelSelection();
             return null;
         }
 
-        onAvatarChange && onAvatarChange(dto.data);
-        
         return dto.data;
     }
 

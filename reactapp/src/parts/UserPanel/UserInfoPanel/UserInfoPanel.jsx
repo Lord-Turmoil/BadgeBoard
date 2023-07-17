@@ -58,7 +58,7 @@ export default function UserInfoPanel({
 
     // editing
     const [enableEdit, setEnableEdit] = useState(false);
-    const [editKey, setEditKey] = useState(0);
+    const [avatarKey, setAvatarKey] = useState(0);
     const turnOnEdit = () => {
         var flat = UserUtil.flat(user);
         setShadow(flat);
@@ -76,25 +76,27 @@ export default function UserInfoPanel({
     }, [disabled]);
 
     // edit properties
-    const [shadow, setShadow] = useState({});
-    const [sex, setSex] = useState(UserUtil.getSexText(shadow.sex));
+    const [shadow, setShadow] = useState(null);
+    const [sex, setSex] = useState(UserUtil.getSexText(shadow && shadow.sex));
 
     useEffect(() => {
-        if (user) {
+        if (user && (shadow == null)) {
             var flat = UserUtil.flat(user);
             setShadow(flat);
             setSex(UserUtil.getSexText(flat.sex));
+            setAvatarKey(avatarKey + 1); // refresh avatar
         }
     }, [user]);
 
     useEffect(() => {
         shadow && validateMotto(shadow.motto);
         shadow && validateUsername(shadow.username);
-        setEditKey(editKey + 1);
     }, [shadow]);
 
     useEffect(() => {
-        setShadow({ ...shadow, sex: UserUtil.getSexNo(sex) });
+        if (shadow != null) {
+            setShadow({ ...shadow, sex: UserUtil.getSexNo(sex) });
+        }
     }, [sex]);
 
     const onMottoChange = (event) => {
@@ -243,13 +245,14 @@ export default function UserInfoPanel({
 
     return (
         <div className={`UserInfoPanel${disabled ? '' : ' active'}`}>
-            <div className="primary" key={editKey}>
+            <div className="primary">
                 <div className="avatar">
                     <AvatarField
                         size={100}
                         src={shadow && shadow.avatarUrl}
                         disabled={!enableEdit}
                         onAvatarChange={onAvatarChange}
+                        key={avatarKey}
                     />
                 </div>
                 <div className="info-wrapper">

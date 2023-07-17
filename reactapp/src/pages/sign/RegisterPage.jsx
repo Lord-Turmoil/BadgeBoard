@@ -179,9 +179,7 @@ export default function RegisterPage() {
             type: 'username',
             value: name
         }).then(dto => {
-            return { status: dto.data, message: dto.data ? 'Username already occupied' : '' };
-        }).catch(dto => {
-            return { status: true, message: 'Server error, please stand by' };
+            return { status: dto.data, message: dto.meta.message ? 'Username already occupied' : '' };
         });
     }
 

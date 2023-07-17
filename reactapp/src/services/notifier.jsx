@@ -4,7 +4,7 @@ import 'alertifyjs/build/css/alertify.min.css';
 import 'alertifyjs/build/css/themes/default.min.css'
 import '../assets/css/alertify.patch.css'
 
-const NOTIFY_WAIT = 1.5;
+const NOTIFY_WAIT = 2;
 
 alertify.set('notifier', 'delay', NOTIFY_WAIT);
 alertify.set('notifier', 'position', 'top-center');

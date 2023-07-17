@@ -20,9 +20,12 @@ class Api {
             return {
                 meta: {
                     status: 101,
-                    message: err.name
+                    message: "Connection error, try again later"
                 },
-                data: err.message
+                data: {
+                    name: err.name,
+                    message: err.message
+                }
             }
         }
         if (!Object.hasOwn(err.response, 'data')) {

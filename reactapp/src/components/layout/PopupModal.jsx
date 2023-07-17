@@ -25,8 +25,8 @@ export default function PopupModal({
                 {children}
             </DialogContent>
             <DialogActions>
-                <Button autoFocus onClick={onCancelInner}>Cancel</Button>
-                <Button onClick={onConfirmInner}>OK</Button>
+                <Button variant="contained" color="error" autoFocus onClick={onCancelInner}>Cancel</Button>
+                <Button variant="contained" color="success" onClick={onConfirmInner}>OK</Button>
             </DialogActions>
         </Dialog>
     );

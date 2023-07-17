@@ -44,6 +44,7 @@ export default function AvatarField({
             }
             reader.onload = () => {
                 setOldImageData(imageData);
+                console.log("🚀 > handleFileSelection > reader.result:", reader.result);
                 setImageData(reader.result?.toString());
                 setShowDialog(true);
             };

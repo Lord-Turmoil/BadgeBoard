@@ -17,7 +17,7 @@ export default function ImageCrop({
     const [sliderValue, setSliderValue] = useState(100);
 
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-        console.log(croppedArea, croppedAreaPixels)
+        // console.log(croppedArea, croppedAreaPixels)
     }, []);
 
     const onSliderValueChange = (event, value) => {
@@ -46,6 +46,8 @@ export default function ImageCrop({
                         onZoomChange={onCropperZoomChange}
                         onCropChange={setCrop}
                         onCropComplete={onCropComplete}
+                        cropShape="rect"
+                        objectFit="cover"
                     />
                 }
             </div>

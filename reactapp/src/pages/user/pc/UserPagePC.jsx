@@ -1,7 +1,7 @@
+import UserPageMobile from "../mobile/UserPageMobile";
+
 export default function UserPagePC() {
     return (
-        <div>
-            <h1>User Page PC</h1>
-        </div>
+        <UserPageMobile />
     );
 }

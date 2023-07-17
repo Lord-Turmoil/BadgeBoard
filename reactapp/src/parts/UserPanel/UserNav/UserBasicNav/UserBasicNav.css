@@ -1,0 +1,6 @@
+.UserBasicNav {
+    flex-flow: row-reverse;
+}
+.UserBasicNav .UserBasicNav__avatar {
+    margin-right: 5px;
+}

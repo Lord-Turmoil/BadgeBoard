@@ -137,7 +137,7 @@ export const useLocalUser = (update = null, callback = null) => {
         }
     }, [update]);
 
-    return { data, loading, error };
+    return { data, setData, loading, error };
 }
 
 export const useUser = (uid, callback = null) => {
@@ -176,5 +176,5 @@ export const useUser = (uid, callback = null) => {
         }
     }, [uid]);
 
-    return { data, loading, error };
+    return { data, setData, loading, error };
 }

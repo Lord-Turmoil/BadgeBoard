@@ -4,6 +4,7 @@ class Api {
     constructor() {
         this._api = axios.create({
             baseURL: 'http://localhost:5168/api/'
+            // baseURL: 'https://localhost:7075/api/'
         });
         this._api.interceptors.request.use(config => {
             config.headers.Authorization = window.localStorage.getItem('token');
@@ -35,7 +36,7 @@ class Api {
         if (!response.data || response.data == "") {
             return ret;
         }
-        
+
         const data = err.response.data;
         if (Object.hasOwn(data, 'meta')) {
             return data;

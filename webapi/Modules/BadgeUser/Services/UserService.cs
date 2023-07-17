@@ -3,6 +3,7 @@ using Arch.EntityFrameworkCore.UnitOfWork;
 using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
+using BadgeBoard.Api.Modules.BadgeGlobal;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Services.Utils;
@@ -115,6 +116,29 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			await _unitOfWork.SaveChangesAsync();
 
 			return new GoodResponse(new GoodWithDataDto(user.Username));
+		}
+
+		public async Task<ApiResponse> UpdateAvatar(int id, UpdateAvatarDto dto)
+		{
+			var repo = _unitOfWork.GetRepository<User>();
+			var user = await UserUtil.GetUserByIdAsync(repo, id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			if (!AvatarUtil.DeleteAvatar(user.AvatarUrl)) {
+				return new GoodResponse(new BadDto(Errors.DeleteAvatarError, "Failed to delete old avatar"));
+			}
+
+			var avatarUrl = AvatarUtil.SaveAvatar(dto.Data, dto.Extension);
+			if (avatarUrl == null) {
+				return new GoodResponse(new BadDto(Errors.SaveAvatarError, "Failed to save new avatar"));
+			}
+
+			user.AvatarUrl = avatarUrl;
+			await _unitOfWork.SaveChangesAsync();
+
+			return new GoodResponse(new GoodWithDataDto(user.AvatarUrl));
 		}
 
 		public async Task<ApiResponse> GetUser(int id)

@@ -12,5 +12,9 @@
 		public const int GetTokenRejected = 2002;
 		public const int RefreshTokenRejected = 2003;
 		public const int RevokeTokenRejected = 2004;
+
+		// User Status
+		public const int DeleteAvatarError = 3001;
+		public const int SaveAvatarError = 3002;
 	}
 }

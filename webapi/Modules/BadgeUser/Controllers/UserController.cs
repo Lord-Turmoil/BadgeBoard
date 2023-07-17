@@ -41,7 +41,6 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 			return await _service.UpdatePreference((int)id, dto);
 		}
 
-
 		[HttpPost]
 		[Route("info")]
 		[Authorize]
@@ -54,8 +53,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 
 			return await _service.UpdateInfo((int)id, dto);
 		}
-
-
+		
 		[HttpPost]
 		[Route("username")]
 		[Authorize]
@@ -69,6 +67,19 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 			}
 
 			return await _service.UpdateUsername((int)id, dto);
+		}
+
+		[HttpPost]
+		[Route("avatar")]
+		[Authorize]
+		public async Task<ApiResponse> UpdateAvatar([FromHeader] string authorization, UpdateAvatarDto dto)
+		{
+			var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
+			if (id == null) {
+				return new UnauthorizedResponse(new BadUserJwtDto());
+			}
+
+			return await _service.UpdateAvatar((int)id, dto);
 		}
 
 

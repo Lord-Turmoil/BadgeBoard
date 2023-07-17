@@ -15,6 +15,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public Task<ApiResponse> UpdateUsername(int id, UpdateUsernameDto dto);
 
+		public Task<ApiResponse> UpdateAvatar(int id, UpdateAvatarDto dto);
 		// get user properties
 		public Task<ApiResponse> GetUser(int id);
 

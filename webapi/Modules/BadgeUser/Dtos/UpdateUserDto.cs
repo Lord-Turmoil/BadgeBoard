@@ -19,4 +19,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 	{
 		public string? Username { get; set; }
 	}
+
+	public class UpdateAvatarDto
+	{
+		public string Extension { get; set; }
+		public string Data { get; set; } // base 64 string
+	}
 }

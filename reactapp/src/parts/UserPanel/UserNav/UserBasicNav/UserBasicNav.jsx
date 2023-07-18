@@ -32,7 +32,9 @@ export default function UserBasicNav({
         var dto = await api.post("auth/token/revoke");
         notifier.auto(dto.meta);
         UserUtil.drop();
+        api.dropToken();
         onMenuClose();
+        window.location.reload(false);
     }
 
     const onClickRefresh = async () =>{

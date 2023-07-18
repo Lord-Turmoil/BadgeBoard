@@ -115,6 +115,10 @@ class Api {
     saveToken(token) {
         window.localStorage.setItem('token', 'bearer ' + token);
     }
+
+    dropToken() {
+        window.localStorage.removeItem('token');
+    }
 }
 
 var api = new Api();

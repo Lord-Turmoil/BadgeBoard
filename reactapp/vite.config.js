@@ -30,7 +30,7 @@ export default defineConfig({
     server: {
         proxy: {
         },
-        port: 5173,
+        port: 66,
         https: false
     }
 })

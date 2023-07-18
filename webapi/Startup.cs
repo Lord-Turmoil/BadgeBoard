@@ -1,5 +1,6 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
 using AutoMapper;
+using BadgeBoard.Api.Extensions.Cors;
 using BadgeBoard.Api.Extensions.Email;
 using BadgeBoard.Api.Extensions.Jwt;
 using BadgeBoard.Api.Extensions.Module;
@@ -22,8 +23,6 @@ namespace BadgeBoard.Api
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddCors();
-
 			ConfigureDatabase<BadgeContext>(services);
 			services.AddUnitOfWork<BadgeContext>();
 			services.RegisterModules();
@@ -67,6 +66,25 @@ namespace BadgeBoard.Api
 				config.AddProfile(new AutoMapperProfile());
 			});
 			services.AddSingleton(autoMapperConfig.CreateMapper());
+
+			// CORS
+			var corsOptions = new CorsOptions();
+			Configuration.GetRequiredSection(CorsOptions.CorsSection).Bind(corsOptions);
+			if (corsOptions.Enable) {
+				services.AddCors(options => {
+					options.AddPolicy(
+						name: CorsOptions.CorsPolicyName,
+						policy => {
+							foreach (var origin in corsOptions.Origins) {
+								policy.WithOrigins(origin);
+							}
+
+							policy.AllowAnyHeader()
+								.AllowAnyMethod()
+								.AllowCredentials();
+						});
+				});
+			}
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -81,15 +99,11 @@ namespace BadgeBoard.Api
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			// Enable static files.
+			// Enable static files. (before use cors)
 			app.UseStaticFiles();
 
 			// Must be placed between UseRouting and UseEndpoints
-			app.UseCors(policy => {
-				policy.AllowAnyOrigin()
-					.AllowAnyMethod()
-					.AllowAnyHeader();
-			});
+			app.UseCors(CorsOptions.CorsPolicyName);
 
 			app.UseEndpoints(endpoints => {
 				endpoints.MapControllers();

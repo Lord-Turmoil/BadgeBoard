@@ -3,6 +3,7 @@ import axios from 'axios';
 class Api {
     constructor() {
         this._api = axios.create({
+            withCredentials: true,
             baseURL: 'http://localhost:5168/api/'
             // baseURL: 'https://localhost:7075/api/'
         });

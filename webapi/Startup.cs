@@ -75,10 +75,13 @@ namespace BadgeBoard.Api
 					options.AddPolicy(
 						name: CorsOptions.CorsPolicyName,
 						policy => {
-							policy.AllowAnyHeader().AllowAnyMethod();
 							foreach (var origin in corsOptions.Origins) {
 								policy.WithOrigins(origin);
 							}
+
+							policy.AllowAnyHeader()
+								.AllowAnyMethod()
+								.AllowCredentials();
 						});
 				});
 			}

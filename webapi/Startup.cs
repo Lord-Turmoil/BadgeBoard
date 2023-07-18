@@ -75,10 +75,13 @@ namespace BadgeBoard.Api
 					options.AddPolicy(
 						name: CorsOptions.CorsPolicyName,
 						policy => {
-							foreach (var origin in corsOptions.Origins) {
-								policy.WithOrigins(origin);
+							if (corsOptions.AllowAny) {
+								policy.AllowAnyOrigin();
+							} else {
+								foreach (var origin in corsOptions.Origins) {
+									policy.WithOrigins(origin);
+								}
 							}
-
 							policy.AllowAnyHeader()
 								.AllowAnyMethod()
 								.AllowCredentials();
@@ -87,6 +90,12 @@ namespace BadgeBoard.Api
 			}
 		}
 
+		/// <summary>
+		/// For middleware order, please refer to:
+		/// https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/index/_static/middleware-pipeline.svg?view=aspnetcore-6.0
+		/// </summary>
+		/// <param name="app"></param>
+		/// <param name="env"></param>
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment()) {
@@ -94,16 +103,16 @@ namespace BadgeBoard.Api
 				app.UseSwagger();
 				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BadgeBoard.Api v1"));
 			}
-			app.UseHttpsRedirection();
-			app.UseRouting();
-			app.UseAuthentication();
-			app.UseAuthorization();
 
-			// Enable static files. (before use cors)
+			app.UseHttpsRedirection();
 			app.UseStaticFiles();
+			app.UseRouting();
 
 			// Must be placed between UseRouting and UseEndpoints
 			app.UseCors(CorsOptions.CorsPolicyName);
+			
+			app.UseAuthentication();
+			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints => {
 				endpoints.MapControllers();

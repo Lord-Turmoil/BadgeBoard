@@ -6,6 +6,7 @@
 		public const string CorsPolicyName = "DefaultPolicy";
 
 		public bool Enable { get; set; } = false;
+		public bool AllowAny { get; set; } = true;
 		public List<string> Origins { get; set; } = new List<string>();
 	}
 }

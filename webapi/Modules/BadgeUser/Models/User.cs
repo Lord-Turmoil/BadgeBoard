@@ -16,7 +16,6 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 
 		// User self fields
 		[Column(TypeName = "varchar(63)")]
-		[Required]
 		public string Username { get; set; }
 
 		[Column(TypeName = "varchar(127)")]

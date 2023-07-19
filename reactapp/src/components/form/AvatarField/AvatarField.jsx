@@ -36,11 +36,15 @@ export default function AvatarField({
     const handleFileSelection = async (event) => {
         event.preventDefault();
         try {
-            let files;
+            let file;
             if (event.dataTransfer) {
-                files = event.dataTransfer.files;
+                file = event.dataTransfer.files[0];
             } else if (event.target) {
-                files = event.target.files;
+                file = event.target.files[0];
+            }
+            if (file.size / 1024 / 1024 > 3.0) {
+                notifier.error("Avatar should be less than 3 MB");
+                return;
             }
             const reader = new FileReader();
             if (!reader) {
@@ -51,7 +55,7 @@ export default function AvatarField({
                 setImageData(reader.result?.toString());
                 setShowDialog(true);
             };
-            reader.readAsDataURL(files[0]);
+            reader.readAsDataURL(file);
         } catch (error) {
             console.log("🚀 > handleFileSelect > error:", error);
         }
@@ -96,7 +100,7 @@ export default function AvatarField({
             data: data
         });
         notifier.auto(dto.meta);
-        
+
         if (dto.meta.status != 0) {
             onCancelSelection();
             return null;

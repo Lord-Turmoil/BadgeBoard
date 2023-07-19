@@ -3,6 +3,7 @@ using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
+using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Services.Impl;
@@ -18,7 +19,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public ApiResponse SendCode(VerificationCodeDto dto)
 		{
-			if (!dto.Verify()) {
+			if (!dto.Format().Verify()) {
 				return new BadRequestResponse(new BadRequestDto());
 			}
 			if (!AccountVerifier.VerifyEmail(dto.Email)) {
@@ -50,7 +51,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public async Task<ApiResponse> Register(RegisterDto dto)
 		{
-			if (!dto.Verify()) {
+			if (!dto.Format().Verify()) {
 				return new BadRequestResponse(new BadRequestDto());
 			}
 
@@ -73,6 +74,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public async Task<ApiResponse> Cancel(CancelDto dto)
 		{
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
 			var repo = _unitOfWork.GetRepository<User>();
 			foreach (var username in dto.Users.Where(username => !string.IsNullOrEmpty(username))) {
 				var user = await UserUtil.FindUserByUsernameAsync(repo, username);
@@ -80,7 +85,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 					UserUtil.EraseUser(_unitOfWork, user);
 				}
 			}
-			await _unitOfWork.SaveChangesAsync();
+
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto());
+			}
 
 			return new GoodResponse(new GoodDto("Users canceled"));
 		}

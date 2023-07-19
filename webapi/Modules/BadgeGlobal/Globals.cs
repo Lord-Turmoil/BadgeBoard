@@ -2,6 +2,8 @@
 {
 	public static class Globals
 	{
+		public const int MaxMottoLength = 66;
+
 		public const int MaxQuestionLength = 800;
 		public const int MaxAnswerLength = 800;
 		public const int MaxMemoryLength = 1000;

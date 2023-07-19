@@ -22,7 +22,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public async Task<ApiResponse> Login(LoginDto dto)
 		{
-			if (!dto.Verify()) {
+			if (!dto.Format().Verify()) {
 				return new BadRequestResponse(new BadRequestDto());
 			}
 
@@ -49,7 +49,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public async Task<TokenResponseData> GetToken(TokenDto dto)
 		{
-			if (!dto.Verify()) {
+			if (!dto.Format().Verify()) {
 				return new TokenResponseData {
 					IsAuthenticated = false,
 					Status = StatusCodes.Status400BadRequest,

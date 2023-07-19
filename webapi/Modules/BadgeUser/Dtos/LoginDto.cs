@@ -13,6 +13,13 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 		{
 			return !(string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password));
 		}
+
+		public override LoginDto Format()
+		{
+			Username = Username.Trim();
+			Password = Password.Trim();
+			return this;
+		}
 	}
 
 	public class LoginWrongPasswordDto : OrdinaryDto

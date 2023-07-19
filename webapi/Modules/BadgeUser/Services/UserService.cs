@@ -47,6 +47,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public async Task<ApiResponse> UpdatePreference(int id, UpdateUserPreferenceDto dto)
 		{
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
 			var repo = _unitOfWork.GetRepository<User>();
 			var user = await UserUtil.FindUserByIdAsync(repo, id);
 			if (user == null) {
@@ -67,6 +71,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public async Task<ApiResponse> UpdateInfo(int id, UpdateUserInfoDto dto)
 		{
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
 			var repo = _unitOfWork.GetRepository<User>();
 			var user = await UserUtil.FindUserByIdAsync(repo, id);
 			if (user == null) {
@@ -108,6 +116,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public async Task<ApiResponse> UpdateUsername(int id, UpdateUsernameDto dto)
 		{
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
 			var repo = _unitOfWork.GetRepository<User>();
 			var user = await UserUtil.FindUserByIdAsync(repo, id);
 			if (user == null) {
@@ -135,6 +147,10 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 		public async Task<ApiResponse> UpdateAvatar(int id, UpdateAvatarDto dto)
 		{
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
 			var repo = _unitOfWork.GetRepository<User>();
 			var user = await UserUtil.FindUserByIdAsync(repo, id);
 			if (user == null) {

@@ -14,6 +14,13 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 		{
 			return AccountVerifier.VerifyAccount(Username, Password);
 		}
+
+		public override RegisterDto Format()
+		{
+			Username = Username.Trim();
+			Password = Password.Trim();
+			return this;
+		}
 	}
 
 	internal class RegisterSuccessData : ApiResponseData

@@ -30,7 +30,7 @@ export default function UserBasicNav({
 
     const onClickLogout = async () => {
         var dto = await api.post("auth/token/revoke");
-        notifier.auto(dto.meta);
+        notifier.auto(dto.meta, "See you later then~");
         UserUtil.drop();
         api.dropToken();
         onMenuClose();

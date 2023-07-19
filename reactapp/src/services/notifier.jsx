@@ -46,11 +46,11 @@ class Notifier {
         }
     }
 
-    auto(meta, dismiss = false, wait = NOTIFY_WAIT) {
+    auto(meta, successMsg = null, errorMsg = null, dismiss = false, wait = NOTIFY_WAIT) {
         if (meta.status == 0) {
-            this.success(meta.message, dismiss, wait);
+            this.success(successMsg ?? meta.message, dismiss, wait);
         } else {
-            this.error(meta.message, dismiss, wait);
+            this.error(errorMsg ?? meta.message, dismiss, wait);
         }
     }
 }

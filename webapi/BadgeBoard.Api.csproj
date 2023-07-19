@@ -28,8 +28,6 @@
     <Folder Include="Modules\BadgeAccount\Controllers\" />
     <Folder Include="Data\" />
     <Folder Include="Modules\BadgeBadge\Controllers\" />
-    <Folder Include="Modules\BadgeBadge\Dtos\" />
-    <Folder Include="Modules\BadgeBadge\Services\" />
     <Folder Include="Modules\BadgeBadge\Responses\" />
     <Folder Include="Templates\" />
     <Folder Include="wwwroot\static\avatar\" />

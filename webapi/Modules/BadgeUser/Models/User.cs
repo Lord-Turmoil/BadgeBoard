@@ -103,6 +103,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		{
 			return sex is >= Unknown and <= Female;
 		}
+		
 	}
 
 	[Owned]

@@ -6,5 +6,10 @@
 		{
 			return true;
 		}
+
+		public virtual ApiRequestDto Format()
+		{
+			return this;
+		}
 	}
 }

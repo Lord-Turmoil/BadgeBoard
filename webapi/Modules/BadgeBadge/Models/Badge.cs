@@ -12,6 +12,11 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 		{
 			public const int Question = 1;
 			public const int Memory = 2;
+
+			public static bool IsValid(int type)
+			{
+				return type is Question or Memory;
+			}
 		}
 
 		[Key]

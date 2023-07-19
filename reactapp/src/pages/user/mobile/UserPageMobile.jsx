@@ -70,7 +70,7 @@ export default function UserPageMobile() {
     return (
         <div className="UserPanel UserPanel__mobile">
             <div className="nav-wrapper">
-                <ExpandFab onClick={toggleExpand} />
+                <ExpandFab open={expandOn} onClick={toggleExpand} />
                 <div className="nav">
                     <UserBasicNav user={visitor}/>
                 </div>

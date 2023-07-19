@@ -12,7 +12,7 @@ import FemaleRoundedIcon from '@mui/icons-material/FemaleRounded';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
-import { Button, Divider, FormControl, FormControlLabel, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material';
+import { Button, ClickAwayListener, Divider, FormControl, FormControlLabel, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material';
 
 import SubtleInput from '~/components/form/SubtleInput';
 
@@ -243,107 +243,119 @@ export default function UserInfoPanel({
         onUserChangeInner({ key: "avatarUrl", data: avatarUrl });
     }
 
+    // click away
+    var canClose = false;
+    const onClickAway = () => {
+        if (!disabled && canClose) {
+            onClose && onClose();
+        } else {
+            canClose = true;
+        }
+    }
+
     return (
-        <div className={`UserInfoPanel${disabled ? '' : ' active'}`}>
-            <div className="primary">
-                <div className="avatar">
-                    <AvatarField
-                        size={100}
-                        src={shadow && shadow.avatarUrl}
-                        disabled={!enableEdit}
-                        onAvatarChange={onAvatarChange}
-                        key={avatarKey}
-                    />
-                </div>
-                <div className="info-wrapper">
-                    <SubtleInput
-                        cls='username'
-                        sx={enableEdit ? { marginTop: "15px" } : null}
-                        error={usernameError.err}
-                        helperText={usernameError.hint}
-                        placeholder='Username'
-                        enabled={enableEdit}
-                        defaultValue={shadow && shadow.username}
-                        onChange={onUsernameChange}
-                        variant='outlined'
-                        label='Username'
-                    />
-                    <Divider sx={{ height: "1px", display: enableEdit ? "none" : "block" }} />
-                    <div className="info">
-                        {enableEdit ?
-                            <div className="birthday">
-                                <LocalizationProvider dateAdapter={AdapterMoment}>
-                                    <MobileDatePicker
-                                        disableFuture
-                                        sx={enableEdit ? { marginTop: "15px" } : null}
-                                        readOnly={!enableEdit}
-                                        value={formatBirthday(shadow ? shadow.birthday : null)}
-                                        onChange={(newValue) => { setShadow({ ...shadow, birthday: newValue.format("YYYY-MM-DD") }) }}
-                                        label="Birthday" />
-                                </LocalizationProvider>
+        <ClickAwayListener onClickAway={onClickAway}>
+            <div className={`UserInfoPanel${disabled ? '' : ' active'}`}>
+                <div className="primary">
+                    <div className="avatar">
+                        <AvatarField
+                            size={100}
+                            src={shadow && shadow.avatarUrl}
+                            disabled={!enableEdit}
+                            onAvatarChange={onAvatarChange}
+                            key={avatarKey}
+                        />
+                    </div>
+                    <div className="info-wrapper">
+                        <SubtleInput
+                            cls='username'
+                            sx={enableEdit ? { marginTop: "15px" } : null}
+                            error={usernameError.err}
+                            helperText={usernameError.hint}
+                            placeholder='Username'
+                            enabled={enableEdit}
+                            defaultValue={shadow && shadow.username}
+                            onChange={onUsernameChange}
+                            variant='outlined'
+                            label='Username'
+                        />
+                        <Divider sx={{ height: "1px", display: enableEdit ? "none" : "block" }} />
+                        <div className="info">
+                            {enableEdit ?
+                                <div className="birthday">
+                                    <LocalizationProvider dateAdapter={AdapterMoment}>
+                                        <MobileDatePicker
+                                            disableFuture
+                                            sx={enableEdit ? { marginTop: "15px" } : null}
+                                            readOnly={!enableEdit}
+                                            value={formatBirthday(shadow ? shadow.birthday : null)}
+                                            onChange={(newValue) => { setShadow({ ...shadow, birthday: newValue.format("YYYY-MM-DD") }) }}
+                                            label="Birthday" />
+                                    </LocalizationProvider>
+                                </div>
+                                :
+                                <div className='birthday'>
+                                    <CakeRoundedIcon sx={{ verticalAlign: 'bottom' }} />{renderBirthday(shadow && shadow.birthday)}
+                                </div>
+                            }
+                            <div className="motto" style={{ display: enableEdit ? "none" : "block" }}>
+                                <DriveFileRenameOutlineRoundedIcon sx={{ verticalAlign: 'bottom' }} />{renderMotto(shadow && shadow.motto)}
                             </div>
-                            :
-                            <div className='birthday'>
-                                <CakeRoundedIcon sx={{ verticalAlign: 'bottom' }} />{renderBirthday(shadow && shadow.birthday)}
-                            </div>
-                        }
-                        <div className="motto" style={{ display: enableEdit ? "none" : "block" }}>
-                            <DriveFileRenameOutlineRoundedIcon sx={{ verticalAlign: 'bottom' }} />{renderMotto(shadow && shadow.motto)}
+                        </div>
+                        <div style={{ display: enableEdit ? "block" : "none" }}>
+                            <FormControl fullWidth sx={enableEdit ? { marginTop: "5px" } : null}>
+                                <FormLabel sx={{ fontSize: '0.8rem', paddingLeft: '14px' }}>Gender</FormLabel>
+                                <RadioGroup row sx={{ justifyContent: 'center' }} value={sex} onChange={(event) => { setSex(event.target.value); }}>
+                                    <FormControlLabel value="Unknown" control={<Radio color='error' />} label={<QuestionMarkRoundedIcon color='error' />} />
+                                    <FormControlLabel value="Male" control={<Radio color='primary' />} label={<MaleRoundedIcon color='primary' />} />
+                                    <FormControlLabel sx={{ marginRight: '0' }} value="Female" control={<Radio color='secondary' />} label={<FemaleRoundedIcon color='secondary' />} />
+                                </RadioGroup>
+                            </FormControl>
                         </div>
                     </div>
-                    <div style={{ display: enableEdit ? "block" : "none" }}>
-                        <FormControl fullWidth sx={enableEdit ? { marginTop: "5px" } : null}>
-                            <FormLabel sx={{ fontSize: '0.8rem', paddingLeft: '14px' }}>Gender</FormLabel>
-                            <RadioGroup row sx={{ justifyContent: 'center' }} value={sex} onChange={(event) => { setSex(event.target.value); }}>
-                                <FormControlLabel value="Unknown" control={<Radio color='error' />} label={<QuestionMarkRoundedIcon color='error' />} />
-                                <FormControlLabel value="Male" control={<Radio color='primary' />} label={<MaleRoundedIcon color='primary' />} />
-                                <FormControlLabel sx={{ marginRight: '0' }} value="Female" control={<Radio color='secondary' />} label={<FemaleRoundedIcon color='secondary' />} />
-                            </RadioGroup>
-                        </FormControl>
+                </div>
+                <Divider />
+                {enableEdit ?
+                    <div style={{ padding: "5px 10px" }}>
+                        <TextField
+                            fullWidth
+                            sx={{ marginTop: "15px" }}
+                            error={mottoError.err}
+                            helperText={mottoError.err ? mottoError.hint : ""}
+                            placeholder='Personalized signature'
+                            multiline
+                            defaultValue={shadow && shadow.motto}
+                            onChange={onMottoChange}
+                            variant='outlined'
+                            label='Personalized Signature'
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position='end'>
+                                        <DriveFileRenameOutlineRoundedIcon />
+                                    </InputAdornment>
+                                )
+                            }} />
+                    </div> : null
+                }
+                {isOwner() ?
+                    <div className="edit">
+                        {enableEdit ?
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <Button fullWidth variant='contained' color='error' onClick={turnOffEdit}>Cancel</Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button disabled={!isReady() || onSubmitting} fullWidth variant='contained' color='success' onClick={onClickSubmit}>
+                                        {onSubmitting ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : "Done"}
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                            : <Button fullWidth variant="contained" onClick={turnOnEdit}>Edit</Button>
+                        }
                     </div>
-                </div>
+                    : null
+                }
             </div>
-            <Divider />
-            {enableEdit ?
-                <div style={{ padding: "5px 10px" }}>
-                    <TextField
-                        fullWidth
-                        sx={{ marginTop: "15px" }}
-                        error={mottoError.err}
-                        helperText={mottoError.err ? mottoError.hint : ""}
-                        placeholder='Personalized signature'
-                        multiline
-                        defaultValue={shadow && shadow.motto}
-                        onChange={onMottoChange}
-                        variant='outlined'
-                        label='Personalized Signature'
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position='end'>
-                                    <DriveFileRenameOutlineRoundedIcon />
-                                </InputAdornment>
-                            )
-                        }} />
-                </div> : null
-            }
-            {isOwner() ?
-                <div className="edit">
-                    {enableEdit ?
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Button fullWidth variant='contained' color='error' onClick={turnOffEdit}>Cancel</Button>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Button disabled={!isReady() || onSubmitting} fullWidth variant='contained' color='success' onClick={onClickSubmit}>
-                                    {onSubmitting ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : "Done"}
-                                </Button>
-                            </Grid>
-                        </Grid>
-                        : <Button fullWidth variant="contained" onClick={turnOnEdit}>Edit</Button>
-                    }
-                </div>
-                : null
-            }
-        </div>
+        </ClickAwayListener>
     );
 }

@@ -1,24 +1,29 @@
 import { useEffect, useState } from 'react';
 
-import { Avatar, Button, Divider, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { useNavigate } from 'react-router-dom';
 
+import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import { Avatar, Button, Divider, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
+
+import api from '~/services/api';
+import notifier from '~/services/notifier';
+import UserUtil from '~/services/user/UserUtil';
 import AvatarUtil from '~/services/user/AvatarUtil';
 
 import '../UserNav.css'
 import './UserBasicNav.css'
-import api from '~/services/api';
-import notifier from '~/services/notifier';
-import UserUtil from '~/services/user/UserUtil';
-
+import { AppRegistrationRounded } from '@mui/icons-material';
 
 export default function UserBasicNav({
     user = null
 }) {
+    const navigate = useNavigate();
 
     const [menuAnchor, setMenuAnchor] = useState(null);
-    const open = Boolean(menuAnchor && user);
+    const onlineOpen = Boolean(menuAnchor && user);
+    const offlineOpen = Boolean(menuAnchor && !user);
 
     const onClickAvatar = (event) => {
         setMenuAnchor(event.currentTarget);
@@ -34,10 +39,12 @@ export default function UserBasicNav({
         UserUtil.drop();
         api.dropToken();
         onMenuClose();
-        window.location.reload(false);
+        setTimeout(() => {
+            window.location.reload(false);
+        }, 1000);
     }
 
-    const onClickRefresh = async () =>{
+    const onClickRefresh = async () => {
         var dto = await api.post("auth/token/refresh");
         notifier.auto(dto.meta);
         onMenuClose();
@@ -51,25 +58,33 @@ export default function UserBasicNav({
                     src={AvatarUtil.getUrlFromUser(user)}
                 />
             </Button>
-            <Menu anchorEl={menuAnchor} open={open} onClose={onMenuClose}>
-                <MenuItem onClick={onMenuClose}>
+            <Menu anchorEl={menuAnchor} open={onlineOpen} onClose={onMenuClose}>
+                <MenuItem onClick={() => { navigate("/") }}>
                     <ListItemIcon>
-                        <ManageAccountsRoundedIcon />
+                        <HomeRoundedIcon />
                     </ListItemIcon>
-                    <ListItemText>Account</ListItemText>
+                    <ListItemText>Home</ListItemText>
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={onClickRefresh}>
-                    <ListItemIcon>
-                        <LogoutRoundedIcon />
-                    </ListItemIcon>
-                    <ListItemText>Refresh</ListItemText>
-                </MenuItem>
                 <MenuItem onClick={onClickLogout}>
                     <ListItemIcon>
                         <LogoutRoundedIcon />
                     </ListItemIcon>
                     <ListItemText>Logout</ListItemText>
+                </MenuItem>
+            </Menu>
+            <Menu anchorEl={menuAnchor} open={offlineOpen} onClose={onMenuClose}>
+                <MenuItem onClick={() => { navigate("/register"); }}>
+                    <ListItemIcon>
+                        <AppRegistrationRounded />
+                    </ListItemIcon>
+                    <ListItemText>Register</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => { navigate("/login"); }}>
+                    <ListItemIcon>
+                        <LoginRoundedIcon />
+                    </ListItemIcon>
+                    <ListItemText>Login</ListItemText>
                 </MenuItem>
             </Menu>
         </div>

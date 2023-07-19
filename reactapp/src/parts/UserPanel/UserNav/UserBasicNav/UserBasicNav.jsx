@@ -15,6 +15,7 @@ import AvatarUtil from '~/services/user/AvatarUtil';
 import '../UserNav.css'
 import './UserBasicNav.css'
 import { AppRegistrationRounded } from '@mui/icons-material';
+import PopperMenu from '~/components/layout/PopperMenu';
 
 export default function UserBasicNav({
     user = null
@@ -58,7 +59,7 @@ export default function UserBasicNav({
                     src={AvatarUtil.getUrlFromUser(user)}
                 />
             </Button>
-            <Menu anchorEl={menuAnchor} open={onlineOpen} onClose={onMenuClose}>
+            <PopperMenu anchorEl={menuAnchor} open={onlineOpen} onClose={onMenuClose}>
                 <MenuItem onClick={() => { navigate("/") }}>
                     <ListItemIcon>
                         <HomeRoundedIcon />
@@ -72,8 +73,8 @@ export default function UserBasicNav({
                     </ListItemIcon>
                     <ListItemText>Logout</ListItemText>
                 </MenuItem>
-            </Menu>
-            <Menu anchorEl={menuAnchor} open={offlineOpen} onClose={onMenuClose}>
+            </PopperMenu>
+            <PopperMenu anchorEl={menuAnchor} open={offlineOpen} onClose={onMenuClose}>
                 <MenuItem onClick={() => { navigate("/register"); }}>
                     <ListItemIcon>
                         <AppRegistrationRounded />
@@ -86,7 +87,7 @@ export default function UserBasicNav({
                     </ListItemIcon>
                     <ListItemText>Login</ListItemText>
                 </MenuItem>
-            </Menu>
+            </PopperMenu>
         </div>
     );
 };

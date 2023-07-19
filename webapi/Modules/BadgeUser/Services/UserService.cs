@@ -4,6 +4,8 @@ using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeGlobal;
+using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
+using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Services.Utils;
@@ -38,7 +40,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 					break;
 				default:
 					return new BadRequestResponse(new BadRequestDto("Bad type"));
-			};
+			}
 
 			return new GoodResponse(new GoodWithDataDto(data));
 		}
@@ -46,15 +48,20 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public async Task<ApiResponse> UpdatePreference(int id, UpdateUserPreferenceDto dto)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.GetUserByIdAsync(repo, id);
+			var user = await UserUtil.FindUserByIdAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
 
-			user.Preference = await UserPreference.GetAsync(_unitOfWork.GetRepository<UserPreference>(), user.UserPreferenceId);
-			user.Preference.IsDefaultPublic = dto.IsDefaultPublic ?? user.Preference.IsDefaultPublic;
-			repo.Update(user);
-			await _unitOfWork.SaveChangesAsync();
+			try {
+				user.Preference = await UserPreference.GetAsync(_unitOfWork.GetRepository<UserPreference>(),
+					user.UserPreferenceId);
+				user.Preference.IsDefaultPublic = dto.IsDefaultPublic ?? user.Preference.IsDefaultPublic;
+				repo.Update(user);
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new InternalServerErrorDto(data: ex));
+			}
 
 			return new GoodResponse(new GoodWithDataDto(_mapper.Map<UserPreference, UserPreferenceDto>(user.Preference)));
 		}
@@ -62,12 +69,17 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public async Task<ApiResponse> UpdateInfo(int id, UpdateUserInfoDto dto)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.GetUserByIdAsync(repo, id);
+			var user = await UserUtil.FindUserByIdAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
 
-			user.Info = await UserInfo.GetAsync(_unitOfWork.GetRepository<UserInfo>(), user.UserInfoId);
+			try {
+				user.Info = await UserInfo.GetAsync(_unitOfWork.GetRepository<UserInfo>(), user.UserInfoId);
+			} catch (MissingReferenceException ex) {
+				return new InternalServerErrorResponse(new InternalServerErrorDto(data: ex));
+			}
+
 			user.Info.Motto = dto.Motto ?? user.Info.Motto;
 			if (dto.Birthday != null) {
 				// silent on failure
@@ -86,8 +98,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				}
 			}
 
-			repo.Update(user);
-			await _unitOfWork.SaveChangesAsync();
+			try {
+				repo.Update(user);
+				await _unitOfWork.SaveChangesAsync();
+			} catch {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto());
+			}
 
 			return new GoodResponse(new GoodWithDataDto(_mapper.Map<UserInfo, UserInfoDto>(user.Info)));
 		}
@@ -95,12 +111,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public async Task<ApiResponse> UpdateUsername(int id, UpdateUsernameDto dto)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.GetUserByIdAsync(repo, id);
+			var user = await UserUtil.FindUserByIdAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
 
-			if (!AccountVerifier.VerifyUsername(dto.Username)) {
+			if (dto.Username == null || !AccountVerifier.VerifyUsername(dto.Username)) {
 				return new BadRequestResponse(new BadRequestDto("Bad username"));
 			}
 
@@ -108,11 +124,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				return new GoodResponse(new GoodWithDataDto(user.Username));
 			}
 
+			// dto.Username can't be null here
 			if (await UserUtil.HasUserByUsernameAsync(repo, dto.Username)) {
 				return new GoodResponse(new UserAlreadyExistsDto("Duplicated username"));
 			}
 
-			user.Username = dto.Username ?? user.Username;
+			user.Username = dto.Username;
 			await _unitOfWork.SaveChangesAsync();
 
 			return new GoodResponse(new GoodWithDataDto(user.Username));
@@ -121,7 +138,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public async Task<ApiResponse> UpdateAvatar(int id, UpdateAvatarDto dto)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.GetUserByIdAsync(repo, id);
+			var user = await UserUtil.FindUserByIdAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
@@ -136,7 +153,11 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			user.AvatarUrl = avatarUrl;
-			await _unitOfWork.SaveChangesAsync();
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto());
+			}
 
 			return new GoodResponse(new GoodDto("Nice avatar!", user.AvatarUrl));
 		}
@@ -144,7 +165,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public async Task<ApiResponse> GetUser(int id)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.GetUserByIdAsync(repo, id);
+			var user = await UserUtil.FindUserByIdAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
@@ -158,12 +179,17 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public async Task<ApiResponse> GetCurrentUser(int id)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.GetUserByIdAsync(repo, id);
+			var user = await UserUtil.FindUserByIdAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
 
-			await User.IncludeAsync(_unitOfWork, user);
+			try {
+				await User.IncludeAsync(_unitOfWork, user);
+			} catch (MissingReferenceException ex) {
+				return new InternalServerErrorResponse(new MissingReferenceDto(data: ex));
+			}
+
 			var data = _mapper.Map<User, UserCompleteDto>(user);
 
 			return new GoodResponse(new GoodWithDataDto(data));

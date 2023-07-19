@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
+using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BadgeBoard.Api.Modules.BadgeAccount.Models
@@ -38,7 +39,7 @@ namespace BadgeBoard.Api.Modules.BadgeAccount.Models
 
 		public static async Task<UserAccount> GetAsync(IRepository<UserAccount> repo, int id)
 		{
-			return await repo.FindAsync(id);
+			return await repo.FindAsync(id) ?? throw new MissingReferenceException("Account");
 		}
 	}
 }

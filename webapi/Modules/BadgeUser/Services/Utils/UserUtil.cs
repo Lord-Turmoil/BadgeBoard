@@ -13,46 +13,24 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 			return await repo.GetFirstOrDefaultAsync(predicate: x => x.Account.Email.Equals(email));
 		}
 
-		public static User? GetUserByEmail(IRepository<User> repo, string email)
+		public static User? FindUserByEmail(IRepository<User> repo, string email)
 		{
 			return repo.GetFirstOrDefault(predicate: x => x.Account.Email.Equals(email));
 		}
-
-		public static User? GetUserById(IRepository<User> repo, int id)
-		{
-			return repo.Find(id);
-		}
-
-		public static async Task<User?> GetUserByIdAsync(IRepository<User> repo, int id)
+		
+		public static async Task<User?> FindUserByIdAsync(IRepository<User> repo, int id)
 		{
 			return await repo.FindAsync(id);
 		}
 
-		public static async Task<User?> GetUserByUsernameAsync(IRepository<User> repo, string username)
+		public static async Task<User?> FindUserByUsernameAsync(IRepository<User> repo, string username)
 		{
 			return await repo.GetFirstOrDefaultAsync(predicate: x => x.Username.Equals(username));
-		}
-
-		public static User? GetUserByUsername(IRepository<User> repo, string username)
-		{
-			return repo.GetFirstOrDefault(predicate: x => x.Username.Equals(username));
-		}
-
-		public static bool HasUserByUsername(IRepository<User> repo, string username)
-		{
-			var user = repo.GetFirstOrDefault(predicate: x => x.Username.Equals(username));
-			return user != null;
 		}
 
 		public static async Task<bool> HasUserByUsernameAsync(IRepository<User> repo, string username)
 		{
 			var user = await repo.GetFirstOrDefaultAsync(predicate: x => x.Username.Equals(username));
-			return user != null;
-		}
-
-		public static bool HasUserById(IRepository<User> repo, int id)
-		{
-			var user = repo.Find(id);
 			return user != null;
 		}
 

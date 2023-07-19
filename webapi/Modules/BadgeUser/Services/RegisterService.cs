@@ -75,7 +75,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		{
 			var repo = _unitOfWork.GetRepository<User>();
 			foreach (var username in dto.Users.Where(username => !string.IsNullOrEmpty(username))) {
-				var user = await UserUtil.GetUserByUsernameAsync(repo, username);
+				var user = await UserUtil.FindUserByUsernameAsync(repo, username);
 				if (user != null) {
 					UserUtil.EraseUser(_unitOfWork, user);
 				}

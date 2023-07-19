@@ -17,7 +17,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Impl
 		public ApiResponse SendVerificationCode(VerificationCodeDto dto)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = UserUtil.GetUserByEmail(repo, dto.Email);
+			var user = UserUtil.FindUserByEmail(repo, dto.Email);
 			if (user != null) {
 				return new GoodResponse(new UserAlreadyExistsDto());
 			}
@@ -28,7 +28,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Impl
 		public ApiResponse SendRetrievalCode(VerificationCodeDto dto)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = UserUtil.GetUserByEmail(repo, dto.Email);
+			var user = UserUtil.FindUserByEmail(repo, dto.Email);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}

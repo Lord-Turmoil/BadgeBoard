@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
+using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Models
@@ -53,7 +54,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 
 		public static async Task<User> GetAsync(IRepository<User> repo, Guid id)
 		{
-			return await repo.FindAsync(id);
+			return await repo.FindAsync(id) ?? throw new MissingReferenceException("User");
 		}
 
 		/// <summary>
@@ -64,13 +65,9 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		/// <returns></returns>
 		public static async Task<User> IncludeAsync(IUnitOfWork unitOfWork, User user)
 		{
-			user.Account = await UserAccount.GetAsync(
-				unitOfWork.GetRepository<UserAccount>(), user.Id);
-			user.Preference = await UserPreference.GetAsync(
-				unitOfWork.GetRepository<UserPreference>(), user.UserPreferenceId);
-			user.Info = await UserInfo.GetAsync(
-				unitOfWork.GetRepository<UserInfo>(), user.UserInfoId);
-
+			user.Account = await UserAccount.GetAsync(unitOfWork.GetRepository<UserAccount>(), user.Id);
+			user.Preference = await UserPreference.GetAsync(unitOfWork.GetRepository<UserPreference>(), user.UserPreferenceId);
+			user.Info = await UserInfo.GetAsync(unitOfWork.GetRepository<UserInfo>(), user.UserInfoId);
 			return user;
 		}
 	}
@@ -92,7 +89,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 
 		public static async Task<UserPreference> GetAsync(IRepository<UserPreference> repo, int id)
 		{
-			return await repo.FindAsync(id);
+			return await repo.FindAsync(id) ?? throw new MissingReferenceException("Preference");
 		}
 	}
 
@@ -130,7 +127,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 
 		public static async Task<UserInfo> GetAsync(IRepository<UserInfo> repo, int id)
 		{
-			return await repo.FindAsync(id);
+			return await repo.FindAsync(id) ?? throw new MissingReferenceException("UserInfo");
 		}
 	}
 }

@@ -5,6 +5,7 @@ using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
+using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Services.Utils;
@@ -26,12 +27,16 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.GetUserByUsernameAsync(repo, dto.Username);
+			var user = await UserUtil.FindUserByUsernameAsync(repo, dto.Username);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
 
-			await User.IncludeAsync(_unitOfWork, user);
+			try {
+				await User.IncludeAsync(_unitOfWork, user);
+			} catch (MissingReferenceException ex) {
+				return new InternalServerErrorResponse(new InternalServerErrorDto(data: ex));
+			}
 
 			if (!AccountUtil.VerifyPasswordHash(dto.Password, user.Account.Salt, user.Account.Password)) {
 				return new GoodResponse(new LoginWrongPasswordDto());
@@ -54,7 +59,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 			// verify user existence
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.GetUserByIdAsync(repo, dto.Id);
+			var user = await UserUtil.FindUserByIdAsync(repo, dto.Id);
 			if (user == null) {
 				return new TokenResponseData {
 					IsAuthenticated = false,
@@ -63,7 +68,16 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			// verify password
-			user.Account = await UserAccount.GetAsync(_unitOfWork.GetRepository<UserAccount>(), user.Id);
+			try {
+				user.Account = await UserAccount.GetAsync(_unitOfWork.GetRepository<UserAccount>(), user.Id);
+			} catch {
+				return new TokenResponseData {
+					Status = StatusCodes.Status500InternalServerError,
+					IsAuthenticated = false,
+					Message = "Missing Account reference"
+				};
+			}
+
 			if (!AccountUtil.VerifyPasswordHash(dto.Password, user.Account.Salt, user.Account.Password)) {
 				return new TokenResponseData {
 					IsAuthenticated = false,
@@ -79,8 +93,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 			var options = _provider.GetRequiredService<IOptions<JwtOptions>>();
 			data.Token = JwtUtil.CreateToken(options, user.Id.ToString());
-			if (user.RefreshTokens.Any(t => t.IsActive)) {
-				var activeToken = user.RefreshTokens.FirstOrDefault(a => a.IsActive);
+			var activeToken = user.RefreshTokens.FirstOrDefault(a => a.IsActive);
+			if (activeToken != null) {
 				data.RefreshToken = activeToken.Token;
 				data.RefreshTokenExpiration = activeToken.Expires;
 			} else {
@@ -108,8 +122,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			var repo = _unitOfWork.GetRepository<User>();
 
 			// Get oldToken owner
-			var user = await repo.GetFirstOrDefaultAsync(
-				predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
+			var user = await repo.GetFirstOrDefaultAsync(predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
 			if (user == null) {
 				return new TokenResponseData {
 					IsAuthenticated = false,
@@ -178,8 +191,15 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			token.Revoked = DateTime.UtcNow;
-			repo.Update(user);
-			await _unitOfWork.SaveChangesAsync();
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch {
+				return new RevokeTokenData {
+					Status = StatusCodes.Status500InternalServerError,
+					Succeeded = false,
+					Message = "Failed to save data"
+				};
+			}
 
 			return new RevokeTokenData {
 				Succeeded = true,

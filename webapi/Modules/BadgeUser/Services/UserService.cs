@@ -170,7 +170,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			try {
 				await _unitOfWork.SaveChangesAsync();
 			} catch (Exception ex) {
-				return new InternalServerErrorResponse(new FailedToSaveChangesDto());
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
 			}
 
 			return new GoodResponse(new GoodDto("Nice avatar!", user.AvatarUrl));

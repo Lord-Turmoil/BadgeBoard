@@ -2,9 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeGlobal.Models;
-using BadgeBoard.Api.Modules.BadgeGlobal.Utils;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 {

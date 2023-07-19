@@ -6,28 +6,28 @@ namespace BadgeBoard.Api.Modules.BadgeBadge
 {
 	public class BadgeRepository : Repository<Badge>
 	{
-		public BadgeRepository(DbContext dbContext) : base(dbContext)
+		public BadgeRepository(BadgeContext dbContext) : base(dbContext)
 		{
 		}
 	}
 
 	public class QuestionPayloadRepository : Repository<QuestionPayload>
 	{
-		public QuestionPayloadRepository(DbContext dbContext) : base(dbContext)
+		public QuestionPayloadRepository(BadgeContext dbContext) : base(dbContext)
 		{
 		}
 	}
 
 	public class MemoryPayloadRepository : Repository<MemoryPayload>
 	{
-		public MemoryPayloadRepository(DbContext dbContext) : base(dbContext)
+		public MemoryPayloadRepository(BadgeContext dbContext) : base(dbContext)
 		{
 		}
 	}
 
 	public class CategoryRepository : Repository<Category>
 	{
-		public CategoryRepository(DbContext dbContext) : base(dbContext)
+		public CategoryRepository(BadgeContext dbContext) : base(dbContext)
 		{
 		}
 	}

@@ -57,7 +57,6 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				user.Preference = await UserPreference.GetAsync(_unitOfWork.GetRepository<UserPreference>(),
 					user.UserPreferenceId);
 				user.Preference.IsDefaultPublic = dto.IsDefaultPublic ?? user.Preference.IsDefaultPublic;
-				repo.Update(user);
 				await _unitOfWork.SaveChangesAsync();
 			} catch (Exception ex) {
 				return new InternalServerErrorResponse(new InternalServerErrorDto(data: ex));
@@ -99,7 +98,6 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			try {
-				repo.Update(user);
 				await _unitOfWork.SaveChangesAsync();
 			} catch {
 				return new InternalServerErrorResponse(new FailedToSaveChangesDto());

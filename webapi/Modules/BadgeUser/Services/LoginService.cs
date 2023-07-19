@@ -102,8 +102,15 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				data.RefreshToken = refreshToken.Token;
 				data.RefreshTokenExpiration = refreshToken.Expires;
 				user.RefreshTokens.Add(refreshToken);
-				repo.Update(user);
-				await _unitOfWork.SaveChangesAsync();
+				try {
+					await _unitOfWork.SaveChangesAsync();
+				} catch {
+					return new TokenResponseData {
+						Status = StatusCodes.Status500InternalServerError,
+						IsAuthenticated = false,
+						Message = "Failed to save data"
+					};
+				}
 			}
 
 			return data;
@@ -145,8 +152,15 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			// Generate a new refresh oldToken
 			var token = TokenUtil.CreateRefreshToken();
 			user.RefreshTokens.Add(token);
-			repo.Update(user);
-			await _unitOfWork.SaveChangesAsync();
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch {
+				return new TokenResponseData {
+					Status = StatusCodes.Status500InternalServerError,
+					IsAuthenticated = false,
+					Message = "Failed to save data"
+				};
+			}
 
 			// Generate new JWT
 			var data = new TokenResponseData {

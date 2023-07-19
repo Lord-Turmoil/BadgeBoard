@@ -59,7 +59,7 @@ export default function UserBasicNav({
                     src={AvatarUtil.getUrlFromUser(user)}
                 />
             </Button>
-            <PopperMenu anchorEl={menuAnchor} open={onlineOpen} onClose={onMenuClose}>
+            <PopperMenu anchorEl={menuAnchor} open={onlineOpen} onClose={onMenuClose} transformOrigin="right top">
                 <MenuItem onClick={() => { navigate("/") }}>
                     <ListItemIcon>
                         <HomeRoundedIcon />
@@ -74,7 +74,7 @@ export default function UserBasicNav({
                     <ListItemText>Logout</ListItemText>
                 </MenuItem>
             </PopperMenu>
-            <PopperMenu anchorEl={menuAnchor} open={offlineOpen} onClose={onMenuClose}>
+            <PopperMenu anchorEl={menuAnchor} open={offlineOpen} onClose={onMenuClose} transformOrigin="right top">
                 <MenuItem onClick={() => { navigate("/register"); }}>
                     <ListItemIcon>
                         <AppRegistrationRounded />

@@ -121,7 +121,7 @@ export default function AvatarField({
                 onConfirm={onConfirmSelection}
             >
                 <ImageCrop
-                    image={imageData}
+                    image={AvatarUtil.getUrl(imageData)}
                     croppedArea={croppedArea}
                     onCroppedAreaChange={setCroppedArea}
                 />

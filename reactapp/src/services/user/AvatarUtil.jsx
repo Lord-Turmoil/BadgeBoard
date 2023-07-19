@@ -8,13 +8,14 @@ class AvatarUtil {
     }
     
     static getUrl(url = null) {
+        // console.log("🚀 > AvatarUtil > getUrl > url:", url);
         if (url == null || url == "") {
             return defaultAvatar;
         }
-        if (url.startsWith("static")) {
-            return defaultBaseUrl + url;
+        if (url.startsWith("/") || url.startsWith("data")) {
+            return url;
         }
-        return url;
+        return defaultBaseUrl + url;
     }
 }
 

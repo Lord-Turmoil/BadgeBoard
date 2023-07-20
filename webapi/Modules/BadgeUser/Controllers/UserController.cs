@@ -72,7 +72,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers
 		[HttpPost]
 		[Route("avatar")]
 		[Authorize]
-		public async Task<ApiResponse> UpdateAvatar([FromHeader] string authorization, UpdateAvatarDto dto)
+		public async Task<ApiResponse> UpdateAvatar([FromHeader] string authorization, [FromBody] UpdateAvatarDto dto)
 		{
 			var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
 			if (id == null) {

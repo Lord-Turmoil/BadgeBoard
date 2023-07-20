@@ -63,11 +63,6 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			throw new NotImplementedException();
 		}
 
-		public Task<ApiResponse> RenameCategory(int id)
-		{
-			throw new NotImplementedException();
-		}
-
 		public async Task<ApiResponse> UpdateCategory(int id, UpdateCategoryDto dto)
 		{
 			if (!dto.Format().Verify()) {
@@ -85,6 +80,14 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 				return new GoodResponse(new CategoryNotExistsDto());
 			}
 
+			// Check name duplication
+			if (category.Name != dto.Name) {
+				if (await CategoryUtil.HasCategoryOfUserAsync(repo, id, dto.Name)) {
+					return new GoodResponse(new CategoryAlreadyExistsDto());
+				}
+			}
+
+			// Update whole category.
 			CategoryUtil.UpdateCategory(category, dto);
 			try {
 				await _unitOfWork.SaveChangesAsync();

@@ -16,12 +16,8 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 
 		// Delete a category, can optionally merge data into another.
 		public Task<ApiResponse> DeleteCategory(int id);
-
-		// Only rename the category.
-		public Task<ApiResponse> RenameCategory(int id);
-
-		// Update category options. Won't affect category name and
-		// current badges in it.
+		
+		// Update category options. Won't affect current badges in it.
 		public Task<ApiResponse> UpdateCategory(int id, UpdateCategoryDto dto);
 
 		// Merge two categories, and abandon (delete) the merge source.

@@ -20,5 +20,9 @@
 		// User Info
 		public const int DeleteAvatarError = 3001;
 		public const int SaveAvatarError = 3002;
+
+		// Category
+		public const int CategoryAlreadyExists = 4001;
+
 	}
 }

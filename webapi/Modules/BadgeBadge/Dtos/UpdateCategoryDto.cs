@@ -3,10 +3,8 @@ using BadgeBoard.Api.Modules.BadgeGlobal;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos
 {
-	public class AddCategoryDto : CategoryDto, IApiRequestDto
+	public class UpdateCategoryDto : CategoryDto, IApiRequestDto
 	{
-		public string Name { get; set; }
-
 		public bool Verify()
 		{
 			return Name.Length is > 0 and < Globals.MaxCategoryNameLength;

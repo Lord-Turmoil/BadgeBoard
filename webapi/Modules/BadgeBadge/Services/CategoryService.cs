@@ -2,10 +2,13 @@
 using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
+using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
+using Microsoft.JSInterop.Infrastructure;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 {
@@ -23,13 +26,37 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 				return new GoodResponse(new UserNotExistsDto());
 			}
 
-			var categories = await CategoryUtil.GetCategoryOfUserAsync(_unitOfWork.GetRepository<Category>(), user.Id);
-			return new GoodResponse(new GoodWithDataDto(categories.Any(x => x.Name == name)));
+			var exists = await CategoryUtil.HasCategoryOfUserAsync(_unitOfWork.GetRepository<Category>(), user.Id, name);
+			return new GoodResponse(new GoodWithDataDto(exists));
 		}
 
-		public Task<ApiResponse> AddCategory(int id)
+		public async Task<ApiResponse> AddCategory(int id, UpdateCategoryDto dto)
 		{
-			throw new NotImplementedException();
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
+			var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			var repo = _unitOfWork.GetRepository<Category>();
+			if (await CategoryUtil.HasCategoryOfUserAsync(repo, id, dto.Name)) {
+				return new GoodResponse(new CategoryAlreadyExistsDto());
+			}
+
+
+			var category = await Category.CreateAsync(repo, dto.Name, user);
+			CategoryUtil.UpdateCategory(category, dto);
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+			}
+
+			var data = _mapper.Map<Category, CategoryDto>(category);
+			return new GoodResponse(new GoodDto("New category options", data));
 		}
 
 		public Task<ApiResponse> DeleteCategory(int id)
@@ -42,7 +69,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			throw new NotImplementedException();
 		}
 
-		public Task<ApiResponse> UpdateCategory(int id)
+		public Task<ApiResponse> UpdateCategory(int id, UpdateCategoryDto dto)
 		{
 			throw new NotImplementedException();
 		}

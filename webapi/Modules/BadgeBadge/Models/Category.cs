@@ -42,23 +42,31 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 			return entry.Entity;
 		}
 
-		public static async Task<Category> GetAsync(IRepository<Category> repo, int id)
+		public static async Task<Category> GetAsync(IRepository<Category> repo, int id, bool include = false)
 		{
-			return await repo.GetFirstOrDefaultAsync(
-				predicate: x => x.Id == id,
-				include: source => source.Include(x => x.Option)
-			) ?? throw new MissingReferenceException("Category");
+			if (include) {
+				return await repo.GetFirstOrDefaultAsync(
+					predicate: x => x.Id == id,
+					include: source => source.Include(x => x.Option)
+				) ?? throw new MissingReferenceException("Category");
+			}
+
+			return await repo.FindAsync(id) ?? throw new MissingReferenceException("Category");
 		}
 
-		public static async Task<Category?> FindAsync(IRepository<Category> repo, int id)
+		public static async Task<Category?> FindAsync(IRepository<Category> repo, int id, bool include = false)
 		{
-			return await repo.GetFirstOrDefaultAsync(
-				predicate: x => x.Id == id,
-				include: source => source.Include(x => x.Option)
-			);
+			if (include) {
+				return await repo.GetFirstOrDefaultAsync(
+					predicate: x => x.Id == id,
+					include: source => source.Include(x => x.Option)
+				);
+			}
+
+			return await repo.FindAsync(id);
 		}
 	}
-	
+
 	[Owned]
 	public class CategoryOption
 	{

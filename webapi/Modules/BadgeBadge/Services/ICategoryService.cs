@@ -12,7 +12,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 	{
 		public Task<ApiResponse> Exists(int id, string name);
 
-		public Task<ApiResponse> AddCategory(int id, UpdateCategoryDto dto);
+		public Task<ApiResponse> AddCategory(int id, AddCategoryDto dto);
 
 		// Delete a category, can optionally merge data into another.
 		public Task<ApiResponse> DeleteCategory(int id);

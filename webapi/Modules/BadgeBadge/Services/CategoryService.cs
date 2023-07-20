@@ -30,7 +30,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			return new GoodResponse(new GoodWithDataDto(exists));
 		}
 
-		public async Task<ApiResponse> AddCategory(int id, UpdateCategoryDto dto)
+		public async Task<ApiResponse> AddCategory(int id, AddCategoryDto dto)
 		{
 			if (!dto.Format().Verify()) {
 				return new BadRequestResponse(new BadRequestDto());

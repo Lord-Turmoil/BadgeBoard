@@ -17,7 +17,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 			return await repo.GetAllAsync(predicate: x => x.UserId == id);
 		}
 
-		public static Category UpdateCategory(Category category, UpdateCategoryDto dto)
+		public static Category UpdateCategory(Category category, CategoryDto dto)
 		{
 			if (!dto.Name.Equals(category.Name)) {
 				category.Name = dto.Name;

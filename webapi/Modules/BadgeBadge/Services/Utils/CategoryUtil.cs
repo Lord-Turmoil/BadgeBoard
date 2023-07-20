@@ -41,5 +41,16 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 
 			return category;
 		}
+
+		public static async Task DeleteCategory(IUnitOfWork unitOfWork, int id)
+		{
+			throw new NotImplementedException();
+
+			var badges = await unitOfWork.GetRepository<Badge>().GetAllAsync(predicate: x => x.CategoryId == id);
+			// TODO: Delete Badge...
+			
+			var repo = unitOfWork.GetRepository<Category>();
+			repo.Delete(id);
+		}
 	}
 }

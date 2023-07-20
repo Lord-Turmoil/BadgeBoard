@@ -58,9 +58,38 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			return new GoodResponse(new GoodDto("New category options", data));
 		}
 
-		public Task<ApiResponse> DeleteCategory(int id)
+		public async Task<ApiResponse> DeleteCategory(int id, DeleteCategoryDto dto)
 		{
-			throw new NotImplementedException();
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
+			var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			var data = new DeleteCategorySuccessDto();
+			foreach (var categoryId in dto.categories) {
+				try {
+					await CategoryUtil.DeleteCategory(_unitOfWork, categoryId);
+				} catch (Exception ex) {
+					data.Errors.Add(new DeleteCategoryErrorData {
+						Id = categoryId,
+						Message = ex.ToString()
+					});
+				}
+			}
+
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+			}
+
+			var message = data.Errors.Count > 0 ? "Deletion partial succeeded" : "Deletion complete";
+
+			return new GoodResponse(new GoodDto(message, data));
 		}
 
 		public async Task<ApiResponse> UpdateCategory(int id, UpdateCategoryDto dto)
@@ -96,6 +125,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			}
 
 			var data = _mapper.Map<Category, CategoryDto>(category);
+
 			return new GoodResponse(new GoodDto("Category updated", data));
 		}
 

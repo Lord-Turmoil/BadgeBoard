@@ -26,6 +26,7 @@ namespace BadgeBoard.Api.Modules
 		public DbSet<QuestionPayload> QuestionPayloads { get; set; }
 		public DbSet<MemoryPayload> MemoryPayloads { get; set; }
 		public DbSet<Category> Categories { get; set; }
+		public DbSet<CategoryOption> CategoriesOptions { get; set; }
 
 		public BadgeContext(DbContextOptions<BadgeContext> options) : base(options)
 		{

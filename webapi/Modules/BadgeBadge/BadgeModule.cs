@@ -11,7 +11,8 @@ namespace BadgeBoard.Api.Modules.BadgeBadge
 			services.AddCustomRepository<Badge, BadgeRepository>()
 				.AddCustomRepository<QuestionPayload, QuestionPayloadRepository>()
 				.AddCustomRepository<MemoryPayload, MemoryPayloadRepository>()
-				.AddCustomRepository<Category, CategoryRepository>();
+				.AddCustomRepository<Category, CategoryRepository>()
+				.AddCustomRepository<CategoryOption, CategoryOptionRepository>();
 
 			return services;
 		}

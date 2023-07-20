@@ -31,4 +31,11 @@ namespace BadgeBoard.Api.Modules.BadgeBadge
 		{
 		}
 	}
+
+	public class CategoryOptionRepository : Repository<CategoryOption>
+	{
+		public CategoryOptionRepository(BadgeContext dbContext) : base(dbContext)
+		{
+		}
+	}
 }

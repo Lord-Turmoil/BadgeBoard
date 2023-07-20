@@ -25,7 +25,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 		[ForeignKey("UserId")]
 		public User User { get; set; }
 
-		public int OptionId { get; set; }
+		public int CategoryOptionId { get; set; }
 		[ForeignKey("CategoryOptionId")]
 		public CategoryOption Option { get; set; }
 
@@ -58,7 +58,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 			);
 		}
 	}
-
+	
 	[Owned]
 	public class CategoryOption
 	{

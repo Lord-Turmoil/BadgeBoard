@@ -1,5 +1,5 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
-using BadgeBoard.Api.Modules.BadgeBadge.Dtos;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
@@ -42,15 +42,32 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 			return category;
 		}
 
-		public static async Task DeleteCategory(IUnitOfWork unitOfWork, int id)
+		public static async Task DeleteCategoryAsync(IUnitOfWork unitOfWork, Category category)
 		{
 			throw new NotImplementedException();
 
-			var badges = await unitOfWork.GetRepository<Badge>().GetAllAsync(predicate: x => x.CategoryId == id);
+			var badges = await unitOfWork.GetRepository<Badge>().GetAllAsync(predicate: x => x.CategoryId == category.Id);
 			// TODO: Delete Badge...
-			
+
 			var repo = unitOfWork.GetRepository<Category>();
-			repo.Delete(id);
+			repo.Delete(category);
+		}
+
+		// src and dst should not be both null (although cause redundant work only)
+		public static async Task MergeCategoriesAsync(IUnitOfWork unitOfWork, Category? src, Category? dst)
+		{
+			var repo = unitOfWork.GetRepository<Badge>();
+
+			IList<Badge> badges;
+			if (src == null) {
+				badges = await repo.GetAllAsync(predicate: x => x.CategoryId == null);
+			} else {
+				badges = await repo.GetAllAsync(predicate: x => x.CategoryId == src.Id);
+			}
+
+			foreach (var badge in badges) {
+				badge.CategoryId = dst?.Id;
+			}
 		}
 	}
 }

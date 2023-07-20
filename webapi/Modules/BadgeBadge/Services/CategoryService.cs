@@ -13,7 +13,7 @@ using Microsoft.JSInterop.Infrastructure;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 {
-    public class CategoryService : BaseService, ICategoryService
+	public class CategoryService : BaseService, ICategoryService
 	{
 		protected CategoryService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork, mapper)
 		{
@@ -71,15 +71,23 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			}
 
 			var data = new DeleteCategorySuccessDto();
-			foreach (var categoryId in dto.categories) {
-				try {
-					await CategoryUtil.DeleteCategory(_unitOfWork, categoryId);
-				} catch (Exception ex) {
+			var repo = _unitOfWork.GetRepository<Category>();
+			foreach (var categoryId in dto.Categories) {
+				// check existence
+				var category = await Category.FindAsync(repo, categoryId);
+				if (category == null) {
 					data.Errors.Add(new DeleteCategoryErrorData {
 						Id = categoryId,
-						Message = ex.ToString()
+						Message = "Not exists"
 					});
+					continue;
 				}
+
+				// do merge to default
+				if (dto.Merge) {
+					await CategoryUtil.MergeCategoriesAsync(_unitOfWork, category, null);
+				}
+				await CategoryUtil.DeleteCategoryAsync(_unitOfWork, category);
 			}
 
 			try {
@@ -130,9 +138,43 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			return new GoodResponse(new GoodDto("Category updated", data));
 		}
 
-		public Task<ApiResponse> MergeCategory(int id)
+		public async Task<ApiResponse> MergeCategory(int id, MergeCategoryDto dto)
 		{
-			throw new NotImplementedException();
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
+			if (dto.SrcId == dto.DstId) {
+				return new BadRequestResponse(new CategoryMergeSelfErrorDto());
+			}
+
+			var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			var repo = _unitOfWork.GetRepository<Category>();
+			Category? src;
+			Category? dst;
+			try {
+				src = dto.SrcId == 0 ? null : await Category.GetAsync(repo, dto.SrcId);
+				dst = dto.DstId == 0 ? null : await Category.GetAsync(repo, dto.DstId);
+			} catch {
+				return new GoodResponse(new CategoryNotExistsDto());
+			}
+
+			await CategoryUtil.MergeCategoriesAsync(_unitOfWork, src, dst);
+			if (dto.Delete && src != null) {
+				await CategoryUtil.DeleteCategoryAsync(_unitOfWork, src);
+			}
+
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+			}
+
+			return new GoodResponse(new GoodDto("Categories Merged"));
 		}
 	}
 }

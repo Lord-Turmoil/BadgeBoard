@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using BadgeBoard.Api.Modules.BadgeAccount.Dtos;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
-using BadgeBoard.Api.Modules.BadgeBadge.Dtos;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 
 namespace BadgeBoard.Api.Modules
 {
-	public class AutoMapperProfile : MapperConfigurationExpression
+    public class AutoMapperProfile : MapperConfigurationExpression
 	{
 		public AutoMapperProfile()
 		{

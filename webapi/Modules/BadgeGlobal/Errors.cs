@@ -24,5 +24,6 @@
 		// Category
 		public const int CategoryAlreadyExists = 4001;
 		public const int CategoryNotExits = 4002;
+		public const int CategoryMergeSelf = 4003;
 	}
 }

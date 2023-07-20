@@ -38,8 +38,8 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 		public bool IsPublic { get; set; } = true;
 
 		// Foreign keys
-		public int CategoryId { get; set; }
-		[ForeignKey("CategoryId")] public Category Category { get; set; }
+		public int? CategoryId { get; set; }
+		[ForeignKey("CategoryId")] public Category? Category { get; set; }
 
 		public int UserId { get; set; }
 		[ForeignKey("UserId")] public User User { get; set; }

@@ -5,17 +5,17 @@ using Org.BouncyCastle.Asn1.Mozilla;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
-	public class RegisterDto : ApiRequestDto
+	public class RegisterDto : IApiRequestDto
 	{
 		public string Username { get; set; }
 		public string Password { get; set; }
 
-		public override bool Verify()
+		public bool Verify()
 		{
 			return AccountVerifier.VerifyAccount(Username, Password);
 		}
 
-		public override RegisterDto Format()
+		public IApiRequestDto Format()
 		{
 			Username = Username.Trim();
 			Password = Password.Trim();

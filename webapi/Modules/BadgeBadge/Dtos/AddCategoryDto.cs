@@ -3,16 +3,16 @@ using BadgeBoard.Api.Modules.BadgeGlobal;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos
 {
-	public class AddCategoryDto : ApiRequestDto
+	public class AddCategoryDto : CategoryDto, IApiRequestDto
 	{
 		public string Name { get; set; }
 
-		public override bool Verify()
+		public bool Verify()
 		{
 			return Name.Length is > 0 and < Globals.MaxCategoryNameLength;
 		}
 
-		public override AddCategoryDto Format()
+		public IApiRequestDto Format()
 		{
 			Name = Name.Trim();
 			return this;

@@ -4,7 +4,7 @@ using BadgeBoard.Api.Modules.BadgeGlobal;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos
 {
-	public class AddBadgeDto : ApiRequestDto
+	public class AddBadgeDto : IApiRequestDto
 	{
 		/// <summary>
 		/// User id of sender. 0 if anonymous.
@@ -27,7 +27,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos
 		public int Category { get; set; }
 		public string? Style { get; set; }
 
-		public override bool Verify()
+		public bool Verify()
 		{
 			if (!Badge.Types.IsValid(Type)) {
 				return false;
@@ -39,7 +39,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos
 			return true;
 		}
 
-		public override AddBadgeDto Format()
+		public IApiRequestDto Format()
 		{
 			Style = Style?.Trim();
 			return this;
@@ -51,7 +51,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos
 		public string Question { get; set; }
 		// Request here won't need Answer, right? :P
 
-		public override bool Verify()
+		public bool Verify()
 		{
 			if (!base.Verify()) {
 				return false;
@@ -60,7 +60,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos
 			return Question.Length is > 0 and < Globals.MaxQuestionLength;
 		}
 
-		public override AddQuestionBadgeDto Format()
+		public AddQuestionBadgeDto Format()
 		{
 			base.Format();
 			Question = Question.Trim();
@@ -72,7 +72,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos
 	{
 		public string Memory { get; set; }
 
-		public override bool Verify()
+		public bool Verify()
 		{
 			if (!base.Verify()) {
 				return false;
@@ -81,7 +81,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos
 			return Memory.Length is > 0 and < Globals.MaxMemoryLength;
 		}
 
-		public override AddMemoryBadgeDto Format()
+		public AddMemoryBadgeDto Format()
 		{
 			base.Format();
 			Memory = Memory.Trim();

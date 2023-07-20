@@ -4,19 +4,28 @@ using BadgeBoard.Api.Modules.BadgeUser.Models;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
-	public class UpdateUserPreferenceDto : ApiRequestDto
+	public class UpdateUserPreferenceDto : IApiRequestDto
 	{
 		public bool? IsDefaultPublic { get; set; }
+		public bool Verify()
+		{
+			return true;
+		}
+
+		public IApiRequestDto Format()
+		{
+			return this;
+		}
 	}
 
 
-	public class UpdateUserInfoDto : ApiRequestDto
+	public class UpdateUserInfoDto : IApiRequestDto
 	{
 		public string? Motto { get; set; }
 		public string? Birthday { get; set; }
 		public int? Sex { get; set; }
 
-		public override bool Verify()
+		public bool Verify()
 		{
 			if (Motto is { Length: > Globals.MaxMottoLength }) {
 				return false;
@@ -27,7 +36,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 			return true;
 		}
 
-		public override UpdateUserInfoDto Format()
+		public IApiRequestDto Format()
 		{
 			Motto = Motto?.Trim();
 			Birthday = Birthday?.Trim();
@@ -35,20 +44,34 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 		}
 	}
 
-	public class UpdateUsernameDto : ApiRequestDto
+	public class UpdateUsernameDto : IApiRequestDto
 	{
 		public string? Username { get; set; }
 
-		public override UpdateUsernameDto Format()
+		public bool Verify()
+		{
+			return true;
+		}
+
+		public IApiRequestDto Format()
 		{
 			Username = Username?.Trim();
 			return this;
 		}
 	}
 
-	public class UpdateAvatarDto : ApiRequestDto
+	public class UpdateAvatarDto : IApiRequestDto
 	{
 		public string Extension { get; set; }
 		public string Data { get; set; } // base 64 string
+		public bool Verify()
+		{
+			return true;
+		}
+
+		public IApiRequestDto Format()
+		{
+			return this;
+		}
 	}
 }

@@ -2,14 +2,19 @@
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
-	public class VerificationCodeDto : ApiRequestDto
+	public class VerificationCodeDto : IApiRequestDto
 	{
 		public string Email { get; set; }
 		public string Type { get; set; }
 
-		public override bool Verify()
+		public bool Verify()
 		{
 			return !(string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Type));
+		}
+
+		public IApiRequestDto Format()
+		{
+			return this;
 		}
 	}
 

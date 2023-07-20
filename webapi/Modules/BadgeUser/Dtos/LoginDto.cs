@@ -4,17 +4,17 @@ using BadgeBoard.Api.Modules.BadgeUser.Models;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
-	public class LoginDto : ApiRequestDto
+	public class LoginDto : IApiRequestDto
 	{
 		public string Username { get; set; }
 		public string Password { get; set; }
 
-		public override bool Verify()
+		public bool Verify()
 		{
 			return !(string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password));
 		}
 
-		public override LoginDto Format()
+		public IApiRequestDto Format()
 		{
 			Username = Username.Trim();
 			Password = Password.Trim();

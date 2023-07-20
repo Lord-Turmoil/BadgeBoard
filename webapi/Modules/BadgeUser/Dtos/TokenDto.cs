@@ -5,14 +5,19 @@ using Google.Protobuf.Reflection;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 {
-	public class TokenDto : ApiRequestDto
+	public class TokenDto : IApiRequestDto
 	{
 		public int Id { get; set; }
 		public string Password { get; set; }
 
-		public override bool Verify()
+		public bool Verify()
 		{
 			return !(string.IsNullOrEmpty(Id.ToString()) || string.IsNullOrEmpty(Password));
+		}
+
+		public IApiRequestDto Format()
+		{
+			return this;
 		}
 	}
 

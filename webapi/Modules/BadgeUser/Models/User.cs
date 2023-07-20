@@ -52,9 +52,14 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 			return entry.Entity;
 		}
 
-		public static async Task<User> GetAsync(IRepository<User> repo, Guid id)
+		public static async Task<User> GetAsync(IRepository<User> repo, int id)
 		{
 			return await repo.FindAsync(id) ?? throw new MissingReferenceException("User");
+		}
+
+		public static async Task<User?> FindAsync(IRepository<User> repo, int id)
+		{
+			return await repo.FindAsync(id);
 		}
 
 		/// <summary>
@@ -103,7 +108,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		{
 			return sex is >= Unknown and <= Female;
 		}
-		
+
 	}
 
 	[Owned]

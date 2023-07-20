@@ -22,14 +22,14 @@ export default function AvatarField({
     const [showDialog, setShowDialog] = useState(false);
 
     const [imageData, setImageData] = useState(src);
-    const [oldImageData, setOldImageData] = useState(src);
+    const [oldImageData, setOldImageData] = useState(null);
 
     // file upload
     const onClickUpload = (event) => {
-        const input = document.createElement('input')
-        input.type = 'file'
-        input.accept = 'image/*'
-        input.addEventListener('change', handleFileSelection)
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.addEventListener('change', handleFileSelection);
         input.click();
     }
 
@@ -63,6 +63,7 @@ export default function AvatarField({
 
     // cropped area (in pixel integer)
     const [croppedArea, setCroppedArea] = useState("");
+
     const getCroppedImage = useCallback(async () => {
         try {
             return await ImageUtil.getCroppedImg(imageData, croppedArea, 0);

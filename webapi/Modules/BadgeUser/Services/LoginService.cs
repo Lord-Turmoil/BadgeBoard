@@ -58,7 +58,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 
 			// verify user existence
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.FindUserByIdAsync(repo, dto.Id);
+			var user = await User.FindAsync(repo, dto.Id);
 			if (user == null) {
 				return new TokenResponseData {
 					IsAuthenticated = false,

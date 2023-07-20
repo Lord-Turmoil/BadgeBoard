@@ -52,7 +52,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.FindUserByIdAsync(repo, id);
+			var user = await User.FindAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
@@ -76,7 +76,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.FindUserByIdAsync(repo, id);
+			var user = await User.FindAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
@@ -121,7 +121,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.FindUserByIdAsync(repo, id);
+			var user = await User.FindAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
@@ -152,7 +152,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 			}
 
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.FindUserByIdAsync(repo, id);
+			var user = await User.FindAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
@@ -179,7 +179,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public async Task<ApiResponse> GetUser(int id)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.FindUserByIdAsync(repo, id);
+			var user = await User.FindAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}
@@ -193,7 +193,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 		public async Task<ApiResponse> GetCurrentUser(int id)
 		{
 			var repo = _unitOfWork.GetRepository<User>();
-			var user = await UserUtil.FindUserByIdAsync(repo, id);
+			var user = await User.FindAsync(repo, id);
 			if (user == null) {
 				return new GoodResponse(new UserNotExistsDto());
 			}

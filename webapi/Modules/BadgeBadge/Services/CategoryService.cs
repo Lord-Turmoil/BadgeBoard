@@ -3,6 +3,7 @@ using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
@@ -12,7 +13,7 @@ using Microsoft.JSInterop.Infrastructure;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 {
-	public class CategoryService : BaseService, ICategoryService
+    public class CategoryService : BaseService, ICategoryService
 	{
 		protected CategoryService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork, mapper)
 		{

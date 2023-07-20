@@ -1,14 +1,14 @@
 ﻿using BadgeBoard.Api.Extensions.Response;
-using BadgeBoard.Api.Modules.BadgeBadge.Dtos;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 {
-	/// <summary>
-	/// Creation and deletion of category. id is from the request
-	/// authorization, denoting the user who is making change of his/her
-	/// own categories.
-	/// </summary>
-	public interface ICategoryService
+    /// <summary>
+    /// Creation and deletion of category. id is from the request
+    /// authorization, denoting the user who is making change of his/her
+    /// own categories.
+    /// </summary>
+    public interface ICategoryService
 	{
 		public Task<ApiResponse> Exists(int id, string name);
 

@@ -46,7 +46,6 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 				return new GoodResponse(new CategoryAlreadyExistsDto());
 			}
 
-
 			var category = await Category.CreateAsync(repo, dto.Name, user);
 			CategoryUtil.UpdateCategory(category, dto);
 			try {
@@ -69,9 +68,32 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			throw new NotImplementedException();
 		}
 
-		public Task<ApiResponse> UpdateCategory(int id, UpdateCategoryDto dto)
+		public async Task<ApiResponse> UpdateCategory(int id, UpdateCategoryDto dto)
 		{
-			throw new NotImplementedException();
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
+			var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+			if (user != null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			var repo = _unitOfWork.GetRepository<Category>();
+			var category = await Category.FindAsync(repo, dto.Id, true);
+			if (category == null) {
+				return new GoodResponse(new CategoryNotExistsDto());
+			}
+
+			CategoryUtil.UpdateCategory(category, dto);
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+			}
+
+			var data = _mapper.Map<Category, CategoryDto>(category);
+			return new GoodResponse(new GoodDto("Category updated", data));
 		}
 
 		public Task<ApiResponse> MergeCategory(int id)

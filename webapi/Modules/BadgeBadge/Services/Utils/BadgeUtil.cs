@@ -31,32 +31,6 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 
 			return new MemoryBadgePack { Badge = badge, Payload = payload };
 		}
-
-		public static async Task<BadgeDto> GetQuestionBadgeDtoAsync(
-			IUnitOfWork unitOfWork, IMapper mapper, QuestionBadgePack pack)
-		{
-			var badgeDto = mapper.Map<Badge, QuestionBadgeDto>(pack.Badge);
-			var userRepo = unitOfWork.GetRepository<User>();
-			User? user;
-			if (badgeDto.Sender != 0) {
-				user = await User.FindAsync(userRepo, badgeDto.Sender);
-				if (user == null) {
-					throw new MissingReferenceException("Sender in badge");
-				}
-
-				badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
-			} else {
-				badgeDto.SrcUser = null;
-			}
-
-			user = await User.FindAsync(userRepo, badgeDto.Receiver);
-			if (user == null) {
-				throw new MissingReferenceException("Receiver in badge");
-			}
-
-			badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
-
-			return badgeDto;
-		}
+		
 	}
 }

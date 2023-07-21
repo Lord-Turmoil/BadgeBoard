@@ -39,6 +39,9 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 		// Restrictions
 		public bool IsLocked { get; set; } = false;
 		public bool IsPublic { get; set; } = true;
+		
+		// check mark
+		public bool IsChecked { get; set; } = false;
 
 		// Foreign keys
 		public int? CategoryId { get; set; }

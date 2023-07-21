@@ -273,9 +273,43 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			return new GoodResponse(new GoodDto("Memory Badge updated", data));
 		}
 
-		public Task<ApiResponse> MoveBadge(int id, MoveBadgeDto dto)
+		public async Task<ApiResponse> MoveBadge(int id, MoveBadgeDto dto)
 		{
-			throw new NotImplementedException();
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
+			var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			var badge = await Badge.FindAsync(_unitOfWork.GetRepository<Badge>(), dto.Id);
+			if (badge == null) {
+				return new GoodResponse(new BadgeNotExistsDto());
+			}
+
+			// Well, hope front end will handle requests that moves to itself.
+			var name = "Default";
+			if (dto.Category == 0) {
+				badge.CategoryId = null;
+			} else {
+				var category = await Category.FindAsync(
+					_unitOfWork.GetRepository<Category>(), dto.Category);
+				if (category == null) {
+					return new GoodResponse(new CategoryNotExistsDto());
+				}
+				badge.CategoryId = category.Id;
+				name = category.Name;
+			}
+
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+			}
+
+			return new GoodResponse(new GoodDto($"Badge moved to {name}"));
 		}
 	}
 }

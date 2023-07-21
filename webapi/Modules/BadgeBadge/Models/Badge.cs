@@ -22,6 +22,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 		}
 
 		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; init; }
 
 		// Identify different payloads
@@ -58,7 +59,6 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 			bool isPublic = true)
 		{
 			var entry = await repo.InsertAsync(new Badge {
-				Id = KeyGenerator.GenerateKey(),
 				Type = type,
 				PayloadId = payload,
 				Sender = sender?.Id ?? 0,

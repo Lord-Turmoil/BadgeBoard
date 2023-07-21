@@ -19,24 +19,35 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 
 		public static Category UpdateCategory(Category category, CategoryDto dto)
 		{
+			var updated = false;
+
 			if (!dto.Name.Equals(category.Name)) {
 				category.Name = dto.Name;
+				updated = true;
 			}
 
 			if (dto.Option.IsPublic != category.Option.IsPublic) {
 				category.Option.IsPublic = dto.Option.IsPublic;
+				updated = true;
 			}
 
 			if (dto.Option.AllowAnonymity != category.Option.AllowAnonymity) {
 				category.Option.AllowAnonymity = dto.Option.AllowAnonymity;
+				updated = true;
 			}
 
 			if (dto.Option.AllowQuestion != category.Option.AllowQuestion) {
 				category.Option.AllowQuestion = dto.Option.AllowQuestion;
+				updated = true;
 			}
 
 			if (dto.Option.IsPublic != category.Option.AllowMemory) {
 				category.Option.AllowMemory = dto.Option.AllowMemory;
+				updated = true;
+			}
+
+			if (updated) {
+				category.UpdatedTime = DateTime.Now;
 			}
 
 			return category;
@@ -67,6 +78,10 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 
 			foreach (var badge in badges) {
 				badge.CategoryId = dst?.Id;
+			}
+
+			if (dst != null) {
+				dst.UpdatedTime = DateTime.Now;
 			}
 		}
 	}

@@ -70,6 +70,11 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 			});
 			return entry.Entity;
 		}
+
+		public static async Task<Badge?> FindAsync(IRepository<Badge> repo, int id)
+		{
+			return await repo.FindAsync(id);
+		}
 	}
 
 	public class QuestionPayload

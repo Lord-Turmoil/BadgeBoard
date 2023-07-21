@@ -142,9 +142,24 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			}
 		}
 
-		public Task<ApiResponse> DeleteBadge(int id, DeleteBadgeDto dto)
+		public async Task<ApiResponse> DeleteBadge(int id, DeleteBadgeDto dto)
 		{
-			throw new NotImplementedException();
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
+			var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			var data = new DeleteBadgeSuccessDto {
+				Errors = await BadgeUtil.DeleteBadgesAsync(_unitOfWork, dto.Badges, user, dto.Force)
+			};
+
+			var message = data.Errors.Count == 0 ? "Deletion succeeded" : "Deletion partial succeeded";
+
+			return new GoodResponse(new GoodDto(message, data));
 		}
 
 		public Task<ApiResponse> UpdateQuestionBadge(int id)

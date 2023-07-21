@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BadgeBoard.Api.Modules.BadgeAccount.Dtos;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
@@ -16,6 +17,7 @@ namespace BadgeBoard.Api.Modules
 			CreateMap<UserAccount, UserAccountDto>();
 
 			// User Module
+			CreateMap<User, UserBriefDto>().ReverseMap();
 			CreateMap<User, UserCompleteDto>().ReverseMap();
 			CreateMap<User, UserGeneralDto>().ReverseMap();
 			CreateMap<UserPreference, UserPreferenceDto>().ReverseMap();
@@ -23,7 +25,12 @@ namespace BadgeBoard.Api.Modules
 
 			// Badge Module
 			CreateMap<Category, CategoryDto>().ReverseMap();
+			CreateMap<Category, CategoryBriefDto>().ReverseMap();
 			CreateMap<CategoryOption, CategoryOptionDto>().ReverseMap();
+
+			CreateMap<Badge, BadgeDto>().ReverseMap();
+			CreateMap<QuestionPayload, QuestionPayloadDto>().ReverseMap();
+			CreateMap<MemoryPayload, MemoryPayloadDto>().ReverseMap();
 		}
 	}
 }

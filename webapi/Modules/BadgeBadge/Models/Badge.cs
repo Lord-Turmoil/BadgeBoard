@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
+using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeGlobal.Models;
+using BadgeBoard.Api.Modules.BadgeGlobal.Utils;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Models
@@ -43,6 +45,31 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 
 		public int UserId { get; set; }
 		[ForeignKey("UserId")] public User User { get; set; }
+
+		public static async Task<Badge> CreateAsync(
+			IRepository<Badge> repo,
+			int type,
+			int payload,
+			User? sender,
+			User receiver,
+			Category? category = null,
+			string? style = null,
+			bool isLocked = false,
+			bool isPublic = true)
+		{
+			var entry = await repo.InsertAsync(new Badge {
+				Id = KeyGenerator.GenerateKey(),
+				Type = type,
+				PayloadId = payload,
+				Sender = sender?.Id ?? 0,
+				Style = style,
+				IsLocked = isLocked,
+				IsPublic = isPublic,
+				Category = category,
+				User = receiver
+			});
+			return entry.Entity;
+		}
 	}
 
 	public class QuestionPayload
@@ -66,6 +93,16 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 			});
 			return entry.Entity;
 		}
+
+		public static async Task<QuestionPayload> GetAsync(IRepository<QuestionPayload> repo, int id)
+		{
+			return await repo.FindAsync(id) ?? throw new MissingReferenceException($"QuestionPayload {id}");
+		}
+
+		public static async Task<QuestionPayload?> FindAsync(IRepository<QuestionPayload> repo, int id)
+		{
+			return await repo.FindAsync(id);
+		}
 	}
 
 	public class MemoryPayload
@@ -83,7 +120,12 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 			return entry.Entity;
 		}
 
-		public static async Task<MemoryPayload?> GetAsync(IRepository<MemoryPayload> repo, int id)
+		public static async Task<MemoryPayload> GetAsync(IRepository<MemoryPayload> repo, int id)
+		{
+			return await repo.FindAsync(id) ?? throw new MissingReferenceException($"MemoryPayload {id}");
+		}
+
+		public static async Task<MemoryPayload?> FindAsync(IRepository<MemoryPayload> repo, int id)
 		{
 			return await repo.FindAsync(id);
 		}

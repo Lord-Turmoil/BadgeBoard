@@ -13,4 +13,10 @@
         public bool AllowQuestion { get; set; }
         public bool AllowMemory { get; set; }
     }
+
+    public class CategoryBriefDto
+    {
+        public int Id { get; set; }
+	    public string Name { get; set; }
+    }
 }

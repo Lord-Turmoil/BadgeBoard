@@ -11,6 +11,14 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 		public string? Title { get; set; }
 	}
 
+	public class UserBriefDto
+	{
+		public int Id { get; set; }
+		public string Username { get; set; }
+		public string? AvatarUrl { get; set; }
+		public string? Title { get; set; }
+	}
+
 	public class UserCompleteDto : BaseUserDto
 	{
 

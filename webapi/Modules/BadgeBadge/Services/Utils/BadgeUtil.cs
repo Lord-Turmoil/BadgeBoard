@@ -29,6 +29,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 			return new MemoryBadgePack { Badge = badge, Payload = payload };
 		}
 
+		
 		public static void DeleteBadge(IUnitOfWork unitOfWork, Badge badge)
 		{
 			unitOfWork.GetRepository<Badge>().Delete(badge.Id);

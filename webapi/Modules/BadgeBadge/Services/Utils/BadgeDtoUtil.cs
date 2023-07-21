@@ -36,7 +36,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 
 			return badgeDto;
 		}
-		
+
 		public static async Task<BadgeDto> GetMemoryBadgeDtoAsync(
 			IUnitOfWork unitOfWork, IMapper mapper, MemoryBadgePack pack)
 		{
@@ -58,6 +58,41 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 			user = await User.FindAsync(userRepo, badgeDto.Receiver);
 			if (user == null) {
 				throw new MissingReferenceException("Receiver in badge");
+			}
+			badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
+
+			return badgeDto;
+		}
+
+		public static async Task<BadgeDto> GetBadgeDtoAsync(
+			IUnitOfWork unitOfWork, IMapper mapper, Badge badge)
+		{
+			var userRepo = unitOfWork.GetRepository<User>();
+			var questionRepo = unitOfWork.GetRepository<QuestionPayload>();
+			var memoryRepo = unitOfWork.GetRepository<MemoryPayload>();
+
+			BadgeDto badgeDto = badge.Type switch {
+				Badge.Types.Question => await GetQuestionBadgeDtoAsync(questionRepo, mapper, badge),
+				Badge.Types.Memory => await GetMemoryBadgeDtoAsync(memoryRepo, mapper, badge),
+				_ => throw new Exception($"Invalid badge type {badge.Type}")
+			};
+
+			User? user;
+			// sender
+			if (badgeDto.Sender != 0) {
+				user = await User.FindAsync(userRepo, badgeDto.Sender);
+				if (user == null) {
+					throw new MissingReferenceException($"Sender {badgeDto.Sender}");
+				}
+				badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
+			} else {
+				badgeDto.SrcUser = null;
+			}
+
+			// receiver
+			user = await User.FindAsync(userRepo, badgeDto.Receiver);
+			if (user == null) {
+				throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
 			}
 			badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
 

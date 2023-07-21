@@ -168,7 +168,35 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			return new GoodResponse(new GoodDto(message, data));
 		}
 
-		public Task<ApiResponse> UpdateQuestionBadge(int id)
+		public async Task<ApiResponse> UpdateBadge(int id, UpdateBadgeDto dto)
+		{
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
+			var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			var badge = await Badge.FindAsync(_unitOfWork.GetRepository<Badge>(), dto.Id);
+			if (badge == null) {
+				return new GoodResponse(new BadgeNotExistsDto());
+			}
+
+			badge.Style = dto.Style;
+			badge.IsPublic = dto.IsPublic;
+
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+			}
+			
+			return new GoodResponse(new GoodDto("Badge updated"));
+		}
+
+		public async Task<ApiResponse> UpdateQuestionBadge(int id, UpdateQuestionBadgeDto dto)
 		{
 			throw new NotImplementedException();
 		}

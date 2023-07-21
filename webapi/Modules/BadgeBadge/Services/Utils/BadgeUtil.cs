@@ -1,9 +1,6 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
-using AutoMapper;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
-using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
-using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
@@ -44,6 +41,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 
 		public static async Task<List<DeleteBadgeErrorData>> DeleteBadgesAsync(IUnitOfWork unitOfWork, IEnumerable<int> badges, User user, bool force = false)
 		{
+			var badgeList = new List<Badge>();
 			var errors = new List<DeleteBadgeErrorData>();
 			var repo = unitOfWork.GetRepository<Badge>();
 
@@ -56,7 +54,19 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 					});
 					continue;
 				}
+				badgeList.Add(badge);
+			}
 
+			errors.AddRange(DeleteBadges(unitOfWork, badgeList, user, force));
+
+			return errors;
+		}
+
+		public static List<DeleteBadgeErrorData> DeleteBadges(IUnitOfWork unitOfWork, IEnumerable<Badge> badges, User user, bool force = false)
+		{
+			var errors = new List<DeleteBadgeErrorData>();
+			
+			foreach (var badge in badges) {
 				if (badge.UserId == user.Id) {
 					// delete badge of user him/her self
 					DeleteBadge(unitOfWork, badge);
@@ -66,14 +76,14 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 						DeleteBadge(unitOfWork, badge);
 					} else {
 						errors.Add(new DeleteBadgeErrorData {
-							Id = badgeId,
+							Id = badge.Id,
 							Message = "Not in force mode"
 						});
 					}
 				} else {
 					// no permission
 					errors.Add(new DeleteBadgeErrorData {
-						Id = badgeId,
+						Id = badge.Id,
 						Message = "Permission denied"
 					});
 				}

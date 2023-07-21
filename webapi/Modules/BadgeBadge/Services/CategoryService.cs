@@ -2,7 +2,6 @@
 using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
-using BadgeBoard.Api.Modules.BadgeBadge.Dtos;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
@@ -10,7 +9,6 @@ using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.JSInterop.Infrastructure;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 {
@@ -88,7 +86,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 				if (dto.Merge) {
 					await CategoryUtil.MergeCategoriesAsync(_unitOfWork, category, null);
 				}
-				await CategoryUtil.DeleteCategoryAsync(_unitOfWork, category);
+				await CategoryUtil.DeleteCategoryAsync(_unitOfWork, category, user);
 			}
 
 			try {
@@ -166,7 +164,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 
 			await CategoryUtil.MergeCategoriesAsync(_unitOfWork, src, dst);
 			if (dto.Delete && src != null) {
-				await CategoryUtil.DeleteCategoryAsync(_unitOfWork, src);
+				await CategoryUtil.DeleteCategoryAsync(_unitOfWork, src, user);
 			}
 
 			try {

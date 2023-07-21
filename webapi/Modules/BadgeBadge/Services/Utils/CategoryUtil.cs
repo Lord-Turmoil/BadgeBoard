@@ -1,6 +1,8 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
+using BadgeBoard.Api.Modules.BadgeUser.Models;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 {
@@ -53,15 +55,16 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 			return category;
 		}
 
-		public static async Task DeleteCategoryAsync(IUnitOfWork unitOfWork, Category category)
+		public static async Task<List<DeleteBadgeErrorData>> DeleteCategoryAsync(IUnitOfWork unitOfWork, Category category, User user)
 		{
-			throw new NotImplementedException();
-
 			var badges = await unitOfWork.GetRepository<Badge>().GetAllAsync(predicate: x => x.CategoryId == category.Id);
-			// TODO: Delete Badge...
+
+			var errors = BadgeUtil.DeleteBadges(unitOfWork, badges, user, true);
 
 			var repo = unitOfWork.GetRepository<Category>();
 			repo.Delete(category);
+
+			return errors;
 		}
 
 		// src and dst should not be both null (although cause redundant work only)

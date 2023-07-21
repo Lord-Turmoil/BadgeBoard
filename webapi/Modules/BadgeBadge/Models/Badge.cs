@@ -23,7 +23,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models
 
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; init; }
+		public int Id { get; set; }
 
 		// Identify different payloads
 		public int Type { get; set; }

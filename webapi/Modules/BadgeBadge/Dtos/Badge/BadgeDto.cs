@@ -9,6 +9,8 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge
 		public int Id { get; set; }
 		public int Type { get; set; }
 
+		public bool IsChecked { get; set; }
+
 		[JsonIgnore]
 		public int Sender { get; set; }
 		public UserBriefDto? SrcUser { get; set; }
@@ -19,7 +21,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge
 
 		public string? Style { get; set; }
 
-		public CategoryBriefDto Category { get; set; }
+		public CategoryBriefDto? Category { get; set; }
 	}
 
 	public class QuestionBadgeDto : BadgeDto

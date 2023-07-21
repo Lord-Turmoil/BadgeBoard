@@ -23,5 +23,8 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 		// Merge two categories, and abandon (delete) the merge source.
 		// For now, will ignore target category options. :(
 		public Task<ApiResponse> MergeCategory(int id, MergeCategoryDto dto);
+
+		// This need no authorization, and id is the target user id.
+		public Task<ApiResponse> GetCategories(int id, bool authorized = false);
 	}
 }

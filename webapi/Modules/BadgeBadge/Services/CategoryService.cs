@@ -9,6 +9,7 @@ using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop.Infrastructure;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services
@@ -175,6 +176,31 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			}
 
 			return new GoodResponse(new GoodDto("Categories Merged"));
+		}
+
+		public async Task<ApiResponse> GetCategories(int id, bool authorized)
+		{
+			var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			var repo = _unitOfWork.GetRepository<Category>();
+			var categoryList = await repo.GetAllAsync(
+				predicate: x => x.UserId == id,
+				include: source => source.Include(x => x.Option));
+
+			var data = new GetCategoryDto();
+			foreach (var category in categoryList) {
+				// skip private category
+				if (!authorized && !category.Option.IsPublic) {
+					continue;
+				}
+
+				data.Categories.Add(_mapper.Map<Category, CategoryDto>(category));
+			}
+
+			return new GoodResponse(new GoodWithDataDto(data));
 		}
 	}
 }

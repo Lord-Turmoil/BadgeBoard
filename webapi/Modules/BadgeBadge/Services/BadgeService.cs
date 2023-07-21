@@ -80,15 +80,66 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			// return single badge dto
 			try {
 				var data = await BadgeDtoUtil.GetQuestionBadgeDtoAsync(_unitOfWork, _mapper, pack);
-				return new GoodResponse(new GoodDto("Badge placed", data));
+				return new GoodResponse(new GoodDto("Question badge placed", data));
 			} catch (Exception ex) {
 				return new GoodResponse(new OrdinaryDto(Errors.FailedToGetBadge, ex.Message));
 			}
 		}
 
-		public Task<ApiResponse> AddMemoryBadge(int id, AddMemoryBadgeDto dto)
+		public async Task<ApiResponse> AddMemoryBadge(int id, AddMemoryBadgeDto dto)
 		{
-			throw new NotImplementedException();
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
+			if (dto.Type != Badge.Types.Memory) {
+				return new BadRequestResponse(new BadRequestDto("Wrong badge type"));
+			}
+
+			if (dto.SrcId != id) {
+				return new BadRequestResponse(new BadRequestDto("Sender inconsistent"));
+			}
+
+			// get sender and receiver
+			var userRepo = _unitOfWork.GetRepository<User>();
+			User? sender = null;
+			if (dto.SrcId != 0) {
+				sender = await User.FindAsync(userRepo, dto.SrcId);
+				if (sender == null) {
+					return new GoodResponse(new UserNotExistsDto());
+				}
+			}
+			User receiver;
+			try {
+				receiver = await User.GetAsync(userRepo, dto.DstId);
+			} catch {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			// get category
+			Category? category = null;
+			if (dto.Category != 0) {
+				category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category);
+				if (category == null) {
+					return new GoodResponse(new CategoryNotExistsDto());
+				}
+			}
+
+			// create new badge
+			var pack = await BadgeUtil.AddMemoryBadgeAsync(_unitOfWork, dto, sender, receiver, category);
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+			}
+
+			// return single badge dto
+			try {
+				var data = await BadgeDtoUtil.GetMemoryBadgeDtoAsync(_unitOfWork, _mapper, pack);
+				return new GoodResponse(new GoodDto("Memory badge placed", data));
+			} catch (Exception ex) {
+				return new GoodResponse(new OrdinaryDto(Errors.FailedToGetBadge, ex.Message));
+			}
 		}
 
 		public Task<ApiResponse> DeleteBadge(int id, DeleteBadgeDto dto)

@@ -28,5 +28,7 @@
 
 		// Badge
 		public const int FailedToGetBadge = 5001;
+		public const int BadgeNotExists = 5002;
+		public const int PayloadNotExists = 5003;
 	}
 }

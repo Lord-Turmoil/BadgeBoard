@@ -192,21 +192,88 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 			} catch (Exception ex) {
 				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
 			}
-			
-			return new GoodResponse(new GoodDto("Badge updated"));
+
+			var data = new UpdateBadgeSuccessDto {
+				IsPublic = badge.IsPublic,
+				Style = badge.Style
+			};
+			return new GoodResponse(new GoodDto("Badge updated", data));
 		}
 
 		public async Task<ApiResponse> UpdateQuestionBadge(int id, UpdateQuestionBadgeDto dto)
 		{
-			throw new NotImplementedException();
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
+			var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			var badge = await Badge.FindAsync(_unitOfWork.GetRepository<Badge>(), dto.Id);
+			if (badge == null) {
+				return new GoodResponse(new BadgeNotExistsDto());
+			}
+
+			var payload = await QuestionPayload.FindAsync(
+				_unitOfWork.GetRepository<QuestionPayload>(), badge.PayloadId);
+			if (payload == null) {
+				return new GoodResponse(new PayloadNotExistsDto());
+			}
+
+			payload.Answer = dto.Answer;
+			badge.IsChecked = payload.Answer != null;
+
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+			}
+
+			var data = new UpdateQuestionBadgeSuccessDto {
+				Answer = payload.Answer
+			};
+			return new GoodResponse(new GoodDto("Question Badge updated", data));
 		}
 
-		public Task<ApiResponse> UpdateMemoryBadge(int id)
+		public async Task<ApiResponse> UpdateMemoryBadge(int id, UpdateMemoryBadgeDto dto)
 		{
-			throw new NotImplementedException();
+			if (!dto.Format().Verify()) {
+				return new BadRequestResponse(new BadRequestDto());
+			}
+
+			var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+			if (user == null) {
+				return new GoodResponse(new UserNotExistsDto());
+			}
+
+			var badge = await Badge.FindAsync(_unitOfWork.GetRepository<Badge>(), dto.Id);
+			if (badge == null) {
+				return new GoodResponse(new BadgeNotExistsDto());
+			}
+
+			var payload = await MemoryPayload.FindAsync(
+				_unitOfWork.GetRepository<MemoryPayload>(), badge.PayloadId);
+			if (payload == null) {
+				return new GoodResponse(new PayloadNotExistsDto());
+			}
+
+			payload.Memory = dto.Memory;
+
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+			}
+
+			var data = new UpdateMemoryBadgeSuccessDto {
+				Memory = payload.Memory
+			};
+			return new GoodResponse(new GoodDto("Memory Badge updated", data));
 		}
 
-		public Task<ApiResponse> MoveBadge(int id)
+		public Task<ApiResponse> MoveBadge(int id, MoveBadgeDto dto)
 		{
 			throw new NotImplementedException();
 		}

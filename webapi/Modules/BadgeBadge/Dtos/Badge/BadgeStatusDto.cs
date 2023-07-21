@@ -9,4 +9,11 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge
 		{
 		}
 	}
+
+	public class PayloadNotExistsDto : OrdinaryDto
+	{
+		public PayloadNotExistsDto(string? message = "Payload does not exists") : base(Errors.PayloadNotExists, message)
+		{
+		}
+	}
 }

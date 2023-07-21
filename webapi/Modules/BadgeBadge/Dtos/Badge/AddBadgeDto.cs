@@ -33,7 +33,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge
             {
                 return false;
             }
-            if (Style is { Length: > 31 })
+            if (Style is { Length: > Globals.MaxStyleLength })
             {
                 return false;
             }

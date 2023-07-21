@@ -157,6 +157,12 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services
 				Errors = await BadgeUtil.DeleteBadgesAsync(_unitOfWork, dto.Badges, user, dto.Force)
 			};
 
+			try {
+				await _unitOfWork.SaveChangesAsync();
+			} catch (Exception ex) {
+				return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+			}
+
 			var message = data.Errors.Count == 0 ? "Deletion succeeded" : "Deletion partial succeeded";
 
 			return new GoodResponse(new GoodDto(message, data));

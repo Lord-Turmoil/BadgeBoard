@@ -93,7 +93,7 @@ export default function LoginPage() {
         notifier.auto(dto.meta);
 
         if (dto.meta.status == 0) {
-            UserUtil.save(dto.data);
+            UserUtil.saveUid(dto.data.id);
             await login();
             return;
         }
@@ -102,14 +102,14 @@ export default function LoginPage() {
     }
 
     const login = async () => {
-        var user = UserUtil.get();
-        if (user == null) {
+        var uid = UserUtil.getUid();
+        if (uid == null) {
             notifier.error('Local storage error');
             return;
         }
 
         var dto = await api.post('auth/token/get', {
-            id: user.account.id,
+            id: uid,
             password: passwordText
         });
         console.log('🚀 > login > dto:', dto);
@@ -117,7 +117,7 @@ export default function LoginPage() {
 
         if (dto.meta.status == 0) {
             api.saveToken(dto.data.token);
-            setTimeout(() => { navigate('/user/' + user.account.id); }, 1000);
+            setTimeout(() => { navigate('/user/' + uid); }, 1000);
         }
     }
 

@@ -41,7 +41,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services
 				return new GoodResponse(new LoginWrongPasswordDto());
 			}
 
-			var userDto = _mapper.Map<User, UserCompleteDto>(user);
+			var userDto = _mapper.Map<User, UserLoginDto>(user);
 
 			return new GoodResponse(new GoodDto("Welcome back, my friend", userDto));
 		}

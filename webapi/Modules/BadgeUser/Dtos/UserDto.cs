@@ -11,6 +11,12 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 		public string? Title { get; set; }
 	}
 
+	public class UserLoginDto
+	{
+		public int Id { get; set; }
+		public bool IsLocked { get; set; }
+	}
+
 	public class UserBriefDto
 	{
 		public int Id { get; set; }

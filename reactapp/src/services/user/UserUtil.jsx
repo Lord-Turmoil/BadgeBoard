@@ -3,11 +3,8 @@ import api from '~/services/api'
 
 // User
 class UserUtil {
-    static get() {
-        var str = window.localStorage.getItem('user');
-        var user = (str == null) ? null : JSON.parse(str);
-        console.log('🚀 > User > get > user:', user);
-        return user;
+    static getUid() {
+        return window.localStorage.getItem('uid');
     }
 
     static getPreference() {
@@ -20,9 +17,8 @@ class UserUtil {
         return (user == null) ? null : user.info;
     }
 
-    static save(user) {
-        window.localStorage.setItem('uid', user.account.id);
-        window.localStorage.setItem('user', JSON.stringify(user));
+    static saveUid(uid) {
+        window.localStorage.setItem('uid', uid);
     }
 
     static savePreference(preference) {

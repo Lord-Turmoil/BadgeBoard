@@ -28,19 +28,4 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 		{
 		}
 	}
-
-	// Login success dto
-	public class LoginSuccessData : ApiResponseData
-	{
-		public UserCompleteDto User { get; set; }
-		public string Jwt { get; set; }
-	}
-
-	public class LoginSuccessDto : GoodDto
-	{
-		public LoginSuccessDto(UserCompleteDto user, string jwt) : base("Welcome back, my friend")
-		{
-			Data = new LoginSuccessData { User = user, Jwt = jwt };
-		}
-	}
 }

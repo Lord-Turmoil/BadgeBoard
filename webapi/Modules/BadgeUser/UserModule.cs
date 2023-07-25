@@ -17,9 +17,9 @@ public class UserModule : BaseModule
 			.AddCustomRepository<UserInfo, UserInfoRepository>()
 			.AddCustomRepository<FavoriteUser, FavoriteUserRepository>();
 
-		services.AddTransient<ILoginService, LoginService>()
-			.AddTransient<IRegisterService, RegisterService>()
-			.AddTransient<IUserService, UserService>();
+		services.AddScoped<ILoginService, LoginService>()
+			.AddScoped<IRegisterService, RegisterService>()
+			.AddScoped<IUserService, UserService>();
 
 		return services;
 	}

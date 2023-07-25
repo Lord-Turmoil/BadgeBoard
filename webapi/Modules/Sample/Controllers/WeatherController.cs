@@ -12,36 +12,34 @@ namespace BadgeBoard.Api.Modules.Sample.Controllers;
 [Route("api/sample/")]
 public class WeatherController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+	private static readonly string[] Summaries = {
+		"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+	};
 
-    private readonly ILogger<WeatherController> _logger;
+	private readonly ILogger<WeatherController> _logger;
 
-    public WeatherController(ILogger<WeatherController> logger)
-    {
-        _logger = logger;
-    }
+	public WeatherController(ILogger<WeatherController> logger)
+	{
+		_logger = logger;
+	}
 
-    [HttpGet]
-    [Route("weather")]
-    public IEnumerable<Weather> Get()
-    {
-        return Enumerable.Range(1, 5).Select(index => new Weather
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
-    }
+	[HttpGet]
+	[Route("weather")]
+	public IEnumerable<Weather> Get()
+	{
+		return Enumerable.Range(1, 5).Select(index => new Weather {
+				Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+				TemperatureC = Random.Shared.Next(-20, 55),
+				Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+			})
+			.ToArray();
+	}
 
-    [Authorize]
-    [HttpGet]
-    [Route("secure")]
-    public ApiResponse Secure()
-    {
-	    return new GoodResponse(new GoodDto());
-    }
+	[Authorize]
+	[HttpGet]
+	[Route("secure")]
+	public ApiResponse Secure()
+	{
+		return new GoodResponse(new GoodDto());
+	}
 }

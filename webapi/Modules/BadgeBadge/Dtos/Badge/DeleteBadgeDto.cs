@@ -3,34 +3,33 @@
 
 using BadgeBoard.Api.Extensions.Response;
 
-namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge
+namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
+
+public class DeleteBadgeDto : IApiRequestDto
 {
-	public class DeleteBadgeDto : IApiRequestDto
+	public List<int> Badges { get; set; } = new();
+
+	// Admin can force delete a badge. :)
+	public bool Force { get; set; }
+
+	public bool Verify()
 	{
-		public List<int> Badges { get; set; } = new List<int>();
-
-		// Admin can force delete a badge. :)
-		public bool Force { get; set; }
-
-		public bool Verify()
-		{
-			return true;
-		}
-
-		public IApiRequestDto Format()
-		{
-			return this;
-		}
+		return true;
 	}
 
-	public class DeleteBadgeErrorData
+	public IApiRequestDto Format()
 	{
-		public int Id { get; set; }
-		public string? Message { get; set; }
+		return this;
 	}
+}
 
-	public class DeleteBadgeSuccessDto : ApiResponseData
-	{
-		public List<DeleteBadgeErrorData> Errors = new();
-	}
+public class DeleteBadgeErrorData
+{
+	public int Id { get; set; }
+	public string? Message { get; set; }
+}
+
+public class DeleteBadgeSuccessDto : ApiResponseData
+{
+	public List<DeleteBadgeErrorData> Errors = new();
 }

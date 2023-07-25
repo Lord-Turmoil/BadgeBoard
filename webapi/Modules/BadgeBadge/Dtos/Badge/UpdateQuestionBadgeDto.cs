@@ -4,34 +4,31 @@
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeGlobal;
 
-namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge
+namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
+
+/// <summary>
+///     Only update answer.
+/// </summary>
+public class UpdateQuestionBadgeDto : IApiRequestDto
 {
-	/// <summary>
-	/// Only update answer.
-	/// </summary>
-	public class UpdateQuestionBadgeDto : IApiRequestDto
+	public int Id { get; set; }
+	public string? Answer { get; set; }
+
+	public bool Verify()
 	{
-		public int Id { get; set; }
-		public string? Answer { get; set; }
+		if (Answer != null) return Answer.Length is > 0 and < Globals.MaxAnswerLength;
 
-		public bool Verify()
-		{
-			if (Answer != null) {
-				return Answer.Length is > 0 and < Globals.MaxAnswerLength;
-			}
-
-			return true;
-		}
-
-		public IApiRequestDto Format()
-		{
-			Answer = Answer?.Trim();
-			return this;
-		}
+		return true;
 	}
 
-	public class UpdateQuestionBadgeSuccessDto : ApiResponseData
+	public IApiRequestDto Format()
 	{
-		public string? Answer { get; set; }
+		Answer = Answer?.Trim();
+		return this;
 	}
+}
+
+public class UpdateQuestionBadgeSuccessDto : ApiResponseData
+{
+	public string? Answer { get; set; }
 }

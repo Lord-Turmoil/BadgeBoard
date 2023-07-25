@@ -5,46 +5,41 @@ using System.Security.Cryptography;
 using BadgeBoard.Api.Extensions.Jwt;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 
-namespace BadgeBoard.Api.Modules.BadgeAccount.Services.Utils
+namespace BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
+
+public static class TokenUtil
 {
-	public static class TokenUtil
+	public const int RefreshTokenExpire = 14;
+	public const string RefreshTokenCookiesName = "refreshToken";
+
+	public static RefreshToken CreateRefreshToken()
 	{
-		public const int RefreshTokenExpire = 14;
-		public const string RefreshTokenCookiesName = "refreshToken";
-
-		public static RefreshToken CreateRefreshToken()
-		{
-			var randomNumber = new byte[32];
-			using (var generator = new RNGCryptoServiceProvider()) {
-				generator.GetBytes(randomNumber);
-			}
-
-			return new RefreshToken {
-				Token = Convert.ToBase64String(randomNumber),
-				Expires = DateTime.UtcNow.AddDays(RefreshTokenExpire),
-				Created = DateTime.UtcNow
-			};
+		var randomNumber = new byte[32];
+		using (var generator = new RNGCryptoServiceProvider()) {
+			generator.GetBytes(randomNumber);
 		}
 
-		public static CookieOptions GetRefreshTokenCookieOptions()
-		{
-			return new CookieOptions {
-				HttpOnly = true,
-				Expires = DateTime.UtcNow.AddDays(RefreshTokenExpire)
-			};
-		}
+		return new RefreshToken {
+			Token = Convert.ToBase64String(randomNumber),
+			Expires = DateTime.UtcNow.AddDays(RefreshTokenExpire),
+			Created = DateTime.UtcNow
+		};
+	}
 
-		public static int? TryGetUserIdFromJwtBearerToken(string token)
-		{
-			if (token.StartsWith("bearer ", StringComparison.OrdinalIgnoreCase)) {
-				token = token[7..];
-			}
-			var value = JwtUtil.GetValueFromBearerToken(token);
-			if (value == null) {
-				return null;
-			}
+	public static CookieOptions GetRefreshTokenCookieOptions()
+	{
+		return new CookieOptions {
+			HttpOnly = true,
+			Expires = DateTime.UtcNow.AddDays(RefreshTokenExpire)
+		};
+	}
 
-			return int.TryParse(value, out var id) ? id : null;
-		}
+	public static int? TryGetUserIdFromJwtBearerToken(string token)
+	{
+		if (token.StartsWith("bearer ", StringComparison.OrdinalIgnoreCase)) token = token[7..];
+		var value = JwtUtil.GetValueFromBearerToken(token);
+		if (value == null) return null;
+
+		return int.TryParse(value, out var id) ? id : null;
 	}
 }

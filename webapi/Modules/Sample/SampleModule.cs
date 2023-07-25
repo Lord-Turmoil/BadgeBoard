@@ -5,15 +5,14 @@ using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Modules.Sample.Models;
 
-namespace BadgeBoard.Api.Modules.Sample
-{
-    public class SampleModule : BaseModule
-	{
-		public override IServiceCollection RegisterModule(IServiceCollection services)
-		{
-			services.AddCustomRepository<Weather, WeatherRepository>();
+namespace BadgeBoard.Api.Modules.Sample;
 
-			return services;
-		}
+public class SampleModule : BaseModule
+{
+	public override IServiceCollection RegisterModule(IServiceCollection services)
+	{
+		services.AddCustomRepository<Weather, WeatherRepository>();
+
+		return services;
 	}
 }

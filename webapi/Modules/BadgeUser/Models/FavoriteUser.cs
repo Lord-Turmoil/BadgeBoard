@@ -3,14 +3,12 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace BadgeBoard.Api.Modules.BadgeUser.Models
-{
-	public class FavoriteUser
-	{
-		[Key]
-		public int Id { get; set; }
+namespace BadgeBoard.Api.Modules.BadgeUser.Models;
 
-		public int SrcId { get; set; }
-		public int DstId { get; set; }
-	}
+public class FavoriteUser
+{
+	[Key] public int Id { get; set; }
+
+	public int SrcId { get; set; }
+	public int DstId { get; set; }
 }

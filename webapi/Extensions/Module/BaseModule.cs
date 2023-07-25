@@ -1,21 +1,17 @@
 ﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
 // Licensed under the BSD 2-Clause License.
 
-using BadgeBoard.Api.Modules.Sample.Models;
-using Microsoft.EntityFrameworkCore;
+namespace BadgeBoard.Api.Extensions.Module;
 
-namespace BadgeBoard.Api.Extensions.Module
+public class BaseModule : IModule
 {
-	public class BaseModule : IModule
+	public virtual IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
 	{
-		public virtual IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
-		{
-			return endpoints;
-		}
+		return endpoints;
+	}
 
-		public virtual IServiceCollection RegisterModule(IServiceCollection services)
-		{
-			return services;
-		}
+	public virtual IServiceCollection RegisterModule(IServiceCollection services)
+	{
+		return services;
 	}
 }

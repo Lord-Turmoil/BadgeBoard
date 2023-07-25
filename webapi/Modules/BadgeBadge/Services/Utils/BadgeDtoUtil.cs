@@ -9,71 +9,97 @@ using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 
-namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
+namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
+
+public static class BadgeDtoUtil
 {
-	public static class BadgeDtoUtil
+	public static async Task<BadgeDto> GetQuestionBadgeDtoAsync(
+		IUnitOfWork unitOfWork, IMapper mapper, QuestionBadgePack pack)
 	{
-		public static async Task<BadgeDto> GetQuestionBadgeDtoAsync(
-			IUnitOfWork unitOfWork, IMapper mapper, QuestionBadgePack pack)
-		{
-			var badgeDto = mapper.Map<Badge, QuestionBadgeDto>(pack.Badge);
-			badgeDto.Payload = mapper.Map<QuestionPayload, QuestionPayloadDto>(pack.Payload);
+		var badgeDto = mapper.Map<Badge, QuestionBadgeDto>(pack.Badge);
+		badgeDto.Payload = mapper.Map<QuestionPayload, QuestionPayloadDto>(pack.Payload);
 
-			var userRepo = unitOfWork.GetRepository<User>();
-			User? user;
-			if (badgeDto.Sender != 0) {
-				user = await User.FindAsync(userRepo, badgeDto.Sender);
-				if (user == null) {
-					throw new MissingReferenceException("Sender in badge");
-				}
-				badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
-			} else {
-				badgeDto.SrcUser = null;
-			}
-
-			user = await User.FindAsync(userRepo, badgeDto.Receiver);
-			if (user == null) {
-				throw new MissingReferenceException("Receiver in badge");
-			}
-			badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
-
-			return badgeDto;
+		var userRepo = unitOfWork.GetRepository<User>();
+		User? user;
+		if (badgeDto.Sender != 0) {
+			user = await User.FindAsync(userRepo, badgeDto.Sender);
+			if (user == null) throw new MissingReferenceException("Sender in badge");
+			badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
+		} else {
+			badgeDto.SrcUser = null;
 		}
 
-		public static async Task<BadgeDto> GetMemoryBadgeDtoAsync(
-			IUnitOfWork unitOfWork, IMapper mapper, MemoryBadgePack pack)
-		{
-			var badgeDto = mapper.Map<Badge, MemoryBadgeDto>(pack.Badge);
-			badgeDto.Payload = mapper.Map<MemoryPayload, MemoryPayloadDto>(pack.Payload);
+		user = await User.FindAsync(userRepo, badgeDto.Receiver);
+		if (user == null) throw new MissingReferenceException("Receiver in badge");
+		badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
 
-			var userRepo = unitOfWork.GetRepository<User>();
-			User? user;
-			if (badgeDto.Sender != 0) {
-				user = await User.FindAsync(userRepo, badgeDto.Sender);
-				if (user == null) {
-					throw new MissingReferenceException("Sender in badge");
-				}
-				badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
-			} else {
-				badgeDto.SrcUser = null;
-			}
+		return badgeDto;
+	}
 
-			user = await User.FindAsync(userRepo, badgeDto.Receiver);
-			if (user == null) {
-				throw new MissingReferenceException("Receiver in badge");
-			}
-			badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
+	public static async Task<BadgeDto> GetMemoryBadgeDtoAsync(
+		IUnitOfWork unitOfWork, IMapper mapper, MemoryBadgePack pack)
+	{
+		var badgeDto = mapper.Map<Badge, MemoryBadgeDto>(pack.Badge);
+		badgeDto.Payload = mapper.Map<MemoryPayload, MemoryPayloadDto>(pack.Payload);
 
-			return badgeDto;
+		var userRepo = unitOfWork.GetRepository<User>();
+		User? user;
+		if (badgeDto.Sender != 0) {
+			user = await User.FindAsync(userRepo, badgeDto.Sender);
+			if (user == null) throw new MissingReferenceException("Sender in badge");
+			badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
+		} else {
+			badgeDto.SrcUser = null;
 		}
 
-		public static async Task<BadgeDto> GetBadgeDtoAsync(
-			IUnitOfWork unitOfWork, IMapper mapper, Badge badge)
-		{
-			var userRepo = unitOfWork.GetRepository<User>();
-			var questionRepo = unitOfWork.GetRepository<QuestionPayload>();
-			var memoryRepo = unitOfWork.GetRepository<MemoryPayload>();
+		user = await User.FindAsync(userRepo, badgeDto.Receiver);
+		if (user == null) throw new MissingReferenceException("Receiver in badge");
+		badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
 
+		return badgeDto;
+	}
+
+	public static async Task<BadgeDto> GetBadgeDtoAsync(
+		IUnitOfWork unitOfWork, IMapper mapper, Badge badge)
+	{
+		var userRepo = unitOfWork.GetRepository<User>();
+		var questionRepo = unitOfWork.GetRepository<QuestionPayload>();
+		var memoryRepo = unitOfWork.GetRepository<MemoryPayload>();
+
+		BadgeDto badgeDto = badge.Type switch {
+			Badge.Types.Question => await GetQuestionBadgeDtoAsync(questionRepo, mapper, badge),
+			Badge.Types.Memory => await GetMemoryBadgeDtoAsync(memoryRepo, mapper, badge),
+			_ => throw new Exception($"Invalid badge type {badge.Type}")
+		};
+
+		User? user;
+		// sender
+		if (badgeDto.Sender != 0) {
+			user = await User.FindAsync(userRepo, badgeDto.Sender);
+			if (user == null) throw new MissingReferenceException($"Sender {badgeDto.Sender}");
+			badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
+		} else {
+			badgeDto.SrcUser = null;
+		}
+
+		// receiver
+		user = await User.FindAsync(userRepo, badgeDto.Receiver);
+		if (user == null) throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
+		badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
+
+		return badgeDto;
+	}
+
+	public static async Task<IList<BadgeDto>> GetBadgeDtoListAsync(
+		IUnitOfWork unitOfWork, IMapper mapper, IEnumerable<Badge> badges)
+	{
+		var badgeDtoList = new List<BadgeDto>();
+
+		var userRepo = unitOfWork.GetRepository<User>();
+		var questionRepo = unitOfWork.GetRepository<QuestionPayload>();
+		var memoryRepo = unitOfWork.GetRepository<MemoryPayload>();
+
+		foreach (var badge in badges) {
 			BadgeDto badgeDto = badge.Type switch {
 				Badge.Types.Question => await GetQuestionBadgeDtoAsync(questionRepo, mapper, badge),
 				Badge.Types.Memory => await GetMemoryBadgeDtoAsync(memoryRepo, mapper, badge),
@@ -84,9 +110,8 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 			// sender
 			if (badgeDto.Sender != 0) {
 				user = await User.FindAsync(userRepo, badgeDto.Sender);
-				if (user == null) {
-					throw new MissingReferenceException($"Sender {badgeDto.Sender}");
-				}
+				if (user == null) throw new MissingReferenceException($"Sender {badgeDto.Sender}");
+
 				badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
 			} else {
 				badgeDto.SrcUser = null;
@@ -94,82 +119,40 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils
 
 			// receiver
 			user = await User.FindAsync(userRepo, badgeDto.Receiver);
-			if (user == null) {
-				throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
-			}
+			if (user == null) throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
 			badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
 
-			return badgeDto;
+			badgeDtoList.Add(badgeDto);
 		}
 
-		public static async Task<IList<BadgeDto>> GetBadgeDtoListAsync(
-			IUnitOfWork unitOfWork, IMapper mapper, IEnumerable<Badge> badges)
-		{
-			var badgeDtoList = new List<BadgeDto>();
+		return badgeDtoList;
+	}
 
-			var userRepo = unitOfWork.GetRepository<User>();
-			var questionRepo = unitOfWork.GetRepository<QuestionPayload>();
-			var memoryRepo = unitOfWork.GetRepository<MemoryPayload>();
+	private static async Task<QuestionBadgeDto> GetQuestionBadgeDtoAsync(IRepository<QuestionPayload> repo,
+		IMapper mapper, Badge badge)
+	{
+		var badgeDto = mapper.Map<Badge, QuestionBadgeDto>(badge);
 
-			foreach (var badge in badges) {
-				BadgeDto badgeDto = badge.Type switch {
-					Badge.Types.Question => await GetQuestionBadgeDtoAsync(questionRepo, mapper, badge),
-					Badge.Types.Memory => await GetMemoryBadgeDtoAsync(memoryRepo, mapper, badge),
-					_ => throw new Exception($"Invalid badge type {badge.Type}")
-				};
+		var payload = await QuestionPayload.FindAsync(repo, badge.PayloadId);
+		if (payload == null)
+			throw new MissingReferenceException($"Missing QuestionPayload {badge.PayloadId} in {badge.Id}");
 
-				User? user;
-				// sender
-				if (badgeDto.Sender != 0) {
-					user = await User.FindAsync(userRepo, badgeDto.Sender);
-					if (user == null) {
-						throw new MissingReferenceException($"Sender {badgeDto.Sender}");
-					}
+		badgeDto.Payload = mapper.Map<QuestionPayload, QuestionPayloadDto>(payload);
 
-					badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
-				} else {
-					badgeDto.SrcUser = null;
-				}
+		return badgeDto;
+	}
 
-				// receiver
-				user = await User.FindAsync(userRepo, badgeDto.Receiver);
-				if (user == null) {
-					throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
-				}
-				badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
+	private static async Task<MemoryBadgeDto> GetMemoryBadgeDtoAsync(IRepository<MemoryPayload> repo, IMapper mapper,
+		Badge badge)
+	{
+		var badgeDto = mapper.Map<Badge, MemoryBadgeDto>(badge);
 
-				badgeDtoList.Add(badgeDto);
-			}
+		var payload = await MemoryPayload.FindAsync(repo, badge.PayloadId);
+		if (payload == null)
+			throw new MissingReferenceException($"Missing QuestionPayload {badge.PayloadId} in {badge.Id}");
 
-			return badgeDtoList;
-		}
+		badgeDto.Payload = mapper.Map<MemoryPayload, MemoryPayloadDto>(payload);
 
-		private static async Task<QuestionBadgeDto> GetQuestionBadgeDtoAsync(IRepository<QuestionPayload> repo, IMapper mapper, Badge badge)
-		{
-			var badgeDto = mapper.Map<Badge, QuestionBadgeDto>(badge);
-
-			var payload = await QuestionPayload.FindAsync(repo, badge.PayloadId);
-			if (payload == null) {
-				throw new MissingReferenceException($"Missing QuestionPayload {badge.PayloadId} in {badge.Id}");
-			}
-
-			badgeDto.Payload = mapper.Map<QuestionPayload, QuestionPayloadDto>(payload);
-
-			return badgeDto;
-		}
-
-		private static async Task<MemoryBadgeDto> GetMemoryBadgeDtoAsync(IRepository<MemoryPayload> repo, IMapper mapper, Badge badge)
-		{
-			var badgeDto = mapper.Map<Badge, MemoryBadgeDto>(badge);
-
-			var payload = await MemoryPayload.FindAsync(repo, badge.PayloadId);
-			if (payload == null) {
-				throw new MissingReferenceException($"Missing QuestionPayload {badge.PayloadId} in {badge.Id}");
-			}
-
-			badgeDto.Payload = mapper.Map<MemoryPayload, MemoryPayloadDto>(payload);
-
-			return badgeDto;
-		}
+		return badgeDto;
 	}
 }

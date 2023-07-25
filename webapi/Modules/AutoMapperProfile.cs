@@ -11,33 +11,32 @@ using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 
-namespace BadgeBoard.Api.Modules
+namespace BadgeBoard.Api.Modules;
+
+public class AutoMapperProfile : MapperConfigurationExpression
 {
-    public class AutoMapperProfile : MapperConfigurationExpression
+	public AutoMapperProfile()
 	{
-		public AutoMapperProfile()
-		{
-			// Account Module
-			CreateMap<UserAccount, UserAccountDto>();
+		// Account Module
+		CreateMap<UserAccount, UserAccountDto>();
 
-			// User Module
-			CreateMap<User, UserLoginDto>().ReverseMap();
-			CreateMap<User, UserBriefDto>().ReverseMap();
-			CreateMap<User, UserGeneralDto>().ReverseMap();
-			CreateMap<User, UserCompleteDto>().ReverseMap();
-			CreateMap<UserPreference, UserPreferenceDto>().ReverseMap();
-			CreateMap<UserInfo, UserInfoDto>().ReverseMap();
+		// User Module
+		CreateMap<User, UserLoginDto>().ReverseMap();
+		CreateMap<User, UserBriefDto>().ReverseMap();
+		CreateMap<User, UserGeneralDto>().ReverseMap();
+		CreateMap<User, UserCompleteDto>().ReverseMap();
+		CreateMap<UserPreference, UserPreferenceDto>().ReverseMap();
+		CreateMap<UserInfo, UserInfoDto>().ReverseMap();
 
-			// Badge Module
-			CreateMap<Category, CategoryDto>().ReverseMap();
-			CreateMap<Category, CategoryBriefDto>().ReverseMap();
-			CreateMap<CategoryOption, CategoryOptionDto>().ReverseMap();
+		// Badge Module
+		CreateMap<Category, CategoryDto>().ReverseMap();
+		CreateMap<Category, CategoryBriefDto>().ReverseMap();
+		CreateMap<CategoryOption, CategoryOptionDto>().ReverseMap();
 
-			CreateMap<Badge, BadgeDto>().ReverseMap();
-			CreateMap<QuestionPayload, QuestionPayloadDto>().ReverseMap();
-			CreateMap<MemoryPayload, MemoryPayloadDto>().ReverseMap();
+		CreateMap<Badge, BadgeDto>().ReverseMap();
+		CreateMap<QuestionPayload, QuestionPayloadDto>().ReverseMap();
+		CreateMap<MemoryPayload, MemoryPayloadDto>().ReverseMap();
 
-			CreateMap<UnreadRecord, UnreadRecordDto>().ReverseMap();
-		}
+		CreateMap<UnreadRecord, UnreadRecordDto>().ReverseMap();
 	}
 }

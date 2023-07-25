@@ -1,156 +1,149 @@
 ﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
 // Licensed under the BSD 2-Clause License.
 
-using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
+using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
-namespace BadgeBoard.Api.Modules.BadgeUser.Models
+namespace BadgeBoard.Api.Modules.BadgeUser.Models;
+
+public class User
 {
-	public class User
+	[Key] public int Id { get; set; }
+
+	[ForeignKey("Id")] public UserAccount Account { get; set; }
+
+	// User self fields
+	[Column(TypeName = "varchar(63)")] public string Username { get; set; }
+
+	[Column(TypeName = "varchar(127)")] public string? AvatarUrl { get; set; }
+
+	[Column(TypeName = "varchar(31)")] public string? Title { get; set; }
+
+	public bool IsLocked { get; set; } = false;
+	public bool IsAdmin { get; set; } = false;
+
+	// foreign key property
+	public int UserPreferenceId { get; set; }
+
+	// reference navigation property
+	[ForeignKey("UserPreferenceId")] public UserPreference Preference { get; set; }
+
+	public int UserInfoId { get; set; }
+
+	[ForeignKey("UserInfoId")] public UserInfo Info { get; set; }
+
+	// Refresh tokens
+	public List<RefreshToken> RefreshTokens { get; set; }
+
+	// Unread record
+	public int UnreadRecordId { get; set; }
+
+	[ForeignKey("UnreadRecordId")] public UnreadRecord Unread { get; set; }
+
+	public static async Task<User> CreateAsync(
+		IRepository<User> repo,
+		string username,
+		UserAccount account,
+		UserPreference preference,
+		UserInfo info,
+		UnreadRecord unread)
 	{
-		[Key]
-		public int Id { get; set; }
-
-		[ForeignKey("Id")]
-		public UserAccount Account { get; set; }
-
-		// User self fields
-		[Column(TypeName = "varchar(63)")]
-		public string Username { get; set; }
-
-		[Column(TypeName = "varchar(127)")]
-		public string? AvatarUrl { get; set; }
-
-		[Column(TypeName = "varchar(31)")]
-		public string? Title { get; set; }
-
-		public bool IsLocked { get; set; } = false;
-		public bool IsAdmin { get; set; } = false;
-
-		// foreign key property
-		public int UserPreferenceId { get; set; }
-		// reference navigation property
-		[ForeignKey("UserPreferenceId")]
-		public UserPreference Preference { get; set; }
-
-		public int UserInfoId { get; set; }
-		[ForeignKey("UserInfoId")]
-		public UserInfo Info { get; set; }
-
-		// Refresh tokens
-		public List<RefreshToken> RefreshTokens { get; set; }
-
-		// Unread record
-		public int UnreadRecordId { get; set; }
-		[ForeignKey("UnreadRecordId")]
-		public UnreadRecord Unread { get; set; }
-
-		public static async Task<User> CreateAsync(
-			IRepository<User> repo,
-			string username,
-			UserAccount account,
-			UserPreference preference,
-			UserInfo info,
-			UnreadRecord unread)
-		{
-			var entry = await repo.InsertAsync(new User {
-				Username = username,
-				Account = account,
-				Preference = preference,
-				Info = info,
-				Unread = unread
-			});
-			return entry.Entity;
-		}
-
-		public static async Task<User> GetAsync(IRepository<User> repo, int id)
-		{
-			return await repo.FindAsync(id) ?? throw new MissingReferenceException("User");
-		}
-
-		public static async Task<User?> FindAsync(IRepository<User> repo, int id)
-		{
-			return await repo.FindAsync(id);
-		}
-
-		/// <summary>
-		/// Get all related entities, since the Arch guys didn't implement this.
-		/// </summary>
-		/// <param name="unitOfWork">Global unit of work</param>
-		/// <param name="user">The user to include related entities</param>
-		/// <returns></returns>
-		public static async Task<User> IncludeAsync(IUnitOfWork unitOfWork, User user)
-		{
-			user.Account = await UserAccount.GetAsync(unitOfWork.GetRepository<UserAccount>(), user.Id);
-			user.Preference = await UserPreference.GetAsync(unitOfWork.GetRepository<UserPreference>(), user.UserPreferenceId);
-			user.Info = await UserInfo.GetAsync(unitOfWork.GetRepository<UserInfo>(), user.UserInfoId);
-			user.Unread = await UnreadRecord.GetAsync(unitOfWork.GetRepository<UnreadRecord>(), user.UnreadRecordId);
-			return user;
-		}
+		var entry = await repo.InsertAsync(new User {
+			Username = username,
+			Account = account,
+			Preference = preference,
+			Info = info,
+			Unread = unread
+		});
+		return entry.Entity;
 	}
 
-	[Owned]
-	public class UserPreference
+	public static async Task<User> GetAsync(IRepository<User> repo, int id)
 	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; set; }
-
-		public bool IsDefaultPublic { get; set; } = false;
-
-		public static async Task<UserPreference> CreateAsync(IRepository<UserPreference> repo)
-		{
-			var entry = await repo.InsertAsync(new UserPreference());
-			return entry.Entity;
-		}
-
-		public static async Task<UserPreference> GetAsync(IRepository<UserPreference> repo, int id)
-		{
-			return await repo.FindAsync(id) ?? throw new MissingReferenceException("Preference");
-		}
+		return await repo.FindAsync(id) ?? throw new MissingReferenceException("User");
 	}
 
-	public static class UserSex
+	public static async Task<User?> FindAsync(IRepository<User> repo, int id)
 	{
-		public const int Unknown = 0;
-		public const int Male = 1;
-		public const int Female = 2;
-
-		public static bool IsValid(int sex)
-		{
-			return sex is >= Unknown and <= Female;
-		}
-
+		return await repo.FindAsync(id);
 	}
 
-	[Owned]
-	public class UserInfo
+	/// <summary>
+	///     Get all related entities, since the Arch guys didn't implement this.
+	/// </summary>
+	/// <param name="unitOfWork">Global unit of work</param>
+	/// <param name="user">The user to include related entities</param>
+	/// <returns></returns>
+	public static async Task<User> IncludeAsync(IUnitOfWork unitOfWork, User user)
 	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; set; }
+		user.Account = await UserAccount.GetAsync(unitOfWork.GetRepository<UserAccount>(), user.Id);
+		user.Preference =
+			await UserPreference.GetAsync(unitOfWork.GetRepository<UserPreference>(), user.UserPreferenceId);
+		user.Info = await UserInfo.GetAsync(unitOfWork.GetRepository<UserInfo>(), user.UserInfoId);
+		user.Unread = await UnreadRecord.GetAsync(unitOfWork.GetRepository<UnreadRecord>(), user.UnreadRecordId);
+		return user;
+	}
+}
 
-		[Column(TypeName = "varchar(127)")]
-		public string? Motto { get; set; }
+[Owned]
+public class UserPreference
+{
+	[Key]
+	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	public int Id { get; set; }
 
-		[Column(TypeName = "varchar(15)")]
-		public string? Birthday { get; set; }
-		public int? Sex { get; set; }
+	public bool IsDefaultPublic { get; set; } = false;
 
-		public static async Task<UserInfo> CreateAsync(IRepository<UserInfo> repo)
-		{
-			var entry = await repo.InsertAsync(new UserInfo());
-			return entry.Entity;
-		}
+	public static async Task<UserPreference> CreateAsync(IRepository<UserPreference> repo)
+	{
+		var entry = await repo.InsertAsync(new UserPreference());
+		return entry.Entity;
+	}
 
-		public static async Task<UserInfo> GetAsync(IRepository<UserInfo> repo, int id)
-		{
-			return await repo.FindAsync(id) ?? throw new MissingReferenceException("UserInfo");
-		}
+	public static async Task<UserPreference> GetAsync(IRepository<UserPreference> repo, int id)
+	{
+		return await repo.FindAsync(id) ?? throw new MissingReferenceException("Preference");
+	}
+}
+
+public static class UserSex
+{
+	public const int Unknown = 0;
+	public const int Male = 1;
+	public const int Female = 2;
+
+	public static bool IsValid(int sex)
+	{
+		return sex is >= Unknown and <= Female;
+	}
+}
+
+[Owned]
+public class UserInfo
+{
+	[Key]
+	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	public int Id { get; set; }
+
+	[Column(TypeName = "varchar(127)")] public string? Motto { get; set; }
+
+	[Column(TypeName = "varchar(15)")] public string? Birthday { get; set; }
+
+	public int? Sex { get; set; }
+
+	public static async Task<UserInfo> CreateAsync(IRepository<UserInfo> repo)
+	{
+		var entry = await repo.InsertAsync(new UserInfo());
+		return entry.Entity;
+	}
+
+	public static async Task<UserInfo> GetAsync(IRepository<UserInfo> repo, int id)
+	{
+		return await repo.FindAsync(id) ?? throw new MissingReferenceException("UserInfo");
 	}
 }

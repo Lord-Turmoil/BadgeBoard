@@ -3,32 +3,31 @@
 
 using BadgeBoard.Api.Extensions.Response;
 
-namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category
+namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
+
+public class DeleteCategoryDto : IApiRequestDto
 {
-	public class DeleteCategoryDto : IApiRequestDto
+	public List<int> Categories { get; set; }
+	public bool Merge { get; set; }
+
+	public bool Verify()
 	{
-		public List<int> Categories { get; set; }
-		public bool Merge { get; set; }
-
-		public bool Verify()
-		{
-			return true;
-		}
-
-		public IApiRequestDto Format()
-		{
-			return this;
-		}
+		return true;
 	}
 
-	public class DeleteCategoryErrorData
+	public IApiRequestDto Format()
 	{
-		public int Id { get; set; }
-		public string? Message { get; set; }
+		return this;
 	}
+}
 
-	public class DeleteCategorySuccessDto : ApiResponseData
-	{
-		public List<DeleteCategoryErrorData> Errors { get; set; } = new();
-	}
+public class DeleteCategoryErrorData
+{
+	public int Id { get; set; }
+	public string? Message { get; set; }
+}
+
+public class DeleteCategorySuccessDto : ApiResponseData
+{
+	public List<DeleteCategoryErrorData> Errors { get; set; } = new();
 }

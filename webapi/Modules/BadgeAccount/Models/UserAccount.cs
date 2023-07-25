@@ -8,41 +8,40 @@ using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
-namespace BadgeBoard.Api.Modules.BadgeAccount.Models
+namespace BadgeBoard.Api.Modules.BadgeAccount.Models;
+
+[Owned]
+public class UserAccount
 {
-	[Owned]
-	public class UserAccount
+	[Key] public int Id { get; set; }
+
+	[Column(TypeName = "varchar(63)")]
+	[EmailAddress]
+	[Required]
+	public string Email { get; set; } = string.Empty;
+
+	[Column(TypeName = "varbinary(256)")]
+	[Required]
+	public byte[] Password { get; set; } = Array.Empty<byte>();
+
+	[Column(TypeName = "varbinary(256)")]
+	[Required]
+	public byte[] Salt { get; set; } = Array.Empty<byte>();
+
+	public static async Task<UserAccount> CreateAsync(IRepository<UserAccount> repo, byte[] salt, byte[] password,
+		string email = "")
 	{
-		[Key]
-		public int Id { get; set; }
+		var entry = await repo.InsertAsync(new UserAccount {
+			Id = AccountUtil.GenerateAccountId(),
+			Salt = salt,
+			Password = password,
+			Email = email
+		});
+		return entry.Entity;
+	}
 
-		[Column(TypeName = "varchar(63)")]
-		[EmailAddress]
-		[Required]
-		public string Email { get; set; } = string.Empty;
-
-		[Column(TypeName = "varbinary(256)")]
-		[Required]
-		public byte[] Password { get; set; } = Array.Empty<byte>();
-
-		[Column(TypeName = "varbinary(256)")]
-		[Required]
-		public byte[] Salt { get; set; } = Array.Empty<byte>();
-
-		public static async Task<UserAccount> CreateAsync(IRepository<UserAccount> repo, byte[] salt, byte[] password, string email = "")
-		{
-			var entry = await repo.InsertAsync(new UserAccount {
-				Id = AccountUtil.GenerateAccountId(),
-				Salt = salt,
-				Password = password,
-				Email = email
-			});
-			return entry.Entity;
-		}
-
-		public static async Task<UserAccount> GetAsync(IRepository<UserAccount> repo, int id)
-		{
-			return await repo.FindAsync(id) ?? throw new MissingReferenceException("Account");
-		}
+	public static async Task<UserAccount> GetAsync(IRepository<UserAccount> repo, int id)
+	{
+		return await repo.FindAsync(id) ?? throw new MissingReferenceException("Account");
 	}
 }

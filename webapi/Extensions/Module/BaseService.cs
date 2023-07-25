@@ -4,19 +4,18 @@
 using Arch.EntityFrameworkCore.UnitOfWork;
 using AutoMapper;
 
-namespace BadgeBoard.Api.Extensions.Module
-{
-	public class BaseService
-	{
-		protected readonly IServiceProvider _provider;
-		protected readonly IUnitOfWork _unitOfWork;
-		protected readonly IMapper _mapper;
+namespace BadgeBoard.Api.Extensions.Module;
 
-		protected BaseService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
-		{
-			_provider = provider;
-			_unitOfWork = unitOfWork;
-			_mapper = mapper;
-		}
+public class BaseService
+{
+	protected readonly IMapper _mapper;
+	protected readonly IServiceProvider _provider;
+	protected readonly IUnitOfWork _unitOfWork;
+
+	protected BaseService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
+	{
+		_provider = provider;
+		_unitOfWork = unitOfWork;
+		_mapper = mapper;
 	}
 }

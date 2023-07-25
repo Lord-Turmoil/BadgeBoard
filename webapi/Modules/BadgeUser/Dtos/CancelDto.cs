@@ -3,19 +3,19 @@
 
 using BadgeBoard.Api.Extensions.Response;
 
-namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
-{
-	public class CancelDto : IApiRequestDto
-	{
-		public List<string> Users { get; set; } = new List<string>();
-		public bool Verify()
-		{
-			return true;
-		}
+namespace BadgeBoard.Api.Modules.BadgeUser.Dtos;
 
-		public IApiRequestDto Format()
-		{
-			return this;
-		}
+public class CancelDto : IApiRequestDto
+{
+	public List<string> Users { get; set; } = new();
+
+	public bool Verify()
+	{
+		return true;
+	}
+
+	public IApiRequestDto Format()
+	{
+		return this;
 	}
 }

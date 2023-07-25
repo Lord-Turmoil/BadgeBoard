@@ -3,36 +3,41 @@
 
 using BadgeBoard.Api.Extensions.Response;
 
-namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
+namespace BadgeBoard.Api.Modules.BadgeUser.Dtos;
+
+public class VerificationCodeDto : IApiRequestDto
 {
-	public class VerificationCodeDto : IApiRequestDto
+	public string Email { get; set; }
+	public string Type { get; set; }
+
+	public bool Verify()
 	{
-		public string Email { get; set; }
-		public string Type { get; set; }
-
-		public bool Verify()
-		{
-			return !(string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Type));
-		}
-
-		public IApiRequestDto Format()
-		{
-			return this;
-		}
+		return !(string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Type));
 	}
 
-	public class VerificationCodeSuccessDto : GoodDto
+	public IApiRequestDto Format()
 	{
-		public VerificationCodeSuccessDto() : base("Verification code sent") { }
+		return this;
 	}
+}
 
-	public class VerificationCodeEmailErrorDto : BadRequestDto
+public class VerificationCodeSuccessDto : GoodDto
+{
+	public VerificationCodeSuccessDto() : base("Verification code sent")
 	{
-		public VerificationCodeEmailErrorDto() : base("Email format error") { }
 	}
+}
 
-	public class VerificationCodeTypeErrorDto : BadRequestDto
+public class VerificationCodeEmailErrorDto : BadRequestDto
+{
+	public VerificationCodeEmailErrorDto() : base("Email format error")
 	{
-		public VerificationCodeTypeErrorDto() : base("Verification code type error") { }
+	}
+}
+
+public class VerificationCodeTypeErrorDto : BadRequestDto
+{
+	public VerificationCodeTypeErrorDto() : base("Verification code type error")
+	{
 	}
 }

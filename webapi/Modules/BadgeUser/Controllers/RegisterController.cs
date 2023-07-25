@@ -13,31 +13,35 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers;
 [ApiController]
 public class RegisterController : BaseController<RegisterController>
 {
-	private readonly IRegisterService _service;
+    private readonly IRegisterService _service;
 
-	public RegisterController(ILogger<RegisterController> logger, IRegisterService service) : base(logger)
-	{
-		_service = service;
-	}
 
-	[HttpPost]
-	[Route("code")]
-	public ApiResponse SendCode([FromBody] VerificationCodeDto dto)
-	{
-		return _service.SendCode(dto);
-	}
+    public RegisterController(ILogger<RegisterController> logger, IRegisterService service) : base(logger)
+    {
+        _service = service;
+    }
 
-	[HttpPost]
-	[Route("register")]
-	public async Task<ApiResponse> Register([FromBody] RegisterDto dto)
-	{
-		return await _service.Register(dto);
-	}
 
-	[HttpPost]
-	[Route("cancel")]
-	public async Task<ApiResponse> Cancel([FromBody] CancelDto dto)
-	{
-		return await _service.Cancel(dto);
-	}
+    [HttpPost]
+    [Route("code")]
+    public ApiResponse SendCode([FromBody] VerificationCodeDto dto)
+    {
+        return _service.SendCode(dto);
+    }
+
+
+    [HttpPost]
+    [Route("register")]
+    public async Task<ApiResponse> Register([FromBody] RegisterDto dto)
+    {
+        return await _service.Register(dto);
+    }
+
+
+    [HttpPost]
+    [Route("cancel")]
+    public async Task<ApiResponse> Cancel([FromBody] CancelDto dto)
+    {
+        return await _service.Cancel(dto);
+    }
 }

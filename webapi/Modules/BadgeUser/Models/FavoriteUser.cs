@@ -7,8 +7,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models;
 
 public class FavoriteUser
 {
-	[Key] public int Id { get; set; }
+    [Key] public int Id { get; set; }
 
-	public int SrcId { get; set; }
-	public int DstId { get; set; }
+    public int SrcId { get; set; }
+    public int DstId { get; set; }
 }

@@ -5,7 +5,7 @@ namespace BadgeBoard.Api.Extensions.Response;
 
 public interface IApiRequestDto
 {
-	public bool Verify();
+    public bool Verify();
 
-	public IApiRequestDto Format();
+    public IApiRequestDto Format();
 }

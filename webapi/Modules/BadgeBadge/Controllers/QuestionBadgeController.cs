@@ -16,47 +16,57 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Controllers;
 [ApiController]
 public class QuestionBadgeController : BaseController<QuestionBadgeController>
 {
-	private readonly IBadgeService _service;
+    private readonly IBadgeService _service;
 
-	public QuestionBadgeController(ILogger<QuestionBadgeController> logger, IBadgeService service) : base(logger)
-	{
-		_service = service;
-	}
 
-	[HttpPost]
-	[Route("anonymous")]
-	public async Task<ApiResponse> AddQuestionBadge([FromBody] AddQuestionBadgeDto dto)
-	{
-		return await _service.AddQuestionBadge(0, dto);
-	}
+    public QuestionBadgeController(ILogger<QuestionBadgeController> logger, IBadgeService service) : base(logger)
+    {
+        _service = service;
+    }
 
-	[HttpPost]
-	[Route("identified")]
-	[Authorize]
-	public async Task<ApiResponse> AddQuestionBadge(
-		[FromHeader] string authorization,
-		[FromBody] AddQuestionBadgeDto dto)
-	{
-		try {
-			var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
-			return await _service.AddQuestionBadge(id, dto);
-		} catch (ArgumentException) {
-			return new UnauthorizedResponse(new BadUserJwtDto());
-		}
-	}
 
-	[HttpPost]
-	[Route("update")]
-	[Authorize]
-	public async Task<ApiResponse> UpdateQuestionBadge(
-		[FromHeader] string authorization,
-		[FromBody] UpdateQuestionBadgeDto dto)
-	{
-		try {
-			var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
-			return await _service.UpdateQuestionBadge(id, dto);
-		} catch (ArgumentException) {
-			return new UnauthorizedResponse(new BadUserJwtDto());
-		}
-	}
+    [HttpPost]
+    [Route("anonymous")]
+    public async Task<ApiResponse> AddQuestionBadge([FromBody] AddQuestionBadgeDto dto)
+    {
+        return await _service.AddQuestionBadge(0, dto);
+    }
+
+
+    [HttpPost]
+    [Route("identified")]
+    [Authorize]
+    public async Task<ApiResponse> AddQuestionBadge(
+        [FromHeader] string authorization,
+        [FromBody] AddQuestionBadgeDto dto)
+    {
+        try
+        {
+            var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+            return await _service.AddQuestionBadge(id, dto);
+        }
+        catch (ArgumentException)
+        {
+            return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+    }
+
+
+    [HttpPost]
+    [Route("update")]
+    [Authorize]
+    public async Task<ApiResponse> UpdateQuestionBadge(
+        [FromHeader] string authorization,
+        [FromBody] UpdateQuestionBadgeDto dto)
+    {
+        try
+        {
+            var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+            return await _service.UpdateQuestionBadge(id, dto);
+        }
+        catch (ArgumentException)
+        {
+            return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+    }
 }

@@ -14,65 +14,71 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Controllers;
 [ApiController]
 public class LoginController : BaseController<LoginController>
 {
-	private readonly ILoginService _service;
+    private readonly ILoginService _service;
 
-	public LoginController(ILogger<LoginController> logger, ILoginService service) : base(logger)
-	{
-		_service = service;
-	}
 
-	[HttpPost]
-	[Route("login")]
-	public async Task<ApiResponse> Login([FromBody] LoginDto dto)
-	{
-		return await _service.Login(dto);
-	}
+    public LoginController(ILogger<LoginController> logger, ILoginService service) : base(logger)
+    {
+        _service = service;
+    }
 
-	[HttpPost]
-	[Route("token/get")]
-	public async Task<ApiResponse> GetToken([FromBody] TokenDto dto)
-	{
-		var data = await _service.GetToken(dto);
-		if (!data.IsAuthenticated) return new ApiResponse(data.Status, new GetTokenFailedDto(data.Message));
 
-		SetRefreshTokenInCookie(data.RefreshToken);
+    [HttpPost]
+    [Route("login")]
+    public async Task<ApiResponse> Login([FromBody] LoginDto dto)
+    {
+        return await _service.Login(dto);
+    }
 
-		return new GoodResponse(new GoodWithDataDto(data));
-	}
 
-	[HttpPost]
-	[Route("token/refresh")]
-	public async Task<ApiResponse> RefreshToken()
-	{
-		var refreshToken = Request.Cookies[TokenUtil.RefreshTokenCookiesName];
-		if (refreshToken == null) return new BadRequestResponse(new BadRequestDto("Missing essential cookies"));
+    [HttpPost]
+    [Route("token/get")]
+    public async Task<ApiResponse> GetToken([FromBody] TokenDto dto)
+    {
+        TokenResponseData data = await _service.GetToken(dto);
+        if (!data.IsAuthenticated) return new ApiResponse(data.Status, new GetTokenFailedDto(data.Message));
 
-		var data = await _service.RefreshToken(refreshToken);
-		if (!data.IsAuthenticated) return new ApiResponse(data.Status, new RefreshTokenFailedDto(data.Message));
+        SetRefreshTokenInCookie(data.RefreshToken);
 
-		SetRefreshTokenInCookie(data.RefreshToken);
+        return new GoodResponse(new GoodWithDataDto(data));
+    }
 
-		return new GoodResponse(new GoodWithDataDto(data));
-	}
 
-	[HttpPost]
-	[Route("token/revoke")]
-	public async Task<ApiResponse> RevokeToken()
-	{
-		var refreshToken = Request.Cookies[TokenUtil.RefreshTokenCookiesName];
-		if (refreshToken == null) return new GoodResponse(new GoodDto("No cookies"));
+    [HttpPost]
+    [Route("token/refresh")]
+    public async Task<ApiResponse> RefreshToken()
+    {
+        var refreshToken = Request.Cookies[TokenUtil.RefreshTokenCookiesName];
+        if (refreshToken == null) return new BadRequestResponse(new BadRequestDto("Missing essential cookies"));
 
-		var data = await _service.RevokeToken(refreshToken);
-		if (!data.Succeeded) return new ApiResponse(data.Status, new RevokeTokenFailedDto(data.Message));
+        TokenResponseData data = await _service.RefreshToken(refreshToken);
+        if (!data.IsAuthenticated) return new ApiResponse(data.Status, new RefreshTokenFailedDto(data.Message));
 
-		return new GoodResponse(new GoodDto(data.Message));
-	}
+        SetRefreshTokenInCookie(data.RefreshToken);
 
-	private void SetRefreshTokenInCookie(string token)
-	{
-		Response.Cookies.Append(
-			TokenUtil.RefreshTokenCookiesName,
-			token,
-			TokenUtil.GetRefreshTokenCookieOptions());
-	}
+        return new GoodResponse(new GoodWithDataDto(data));
+    }
+
+
+    [HttpPost]
+    [Route("token/revoke")]
+    public async Task<ApiResponse> RevokeToken()
+    {
+        var refreshToken = Request.Cookies[TokenUtil.RefreshTokenCookiesName];
+        if (refreshToken == null) return new GoodResponse(new GoodDto("No cookies"));
+
+        RevokeTokenData data = await _service.RevokeToken(refreshToken);
+        if (!data.Succeeded) return new ApiResponse(data.Status, new RevokeTokenFailedDto(data.Message));
+
+        return new GoodResponse(new GoodDto(data.Message));
+    }
+
+
+    private void SetRefreshTokenInCookie(string token)
+    {
+        Response.Cookies.Append(
+            TokenUtil.RefreshTokenCookiesName,
+            token,
+            TokenUtil.GetRefreshTokenCookieOptions());
+    }
 }

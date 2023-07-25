@@ -18,165 +18,187 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services;
 
 public class UserService : BaseService, IUserService
 {
-	public UserService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork,
-		mapper)
-	{
-	}
+    public UserService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork,
+        mapper) { }
 
-	public async Task<ApiResponse> Exists(string type, string value)
-	{
-		if (string.IsNullOrEmpty(type) || string.IsNullOrWhiteSpace(value))
-			return new GoodResponse(new GoodWithDataDto(false));
 
-		var repo = _unitOfWork.GetRepository<User>();
-		bool data;
-		switch (type) {
-			case "id":
-				if (TryParse(value, out var id))
-					data = await UserUtil.HasUserByIdAsync(repo, id);
-				else
-					return new BadRequestResponse(new BadRequestDto("Bad ID"));
-				break;
-			case "username":
-				data = await UserUtil.HasUserByUsernameAsync(repo, value);
-				break;
-			default:
-				return new BadRequestResponse(new BadRequestDto("Bad type"));
-		}
+    public async Task<ApiResponse> Exists(string type, string value)
+    {
+        if (string.IsNullOrEmpty(type) || string.IsNullOrWhiteSpace(value))
+            return new GoodResponse(new GoodWithDataDto(false));
 
-		return new GoodResponse(new GoodWithDataDto(data));
-	}
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        bool data;
+        switch (type)
+        {
+            case "id":
+                if (TryParse(value, out var id))
+                    data = await UserUtil.HasUserByIdAsync(repo, id);
+                else
+                    return new BadRequestResponse(new BadRequestDto("Bad ID"));
+                break;
+            case "username":
+                data = await UserUtil.HasUserByUsernameAsync(repo, value);
+                break;
+            default:
+                return new BadRequestResponse(new BadRequestDto("Bad type"));
+        }
 
-	public async Task<ApiResponse> UpdatePreference(int id, UpdateUserPreferenceDto dto)
-	{
-		if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        return new GoodResponse(new GoodWithDataDto(data));
+    }
 
-		var repo = _unitOfWork.GetRepository<User>();
-		var user = await User.FindAsync(repo, id);
-		if (user == null) return new GoodResponse(new UserNotExistsDto());
 
-		try {
-			user.Preference = await UserPreference.GetAsync(_unitOfWork.GetRepository<UserPreference>(),
-				user.UserPreferenceId);
-			user.Preference.IsDefaultPublic = dto.IsDefaultPublic ?? user.Preference.IsDefaultPublic;
-			await _unitOfWork.SaveChangesAsync();
-		} catch (Exception ex) {
-			return new InternalServerErrorResponse(new InternalServerErrorDto(data: ex));
-		}
+    public async Task<ApiResponse> UpdatePreference(int id, UpdateUserPreferenceDto dto)
+    {
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
 
-		return new GoodResponse(new GoodWithDataDto(_mapper.Map<UserPreference, UserPreferenceDto>(user.Preference)));
-	}
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        User? user = await User.FindAsync(repo, id);
+        if (user == null) return new GoodResponse(new UserNotExistsDto());
 
-	public async Task<ApiResponse> UpdateInfo(int id, UpdateUserInfoDto dto)
-	{
-		if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        try
+        {
+            user.Preference = await UserPreference.GetAsync(_unitOfWork.GetRepository<UserPreference>(),
+                user.UserPreferenceId);
+            user.Preference.IsDefaultPublic = dto.IsDefaultPublic ?? user.Preference.IsDefaultPublic;
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return new InternalServerErrorResponse(new InternalServerErrorDto(data: ex));
+        }
 
-		var repo = _unitOfWork.GetRepository<User>();
-		var user = await User.FindAsync(repo, id);
-		if (user == null) return new GoodResponse(new UserNotExistsDto());
+        return new GoodResponse(new GoodWithDataDto(_mapper.Map<UserPreference, UserPreferenceDto>(user.Preference)));
+    }
 
-		try {
-			user.Info = await UserInfo.GetAsync(_unitOfWork.GetRepository<UserInfo>(), user.UserInfoId);
-		} catch (MissingReferenceException ex) {
-			return new InternalServerErrorResponse(new InternalServerErrorDto(data: ex));
-		}
 
-		user.Info.Motto = dto.Motto ?? user.Info.Motto;
-		if (dto.Birthday != null)
-			// silent on failure
-			try {
-				var birthday = DateTime.ParseExact(dto.Birthday, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-				if (birthday < DateTime.Today)
-					user.Info.Birthday = birthday.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-			} catch (FormatException) {
-			}
+    public async Task<ApiResponse> UpdateInfo(int id, UpdateUserInfoDto dto)
+    {
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
 
-		if (dto.Sex != null)
-			if (UserSex.IsValid((int)dto.Sex))
-				user.Info.Sex = dto.Sex;
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        User? user = await User.FindAsync(repo, id);
+        if (user == null) return new GoodResponse(new UserNotExistsDto());
 
-		try {
-			await _unitOfWork.SaveChangesAsync();
-		} catch {
-			return new InternalServerErrorResponse(new FailedToSaveChangesDto());
-		}
+        try
+        {
+            user.Info = await UserInfo.GetAsync(_unitOfWork.GetRepository<UserInfo>(), user.UserInfoId);
+        }
+        catch (MissingReferenceException ex)
+        {
+            return new InternalServerErrorResponse(new InternalServerErrorDto(data: ex));
+        }
 
-		return new GoodResponse(new GoodWithDataDto(_mapper.Map<UserInfo, UserInfoDto>(user.Info)));
-	}
+        user.Info.Motto = dto.Motto ?? user.Info.Motto;
+        if (dto.Birthday != null)
+            // silent on failure
+            try
+            {
+                DateTime birthday = DateTime.ParseExact(dto.Birthday, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                if (birthday < DateTime.Today)
+                    user.Info.Birthday = birthday.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+            catch (FormatException) { }
 
-	public async Task<ApiResponse> UpdateUsername(int id, UpdateUsernameDto dto)
-	{
-		if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (dto.Sex != null)
+            if (UserSex.IsValid((int)dto.Sex))
+                user.Info.Sex = dto.Sex;
 
-		var repo = _unitOfWork.GetRepository<User>();
-		var user = await User.FindAsync(repo, id);
-		if (user == null) return new GoodResponse(new UserNotExistsDto());
+        try
+        {
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch
+        {
+            return new InternalServerErrorResponse(new FailedToSaveChangesDto());
+        }
 
-		if (dto.Username == null || !AccountVerifier.VerifyUsername(dto.Username))
-			return new BadRequestResponse(new BadRequestDto("Bad username"));
+        return new GoodResponse(new GoodWithDataDto(_mapper.Map<UserInfo, UserInfoDto>(user.Info)));
+    }
 
-		if (user.Username == dto.Username) return new GoodResponse(new GoodWithDataDto(user.Username));
 
-		// dto.Username can't be null here
-		if (await UserUtil.HasUserByUsernameAsync(repo, dto.Username))
-			return new GoodResponse(new UserAlreadyExistsDto("Duplicated username"));
+    public async Task<ApiResponse> UpdateUsername(int id, UpdateUsernameDto dto)
+    {
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
 
-		user.Username = dto.Username;
-		await _unitOfWork.SaveChangesAsync();
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        User? user = await User.FindAsync(repo, id);
+        if (user == null) return new GoodResponse(new UserNotExistsDto());
 
-		return new GoodResponse(new GoodWithDataDto(user.Username));
-	}
+        if (dto.Username == null || !AccountVerifier.VerifyUsername(dto.Username))
+            return new BadRequestResponse(new BadRequestDto("Bad username"));
 
-	public async Task<ApiResponse> UpdateAvatar(int id, UpdateAvatarDto dto)
-	{
-		if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (user.Username == dto.Username) return new GoodResponse(new GoodWithDataDto(user.Username));
 
-		var repo = _unitOfWork.GetRepository<User>();
-		var user = await User.FindAsync(repo, id);
-		if (user == null) return new GoodResponse(new UserNotExistsDto());
+        // dto.Username can't be null here
+        if (await UserUtil.HasUserByUsernameAsync(repo, dto.Username))
+            return new GoodResponse(new UserAlreadyExistsDto("Duplicated username"));
 
-		if (!AvatarUtil.DeleteAvatar(user.AvatarUrl))
-			return new GoodResponse(new BadDto(Errors.DeleteAvatarError, "Failed to delete old avatar"));
+        user.Username = dto.Username;
+        await _unitOfWork.SaveChangesAsync();
 
-		var avatarUrl = AvatarUtil.SaveAvatar(dto.Data, dto.Extension);
-		if (avatarUrl == null) return new GoodResponse(new BadDto(Errors.SaveAvatarError, "Failed to save new avatar"));
+        return new GoodResponse(new GoodWithDataDto(user.Username));
+    }
 
-		user.AvatarUrl = avatarUrl;
-		try {
-			await _unitOfWork.SaveChangesAsync();
-		} catch (Exception ex) {
-			return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
-		}
 
-		return new GoodResponse(new GoodDto("Nice avatar!", user.AvatarUrl));
-	}
+    public async Task<ApiResponse> UpdateAvatar(int id, UpdateAvatarDto dto)
+    {
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
 
-	public async Task<ApiResponse> GetUser(int id)
-	{
-		var repo = _unitOfWork.GetRepository<User>();
-		var user = await User.FindAsync(repo, id);
-		if (user == null) return new GoodResponse(new UserNotExistsDto());
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        User? user = await User.FindAsync(repo, id);
+        if (user == null) return new GoodResponse(new UserNotExistsDto());
 
-		await User.IncludeAsync(_unitOfWork, user);
-		var data = _mapper.Map<User, UserGeneralDto>(user);
+        if (!AvatarUtil.DeleteAvatar(user.AvatarUrl))
+            return new GoodResponse(new BadDto(Errors.DeleteAvatarError, "Failed to delete old avatar"));
 
-		return new GoodResponse(new GoodWithDataDto(data));
-	}
+        var avatarUrl = AvatarUtil.SaveAvatar(dto.Data, dto.Extension);
+        if (avatarUrl == null) return new GoodResponse(new BadDto(Errors.SaveAvatarError, "Failed to save new avatar"));
 
-	public async Task<ApiResponse> GetCurrentUser(int id)
-	{
-		var repo = _unitOfWork.GetRepository<User>();
-		var user = await User.FindAsync(repo, id);
-		if (user == null) return new GoodResponse(new UserNotExistsDto());
+        user.AvatarUrl = avatarUrl;
+        try
+        {
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+        }
 
-		try {
-			await User.IncludeAsync(_unitOfWork, user);
-		} catch (MissingReferenceException ex) {
-			return new InternalServerErrorResponse(new MissingReferenceDto(data: ex));
-		}
+        return new GoodResponse(new GoodDto("Nice avatar!", user.AvatarUrl));
+    }
 
-		var data = _mapper.Map<User, UserCompleteDto>(user);
 
-		return new GoodResponse(new GoodWithDataDto(data));
-	}
+    public async Task<ApiResponse> GetUser(int id)
+    {
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        User? user = await User.FindAsync(repo, id);
+        if (user == null) return new GoodResponse(new UserNotExistsDto());
+
+        await User.IncludeAsync(_unitOfWork, user);
+        UserGeneralDto? data = _mapper.Map<User, UserGeneralDto>(user);
+
+        return new GoodResponse(new GoodWithDataDto(data));
+    }
+
+
+    public async Task<ApiResponse> GetCurrentUser(int id)
+    {
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        User? user = await User.FindAsync(repo, id);
+        if (user == null) return new GoodResponse(new UserNotExistsDto());
+
+        try
+        {
+            await User.IncludeAsync(_unitOfWork, user);
+        }
+        catch (MissingReferenceException ex)
+        {
+            return new InternalServerErrorResponse(new MissingReferenceDto(data: ex));
+        }
+
+        UserCompleteDto? data = _mapper.Map<User, UserCompleteDto>(user);
+
+        return new GoodResponse(new GoodWithDataDto(data));
+    }
 }

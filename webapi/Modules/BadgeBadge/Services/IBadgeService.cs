@@ -12,15 +12,16 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services;
 /// </summary>
 public interface IBadgeService
 {
-	public Task<ApiResponse> AddQuestionBadge(int id, AddQuestionBadgeDto dto);
-	public Task<ApiResponse> AddMemoryBadge(int id, AddMemoryBadgeDto dto);
+    public Task<ApiResponse> AddQuestionBadge(int id, AddQuestionBadgeDto dto);
+    public Task<ApiResponse> AddMemoryBadge(int id, AddMemoryBadgeDto dto);
 
-	public Task<ApiResponse> DeleteBadge(int id, DeleteBadgeDto dto);
+    public Task<ApiResponse> DeleteBadge(int id, DeleteBadgeDto dto);
 
-	public Task<ApiResponse> UpdateBadge(int id, UpdateBadgeDto dto);
-	public Task<ApiResponse> UpdateQuestionBadge(int id, UpdateQuestionBadgeDto dto);
-	public Task<ApiResponse> UpdateMemoryBadge(int id, UpdateMemoryBadgeDto dto);
+    public Task<ApiResponse> UpdateBadge(int id, UpdateBadgeDto dto);
+    public Task<ApiResponse> UpdateQuestionBadge(int id, UpdateQuestionBadgeDto dto);
+    public Task<ApiResponse> UpdateMemoryBadge(int id, UpdateMemoryBadgeDto dto);
 
-	// Move badge to another category.
-	public Task<ApiResponse> MoveBadge(int id, MoveBadgeDto dto);
+
+    // Move badge to another category.
+    public Task<ApiResponse> MoveBadge(int id, MoveBadgeDto dto);
 }

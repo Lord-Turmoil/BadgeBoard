@@ -8,15 +8,16 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 
 public class AddCategoryDto : BaseCategoryDto, IApiRequestDto
 {
-	public bool Verify()
-	{
-		if (Name == null || Option == null) return false;
-		return Name.Length is > 0 and < Globals.MaxCategoryNameLength;
-	}
+    public bool Verify()
+    {
+        if (Name == null || Option == null) return false;
+        return Name.Length is > 0 and < Globals.MaxCategoryNameLength;
+    }
 
-	public IApiRequestDto Format()
-	{
-		Name = Name?.Trim();
-		return this;
-	}
+
+    public IApiRequestDto Format()
+    {
+        Name = Name?.Trim();
+        return this;
+    }
 }

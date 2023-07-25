@@ -10,17 +10,17 @@ namespace BadgeBoard.Api.Modules.BadgeUser;
 
 public class UserModule : BaseModule
 {
-	public override IServiceCollection RegisterModule(IServiceCollection services)
-	{
-		services.AddCustomRepository<User, UserRepository>()
-			.AddCustomRepository<UserPreference, UserPreferenceRepository>()
-			.AddCustomRepository<UserInfo, UserInfoRepository>()
-			.AddCustomRepository<FavoriteUser, FavoriteUserRepository>();
+    public override IServiceCollection RegisterModule(IServiceCollection services)
+    {
+        services.AddCustomRepository<User, UserRepository>()
+            .AddCustomRepository<UserPreference, UserPreferenceRepository>()
+            .AddCustomRepository<UserInfo, UserInfoRepository>()
+            .AddCustomRepository<FavoriteUser, FavoriteUserRepository>();
 
-		services.AddScoped<ILoginService, LoginService>()
-			.AddScoped<IRegisterService, RegisterService>()
-			.AddScoped<IUserService, UserService>();
+        services.AddScoped<ILoginService, LoginService>()
+            .AddScoped<IRegisterService, RegisterService>()
+            .AddScoped<IUserService, UserService>();
 
-		return services;
-	}
+        return services;
+    }
 }

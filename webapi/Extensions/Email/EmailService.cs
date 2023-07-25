@@ -10,30 +10,32 @@ namespace BadgeBoard.Api.Extensions.Email;
 
 public class EmailService : IEmailService
 {
-	private readonly EmailOptions _settings;
+    private readonly EmailOptions _settings;
 
-	public EmailService(IOptions<EmailOptions> settings)
-	{
-		_settings = settings.Value;
-	}
 
-	public async Task SendEmailAsync(EmailRequest request)
-	{
-		var email = new MimeMessage();
+    public EmailService(IOptions<EmailOptions> settings)
+    {
+        _settings = settings.Value;
+    }
 
-		email.From.Add(MailboxAddress.Parse(_settings.Email));
-		email.Sender = MailboxAddress.Parse(_settings.Email);
-		email.To.Add(MailboxAddress.Parse(request.Receiver));
-		email.Subject = request.Subject;
 
-		var builder = new BodyBuilder {
-			HtmlBody = request.Body
-		};
-		email.Body = builder.ToMessageBody();
-		using var smtp = new SmtpClient();
-		await smtp.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.StartTls);
-		await smtp.AuthenticateAsync(_settings.Email, _settings.Password);
-		await smtp.SendAsync(email);
-		await smtp.DisconnectAsync(true);
-	}
+    public async Task SendEmailAsync(EmailRequest request)
+    {
+        var email = new MimeMessage();
+
+        email.From.Add(MailboxAddress.Parse(_settings.Email));
+        email.Sender = MailboxAddress.Parse(_settings.Email);
+        email.To.Add(MailboxAddress.Parse(request.Receiver));
+        email.Subject = request.Subject;
+
+        var builder = new BodyBuilder {
+            HtmlBody = request.Body
+        };
+        email.Body = builder.ToMessageBody();
+        using var smtp = new SmtpClient();
+        await smtp.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.StartTls);
+        await smtp.AuthenticateAsync(_settings.Email, _settings.Password);
+        await smtp.SendAsync(email);
+        await smtp.DisconnectAsync(true);
+    }
 }

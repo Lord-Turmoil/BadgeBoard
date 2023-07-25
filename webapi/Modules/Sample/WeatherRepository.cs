@@ -8,7 +8,5 @@ namespace BadgeBoard.Api.Modules.Sample;
 
 public class WeatherRepository : Repository<Weather>
 {
-	public WeatherRepository(BadgeContext context) : base(context)
-	{
-	}
+    public WeatherRepository(BadgeContext context) : base(context) { }
 }

@@ -8,78 +8,84 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 
 public class AddBadgeDto : IApiRequestDto
 {
-	/// <summary>
-	///     User id of sender. 0 if anonymous.
-	/// </summary>
-	public int SrcId { get; set; }
+    /// <summary>
+    ///     User id of sender. 0 if anonymous.
+    /// </summary>
+    public int SrcId { get; set; }
 
-	/// <summary>
-	///     User id of receiver. Must be valid.
-	/// </summary>
-	public int DstId { get; set; }
+    /// <summary>
+    ///     User id of receiver. Must be valid.
+    /// </summary>
+    public int DstId { get; set; }
 
-	/// <summary>
-	///     Badge type, question or memory.
-	/// </summary>
-	public int Type { get; set; }
+    /// <summary>
+    ///     Badge type, question or memory.
+    /// </summary>
+    public int Type { get; set; }
 
-	/// <summary>
-	///     Category id, 0 if is default.
-	/// </summary>
-	public int Category { get; set; }
+    /// <summary>
+    ///     Category id, 0 if is default.
+    /// </summary>
+    public int Category { get; set; }
 
-	public string? Style { get; set; }
+    public string? Style { get; set; }
 
-	public virtual bool Verify()
-	{
-		if (!Models.Badge.Types.IsValid(Type)) return false;
-		if (Style is { Length: > Globals.MaxStyleLength }) return false;
 
-		return true;
-	}
+    public virtual bool Verify()
+    {
+        if (!Models.Badge.Types.IsValid(Type)) return false;
+        if (Style is { Length: > Globals.MaxStyleLength }) return false;
 
-	public virtual IApiRequestDto Format()
-	{
-		Style = Style?.Trim();
-		return this;
-	}
+        return true;
+    }
+
+
+    public virtual IApiRequestDto Format()
+    {
+        Style = Style?.Trim();
+        return this;
+    }
 }
 
 public class AddQuestionBadgeDto : AddBadgeDto
 {
-	public string Question { get; set; }
-	// Request here won't need Answer, right? :P
+    public string Question { get; set; }
+    // Request here won't need Answer, right? :P
 
-	public override bool Verify()
-	{
-		if (!base.Verify()) return false;
 
-		return Question.Length is > 0 and < Globals.MaxQuestionLength;
-	}
+    public override bool Verify()
+    {
+        if (!base.Verify()) return false;
 
-	public override IApiRequestDto Format()
-	{
-		base.Format();
-		Question = Question.Trim();
-		return this;
-	}
+        return Question.Length is > 0 and < Globals.MaxQuestionLength;
+    }
+
+
+    public override IApiRequestDto Format()
+    {
+        base.Format();
+        Question = Question.Trim();
+        return this;
+    }
 }
 
 public class AddMemoryBadgeDto : AddBadgeDto
 {
-	public string Memory { get; set; }
+    public string Memory { get; set; }
 
-	public override bool Verify()
-	{
-		if (!base.Verify()) return false;
 
-		return Memory.Length is > 0 and < Globals.MaxMemoryLength;
-	}
+    public override bool Verify()
+    {
+        if (!base.Verify()) return false;
 
-	public override IApiRequestDto Format()
-	{
-		base.Format();
-		Memory = Memory.Trim();
-		return this;
-	}
+        return Memory.Length is > 0 and < Globals.MaxMemoryLength;
+    }
+
+
+    public override IApiRequestDto Format()
+    {
+        base.Format();
+        Memory = Memory.Trim();
+        return this;
+    }
 }

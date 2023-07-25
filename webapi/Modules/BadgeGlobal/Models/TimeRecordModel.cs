@@ -8,6 +8,6 @@ namespace BadgeBoard.Api.Modules.BadgeGlobal.Models;
 /// </summary>
 public class TimeRecordModel
 {
-	public DateTime CreatedTime { get; set; }
-	public DateTime UpdatedTime { get; set; }
+    public DateTime CreatedTime { get; set; }
+    public DateTime UpdatedTime { get; set; }
 }

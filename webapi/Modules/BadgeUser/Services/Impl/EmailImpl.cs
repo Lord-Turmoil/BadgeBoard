@@ -13,26 +13,26 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Impl;
 
 public class EmailImpl : BaseImpl
 {
-	public EmailImpl(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork,
-		mapper)
-	{
-	}
+    public EmailImpl(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork,
+        mapper) { }
 
-	public ApiResponse SendVerificationCode(VerificationCodeDto dto)
-	{
-		var repo = _unitOfWork.GetRepository<User>();
-		var user = UserUtil.FindUserByEmail(repo, dto.Email);
-		if (user != null) return new GoodResponse(new UserAlreadyExistsDto());
 
-		return new GoodResponse(new GoodDto("Verification code sent"));
-	}
+    public ApiResponse SendVerificationCode(VerificationCodeDto dto)
+    {
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        User? user = UserUtil.FindUserByEmail(repo, dto.Email);
+        if (user != null) return new GoodResponse(new UserAlreadyExistsDto());
 
-	public ApiResponse SendRetrievalCode(VerificationCodeDto dto)
-	{
-		var repo = _unitOfWork.GetRepository<User>();
-		var user = UserUtil.FindUserByEmail(repo, dto.Email);
-		if (user == null) return new GoodResponse(new UserNotExistsDto());
+        return new GoodResponse(new GoodDto("Verification code sent"));
+    }
 
-		return new GoodResponse(new GoodDto("Retrieval code sent"));
-	}
+
+    public ApiResponse SendRetrievalCode(VerificationCodeDto dto)
+    {
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        User? user = UserUtil.FindUserByEmail(repo, dto.Email);
+        if (user == null) return new GoodResponse(new UserNotExistsDto());
+
+        return new GoodResponse(new GoodDto("Retrieval code sent"));
+    }
 }

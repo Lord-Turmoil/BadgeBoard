@@ -8,42 +8,30 @@ namespace BadgeBoard.Api.Modules.BadgeBadge;
 
 public class BadgeRepository : Repository<Badge>
 {
-	public BadgeRepository(BadgeContext dbContext) : base(dbContext)
-	{
-	}
+    public BadgeRepository(BadgeContext dbContext) : base(dbContext) { }
 }
 
 public class QuestionPayloadRepository : Repository<QuestionPayload>
 {
-	public QuestionPayloadRepository(BadgeContext dbContext) : base(dbContext)
-	{
-	}
+    public QuestionPayloadRepository(BadgeContext dbContext) : base(dbContext) { }
 }
 
 public class MemoryPayloadRepository : Repository<MemoryPayload>
 {
-	public MemoryPayloadRepository(BadgeContext dbContext) : base(dbContext)
-	{
-	}
+    public MemoryPayloadRepository(BadgeContext dbContext) : base(dbContext) { }
 }
 
 public class CategoryRepository : Repository<Category>
 {
-	public CategoryRepository(BadgeContext dbContext) : base(dbContext)
-	{
-	}
+    public CategoryRepository(BadgeContext dbContext) : base(dbContext) { }
 }
 
 public class CategoryOptionRepository : Repository<CategoryOption>
 {
-	public CategoryOptionRepository(BadgeContext dbContext) : base(dbContext)
-	{
-	}
+    public CategoryOptionRepository(BadgeContext dbContext) : base(dbContext) { }
 }
 
 public class UnreadRecordRepository : Repository<UnreadRecord>
 {
-	public UnreadRecordRepository(BadgeContext dbContext) : base(dbContext)
-	{
-	}
+    public UnreadRecordRepository(BadgeContext dbContext) : base(dbContext) { }
 }

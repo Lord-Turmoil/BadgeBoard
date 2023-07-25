@@ -16,74 +16,82 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services;
 
 public class RegisterService : BaseService, IRegisterService
 {
-	public RegisterService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider,
-		unitOfWork, mapper)
-	{
-	}
-
-	public ApiResponse SendCode(VerificationCodeDto dto)
-	{
-		if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
-		if (!AccountVerifier.VerifyEmail(dto.Email)) return new BadRequestResponse(new VerificationCodeEmailErrorDto());
-
-		var emailType = dto.Type switch {
-			"register" => EmailTypes.Register,
-			"retrieve" => EmailTypes.Retrieve,
-			_ => EmailTypes.Invalid
-		};
-		if (emailType == EmailTypes.Invalid)
-			return new BadRequestResponse(new BadRequestDto($"Invalid type: {dto.Type}"));
-
-		// Intended to be asynchronous.
-		var impl = new EmailImpl(_provider, _unitOfWork, _mapper);
-		switch (emailType) {
-			case EmailTypes.Register:
-				impl.SendVerificationCode(dto);
-				break;
-			case EmailTypes.Retrieve:
-				impl.SendRetrievalCode(dto);
-				break;
-		}
-
-		return new GoodResponse(new GoodDto());
-	}
-
-	public async Task<ApiResponse> Register(RegisterDto dto)
-	{
-		if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
-
-		var repo = _unitOfWork.GetRepository<User>();
-		if (await UserUtil.HasUserByUsernameAsync(repo, dto.Username))
-			return new GoodResponse(new UserAlreadyExistsDto());
-
-		try {
-			await UserUtil.CreateUserAsync(_unitOfWork, dto);
-			await _unitOfWork.SaveChangesAsync();
-		} catch (Exception ex) {
-			Console.WriteLine(ex.ToString());
-			return new InternalServerErrorResponse(new InternalServerErrorDto("Failed to save user data"));
-		}
-
-		return new GoodResponse(new GoodDto("Welcome, my friend"));
-	}
+    public RegisterService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider,
+        unitOfWork, mapper) { }
 
 
-	public async Task<ApiResponse> Cancel(CancelDto dto)
-	{
-		if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+    public ApiResponse SendCode(VerificationCodeDto dto)
+    {
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!AccountVerifier.VerifyEmail(dto.Email)) return new BadRequestResponse(new VerificationCodeEmailErrorDto());
 
-		var repo = _unitOfWork.GetRepository<User>();
-		foreach (var username in dto.Users.Where(username => !string.IsNullOrEmpty(username))) {
-			var user = await UserUtil.FindUserByUsernameAsync(repo, username);
-			if (user != null) UserUtil.EraseUser(_unitOfWork, user);
-		}
+        var emailType = dto.Type switch {
+            "register" => EmailTypes.Register,
+            "retrieve" => EmailTypes.Retrieve,
+            _ => EmailTypes.Invalid
+        };
+        if (emailType == EmailTypes.Invalid)
+            return new BadRequestResponse(new BadRequestDto($"Invalid type: {dto.Type}"));
 
-		try {
-			await _unitOfWork.SaveChangesAsync();
-		} catch (Exception ex) {
-			return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
-		}
+        // Intended to be asynchronous.
+        var impl = new EmailImpl(_provider, _unitOfWork, _mapper);
+        switch (emailType)
+        {
+            case EmailTypes.Register:
+                impl.SendVerificationCode(dto);
+                break;
+            case EmailTypes.Retrieve:
+                impl.SendRetrievalCode(dto);
+                break;
+        }
 
-		return new GoodResponse(new GoodDto("Users canceled"));
-	}
+        return new GoodResponse(new GoodDto());
+    }
+
+
+    public async Task<ApiResponse> Register(RegisterDto dto)
+    {
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        if (await UserUtil.HasUserByUsernameAsync(repo, dto.Username))
+            return new GoodResponse(new UserAlreadyExistsDto());
+
+        try
+        {
+            await UserUtil.CreateUserAsync(_unitOfWork, dto);
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+            return new InternalServerErrorResponse(new InternalServerErrorDto("Failed to save user data"));
+        }
+
+        return new GoodResponse(new GoodDto("Welcome, my friend"));
+    }
+
+
+    public async Task<ApiResponse> Cancel(CancelDto dto)
+    {
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        foreach (var username in dto.Users.Where(username => !string.IsNullOrEmpty(username)))
+        {
+            User? user = await UserUtil.FindUserByUsernameAsync(repo, username);
+            if (user != null) UserUtil.EraseUser(_unitOfWork, user);
+        }
+
+        try
+        {
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
+        }
+
+        return new GoodResponse(new GoodDto("Users canceled"));
+    }
 }

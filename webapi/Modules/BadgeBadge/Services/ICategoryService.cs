@@ -13,20 +13,24 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services;
 /// </summary>
 public interface ICategoryService
 {
-	public Task<ApiResponse> Exists(int id, string name);
+    public Task<ApiResponse> Exists(int id, string name);
 
-	public Task<ApiResponse> AddCategory(int id, AddCategoryDto dto);
+    public Task<ApiResponse> AddCategory(int id, AddCategoryDto dto);
 
-	// Delete a category, can optionally merge data into another.
-	public Task<ApiResponse> DeleteCategory(int id, DeleteCategoryDto dto);
 
-	// Update category options. Won't affect current badges in it.
-	public Task<ApiResponse> UpdateCategory(int id, UpdateCategoryDto dto);
+    // Delete a category, can optionally merge data into another.
+    public Task<ApiResponse> DeleteCategory(int id, DeleteCategoryDto dto);
 
-	// Merge two categories, and abandon (delete) the merge source.
-	// For now, will ignore target category options. :(
-	public Task<ApiResponse> MergeCategory(int id, MergeCategoryDto dto);
 
-	// This need no authorization, and id is the target user id.
-	public Task<ApiResponse> GetCategories(int id, bool authorized = false);
+    // Update category options. Won't affect current badges in it.
+    public Task<ApiResponse> UpdateCategory(int id, UpdateCategoryDto dto);
+
+
+    // Merge two categories, and abandon (delete) the merge source.
+    // For now, will ignore target category options. :(
+    public Task<ApiResponse> MergeCategory(int id, MergeCategoryDto dto);
+
+
+    // This need no authorization, and id is the target user id.
+    public Task<ApiResponse> GetCategories(int id, bool authorized = false);
 }

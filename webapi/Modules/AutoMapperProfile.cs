@@ -15,28 +15,28 @@ namespace BadgeBoard.Api.Modules;
 
 public class AutoMapperProfile : MapperConfigurationExpression
 {
-	public AutoMapperProfile()
-	{
-		// Account Module
-		CreateMap<UserAccount, UserAccountDto>();
+    public AutoMapperProfile()
+    {
+        // Account Module
+        CreateMap<UserAccount, UserAccountDto>();
 
-		// User Module
-		CreateMap<User, UserLoginDto>().ReverseMap();
-		CreateMap<User, UserBriefDto>().ReverseMap();
-		CreateMap<User, UserGeneralDto>().ReverseMap();
-		CreateMap<User, UserCompleteDto>().ReverseMap();
-		CreateMap<UserPreference, UserPreferenceDto>().ReverseMap();
-		CreateMap<UserInfo, UserInfoDto>().ReverseMap();
+        // User Module
+        CreateMap<User, UserLoginDto>().ReverseMap();
+        CreateMap<User, UserBriefDto>().ReverseMap();
+        CreateMap<User, UserGeneralDto>().ReverseMap();
+        CreateMap<User, UserCompleteDto>().ReverseMap();
+        CreateMap<UserPreference, UserPreferenceDto>().ReverseMap();
+        CreateMap<UserInfo, UserInfoDto>().ReverseMap();
 
-		// Badge Module
-		CreateMap<Category, CategoryDto>().ReverseMap();
-		CreateMap<Category, CategoryBriefDto>().ReverseMap();
-		CreateMap<CategoryOption, CategoryOptionDto>().ReverseMap();
+        // Badge Module
+        CreateMap<Category, CategoryDto>().ReverseMap();
+        CreateMap<Category, CategoryBriefDto>().ReverseMap();
+        CreateMap<CategoryOption, CategoryOptionDto>().ReverseMap();
 
-		CreateMap<Badge, BadgeDto>().ReverseMap();
-		CreateMap<QuestionPayload, QuestionPayloadDto>().ReverseMap();
-		CreateMap<MemoryPayload, MemoryPayloadDto>().ReverseMap();
+        CreateMap<Badge, BadgeDto>().ReverseMap();
+        CreateMap<QuestionPayload, QuestionPayloadDto>().ReverseMap();
+        CreateMap<MemoryPayload, MemoryPayloadDto>().ReverseMap();
 
-		CreateMap<UnreadRecord, UnreadRecordDto>().ReverseMap();
-	}
+        CreateMap<UnreadRecord, UnreadRecordDto>().ReverseMap();
+    }
 }

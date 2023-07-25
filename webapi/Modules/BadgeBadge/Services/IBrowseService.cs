@@ -3,6 +3,4 @@
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services;
 
-public interface IBrowseService
-{
-}
+public interface IBrowseService { }

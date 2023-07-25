@@ -8,20 +8,20 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 
 public class UpdateCategoryDto : BaseCategoryDto, IApiRequestDto
 {
-	public int Id { get; set; }
+    public int Id { get; set; }
 
-	public bool Verify()
-	{
-		if (Name != null) {
-			return Name.Length is > 0 and < Globals.MaxCategoryNameLength;
-		}
 
-		return true;
-	}
+    public bool Verify()
+    {
+        if (Name != null) return Name.Length is > 0 and < Globals.MaxCategoryNameLength;
 
-	public IApiRequestDto Format()
-	{
-		Name = Name?.Trim();
-		return this;
-	}
+        return true;
+    }
+
+
+    public IApiRequestDto Format()
+    {
+        Name = Name?.Trim();
+        return this;
+    }
 }

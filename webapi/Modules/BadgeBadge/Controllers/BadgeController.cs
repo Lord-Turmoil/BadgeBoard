@@ -16,49 +16,62 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Controllers;
 [ApiController]
 public class BadgeController : BaseController<BadgeController>
 {
-	private readonly IBadgeService _service;
+    private readonly IBadgeService _service;
 
-	public BadgeController(ILogger<BadgeController> logger, IBadgeService service) : base(logger)
-	{
-		_service = service;
-	}
 
-	[HttpPost]
-	[Route("delete")]
-	[Authorize]
-	public async Task<ApiResponse> DeleteBadge([FromHeader] string authorization, [FromBody] DeleteBadgeDto dto)
-	{
-		try {
-			var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
-			return await _service.DeleteBadge(id, dto);
-		} catch (ArgumentException) {
-			return new UnauthorizedResponse(new BadUserJwtDto());
-		}
-	}
+    public BadgeController(ILogger<BadgeController> logger, IBadgeService service) : base(logger)
+    {
+        _service = service;
+    }
 
-	[HttpPost]
-	[Route("update")]
-	[Authorize]
-	public async Task<ApiResponse> UpdateBadge([FromHeader] string authorization, [FromBody] UpdateBadgeDto dto)
-	{
-		try {
-			var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
-			return await _service.UpdateBadge(id, dto);
-		} catch (ArgumentException) {
-			return new UnauthorizedResponse(new BadUserJwtDto());
-		}
-	}
 
-	[HttpPost]
-	[Route("move")]
-	[Authorize]
-	public async Task<ApiResponse> MoveBadge([FromHeader] string authorization, [FromBody] MoveBadgeDto dto)
-	{
-		try {
-			var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
-			return await _service.MoveBadge(id, dto);
-		} catch (ArgumentException) {
-			return new UnauthorizedResponse(new BadUserJwtDto());
-		}
-	}
+    [HttpPost]
+    [Route("delete")]
+    [Authorize]
+    public async Task<ApiResponse> DeleteBadge([FromHeader] string authorization, [FromBody] DeleteBadgeDto dto)
+    {
+        try
+        {
+            var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+            return await _service.DeleteBadge(id, dto);
+        }
+        catch (ArgumentException)
+        {
+            return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+    }
+
+
+    [HttpPost]
+    [Route("update")]
+    [Authorize]
+    public async Task<ApiResponse> UpdateBadge([FromHeader] string authorization, [FromBody] UpdateBadgeDto dto)
+    {
+        try
+        {
+            var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+            return await _service.UpdateBadge(id, dto);
+        }
+        catch (ArgumentException)
+        {
+            return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+    }
+
+
+    [HttpPost]
+    [Route("move")]
+    [Authorize]
+    public async Task<ApiResponse> MoveBadge([FromHeader] string authorization, [FromBody] MoveBadgeDto dto)
+    {
+        try
+        {
+            var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+            return await _service.MoveBadge(id, dto);
+        }
+        catch (ArgumentException)
+        {
+            return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+    }
 }

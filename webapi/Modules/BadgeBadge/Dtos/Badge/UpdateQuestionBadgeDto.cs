@@ -11,24 +11,26 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 /// </summary>
 public class UpdateQuestionBadgeDto : IApiRequestDto
 {
-	public int Id { get; set; }
-	public string? Answer { get; set; }
+    public int Id { get; set; }
+    public string? Answer { get; set; }
 
-	public bool Verify()
-	{
-		if (Answer != null) return Answer.Length is > 0 and < Globals.MaxAnswerLength;
 
-		return true;
-	}
+    public bool Verify()
+    {
+        if (Answer != null) return Answer.Length is > 0 and < Globals.MaxAnswerLength;
 
-	public IApiRequestDto Format()
-	{
-		Answer = Answer?.Trim();
-		return this;
-	}
+        return true;
+    }
+
+
+    public IApiRequestDto Format()
+    {
+        Answer = Answer?.Trim();
+        return this;
+    }
 }
 
 public class UpdateQuestionBadgeSuccessDto : ApiResponseData
 {
-	public string? Answer { get; set; }
+    public string? Answer { get; set; }
 }

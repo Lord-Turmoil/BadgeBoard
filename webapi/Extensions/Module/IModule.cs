@@ -5,38 +5,42 @@ namespace BadgeBoard.Api.Extensions.Module;
 
 public interface IModule
 {
-	IServiceCollection RegisterModule(IServiceCollection services);
-	IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints);
+    IServiceCollection RegisterModule(IServiceCollection services);
+    IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints);
 }
 
 public static class ModuleExtensions
 {
-	// this could also be added into the DI container
-	private static readonly List<IModule> registeredModules = new();
+    // this could also be added into the DI container
+    private static readonly List<IModule> registeredModules = new();
 
-	public static IServiceCollection RegisterModules(this IServiceCollection services)
-	{
-		var modules = DiscoverModules();
-		foreach (var module in modules) {
-			module.RegisterModule(services);
-			registeredModules.Add(module);
-		}
 
-		return services;
-	}
+    public static IServiceCollection RegisterModules(this IServiceCollection services)
+    {
+        IEnumerable<IModule> modules = DiscoverModules();
+        foreach (IModule module in modules)
+        {
+            module.RegisterModule(services);
+            registeredModules.Add(module);
+        }
 
-	public static WebApplication MapEndpoints(this WebApplication app)
-	{
-		foreach (var module in registeredModules) module.MapEndpoints(app);
-		return app;
-	}
+        return services;
+    }
 
-	private static IEnumerable<IModule> DiscoverModules()
-	{
-		return typeof(IModule).Assembly
-			.GetTypes()
-			.Where(p => p.IsClass && p.IsAssignableTo(typeof(IModule)))
-			.Select(Activator.CreateInstance)
-			.Cast<IModule>();
-	}
+
+    public static WebApplication MapEndpoints(this WebApplication app)
+    {
+        foreach (IModule module in registeredModules) module.MapEndpoints(app);
+        return app;
+    }
+
+
+    private static IEnumerable<IModule> DiscoverModules()
+    {
+        return typeof(IModule).Assembly
+            .GetTypes()
+            .Where(p => p.IsClass && p.IsAssignableTo(typeof(IModule)))
+            .Select(Activator.CreateInstance)
+            .Cast<IModule>();
+    }
 }

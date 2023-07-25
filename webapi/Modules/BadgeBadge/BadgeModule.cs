@@ -10,17 +10,17 @@ namespace BadgeBoard.Api.Modules.BadgeBadge;
 
 public class BadgeModule : BaseModule
 {
-	public override IServiceCollection RegisterModule(IServiceCollection services)
-	{
-		services.AddCustomRepository<Badge, BadgeRepository>()
-			.AddCustomRepository<QuestionPayload, QuestionPayloadRepository>()
-			.AddCustomRepository<MemoryPayload, MemoryPayloadRepository>()
-			.AddCustomRepository<Category, CategoryRepository>()
-			.AddCustomRepository<CategoryOption, CategoryOptionRepository>();
+    public override IServiceCollection RegisterModule(IServiceCollection services)
+    {
+        services.AddCustomRepository<Badge, BadgeRepository>()
+            .AddCustomRepository<QuestionPayload, QuestionPayloadRepository>()
+            .AddCustomRepository<MemoryPayload, MemoryPayloadRepository>()
+            .AddCustomRepository<Category, CategoryRepository>()
+            .AddCustomRepository<CategoryOption, CategoryOptionRepository>();
 
-		services.AddScoped<IBadgeService, BadgeService>()
-			.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IBadgeService, BadgeService>()
+            .AddScoped<ICategoryService, CategoryService>();
 
-		return services;
-	}
+        return services;
+    }
 }

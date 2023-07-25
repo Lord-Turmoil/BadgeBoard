@@ -18,195 +18,215 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services;
 
 public class LoginService : BaseService, ILoginService
 {
-	public LoginService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
-		: base(provider, unitOfWork, mapper)
-	{
-	}
+    public LoginService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
+        : base(provider, unitOfWork, mapper) { }
 
-	public async Task<ApiResponse> Login(LoginDto dto)
-	{
-		if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
 
-		var repo = _unitOfWork.GetRepository<User>();
-		var user = await UserUtil.FindUserByUsernameAsync(repo, dto.Username);
-		if (user == null) return new GoodResponse(new UserNotExistsDto());
+    public async Task<ApiResponse> Login(LoginDto dto)
+    {
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
 
-		try {
-			await User.IncludeAsync(_unitOfWork, user);
-		} catch (MissingReferenceException ex) {
-			return new InternalServerErrorResponse(new InternalServerErrorDto(data: ex));
-		}
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        User? user = await UserUtil.FindUserByUsernameAsync(repo, dto.Username);
+        if (user == null) return new GoodResponse(new UserNotExistsDto());
 
-		if (!AccountUtil.VerifyPasswordHash(dto.Password, user.Account.Salt, user.Account.Password))
-			return new GoodResponse(new LoginWrongPasswordDto());
+        try
+        {
+            await User.IncludeAsync(_unitOfWork, user);
+        }
+        catch (MissingReferenceException ex)
+        {
+            return new InternalServerErrorResponse(new InternalServerErrorDto(data: ex));
+        }
 
-		var userDto = _mapper.Map<User, UserLoginDto>(user);
+        if (!AccountUtil.VerifyPasswordHash(dto.Password, user.Account.Salt, user.Account.Password))
+            return new GoodResponse(new LoginWrongPasswordDto());
 
-		return new GoodResponse(new GoodDto("Welcome back, my friend", userDto));
-	}
+        UserLoginDto? userDto = _mapper.Map<User, UserLoginDto>(user);
 
-	public async Task<TokenResponseData> GetToken(TokenDto dto)
-	{
-		if (!dto.Format().Verify())
-			return new TokenResponseData {
-				IsAuthenticated = false,
-				Status = StatusCodes.Status400BadRequest,
-				Message = "Request format error"
-			};
+        return new GoodResponse(new GoodDto("Welcome back, my friend", userDto));
+    }
 
-		// verify user existence
-		var repo = _unitOfWork.GetRepository<User>();
-		var user = await User.FindAsync(repo, dto.Id);
-		if (user == null)
-			return new TokenResponseData {
-				IsAuthenticated = false,
-				Message = "No such user"
-			};
 
-		// verify password
-		try {
-			user.Account = await UserAccount.GetAsync(_unitOfWork.GetRepository<UserAccount>(), user.Id);
-		} catch {
-			return new TokenResponseData {
-				Status = StatusCodes.Status500InternalServerError,
-				IsAuthenticated = false,
-				Message = "Missing Account reference"
-			};
-		}
+    public async Task<TokenResponseData> GetToken(TokenDto dto)
+    {
+        if (!dto.Format().Verify())
+            return new TokenResponseData {
+                IsAuthenticated = false,
+                Status = StatusCodes.Status400BadRequest,
+                Message = "Request format error"
+            };
 
-		if (!AccountUtil.VerifyPasswordHash(dto.Password, user.Account.Salt, user.Account.Password))
-			return new TokenResponseData {
-				IsAuthenticated = false,
-				Message = "Wrong password"
-			};
+        // verify user existence
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+        User? user = await User.FindAsync(repo, dto.Id);
+        if (user == null)
+            return new TokenResponseData {
+                IsAuthenticated = false,
+                Message = "No such user"
+            };
 
-		// verification complete
-		var data = new TokenResponseData {
-			Id = user.Id,
-			IsAuthenticated = true
-		};
+        // verify password
+        try
+        {
+            user.Account = await UserAccount.GetAsync(_unitOfWork.GetRepository<UserAccount>(), user.Id);
+        }
+        catch
+        {
+            return new TokenResponseData {
+                Status = StatusCodes.Status500InternalServerError,
+                IsAuthenticated = false,
+                Message = "Missing Account reference"
+            };
+        }
 
-		var options = _provider.GetRequiredService<IOptions<JwtOptions>>();
-		data.Token = JwtUtil.CreateToken(options, user.Id.ToString());
-		var activeToken = user.RefreshTokens.FirstOrDefault(a => a.IsActive);
-		if (activeToken != null) {
-			data.RefreshToken = activeToken.Token;
-			data.RefreshTokenExpiration = activeToken.Expires;
-		} else {
-			var refreshToken = TokenUtil.CreateRefreshToken();
-			data.RefreshToken = refreshToken.Token;
-			data.RefreshTokenExpiration = refreshToken.Expires;
-			user.RefreshTokens.Add(refreshToken);
-			try {
-				await _unitOfWork.SaveChangesAsync();
-			} catch {
-				return new TokenResponseData {
-					Status = StatusCodes.Status500InternalServerError,
-					IsAuthenticated = false,
-					Message = "Failed to save data"
-				};
-			}
-		}
+        if (!AccountUtil.VerifyPasswordHash(dto.Password, user.Account.Salt, user.Account.Password))
+            return new TokenResponseData {
+                IsAuthenticated = false,
+                Message = "Wrong password"
+            };
 
-		return data;
-	}
+        // verification complete
+        var data = new TokenResponseData {
+            Id = user.Id,
+            IsAuthenticated = true
+        };
 
-	public async Task<TokenResponseData> RefreshToken(string oldToken)
-	{
-		if (string.IsNullOrWhiteSpace(oldToken))
-			return new TokenResponseData {
-				IsAuthenticated = false,
-				Status = StatusCodes.Status400BadRequest,
-				Message = "Invalid oldToken"
-			};
+        var options = _provider.GetRequiredService<IOptions<JwtOptions>>();
+        data.Token = JwtUtil.CreateToken(options, user.Id.ToString());
+        RefreshToken? activeToken = user.RefreshTokens.FirstOrDefault(a => a.IsActive);
+        if (activeToken != null)
+        {
+            data.RefreshToken = activeToken.Token;
+            data.RefreshTokenExpiration = activeToken.Expires;
+        }
+        else
+        {
+            RefreshToken refreshToken = TokenUtil.CreateRefreshToken();
+            data.RefreshToken = refreshToken.Token;
+            data.RefreshTokenExpiration = refreshToken.Expires;
+            user.RefreshTokens.Add(refreshToken);
+            try
+            {
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch
+            {
+                return new TokenResponseData {
+                    Status = StatusCodes.Status500InternalServerError,
+                    IsAuthenticated = false,
+                    Message = "Failed to save data"
+                };
+            }
+        }
 
-		var repo = _unitOfWork.GetRepository<User>();
+        return data;
+    }
 
-		// Get oldToken owner
-		var user = await repo.GetFirstOrDefaultAsync(predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
-		if (user == null)
-			return new TokenResponseData {
-				IsAuthenticated = false,
-				Message = "Token did not match any users"
-			};
 
-		// Get refresh oldToken
-		var refreshToken = user.RefreshTokens.Single(x => x.Token == oldToken);
-		if (!refreshToken.IsActive)
-			return new TokenResponseData {
-				IsAuthenticated = false,
-				Message = "Token not active"
-			};
+    public async Task<TokenResponseData> RefreshToken(string oldToken)
+    {
+        if (string.IsNullOrWhiteSpace(oldToken))
+            return new TokenResponseData {
+                IsAuthenticated = false,
+                Status = StatusCodes.Status400BadRequest,
+                Message = "Invalid oldToken"
+            };
 
-		// Revoke current refresh oldToken
-		refreshToken.Revoked = DateTime.UtcNow;
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
 
-		// Generate a new refresh oldToken
-		var token = TokenUtil.CreateRefreshToken();
-		user.RefreshTokens.Add(token);
-		try {
-			await _unitOfWork.SaveChangesAsync();
-		} catch {
-			return new TokenResponseData {
-				Status = StatusCodes.Status500InternalServerError,
-				IsAuthenticated = false,
-				Message = "Failed to save data"
-			};
-		}
+        // Get oldToken owner
+        User? user = await repo.GetFirstOrDefaultAsync(predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
+        if (user == null)
+            return new TokenResponseData {
+                IsAuthenticated = false,
+                Message = "Token did not match any users"
+            };
 
-		// Generate new JWT
-		var data = new TokenResponseData {
-			Id = user.Id,
-			IsAuthenticated = true
-		};
+        // Get refresh oldToken
+        RefreshToken refreshToken = user.RefreshTokens.Single(x => x.Token == oldToken);
+        if (!refreshToken.IsActive)
+            return new TokenResponseData {
+                IsAuthenticated = false,
+                Message = "Token not active"
+            };
 
-		var options = _provider.GetRequiredService<IOptions<JwtOptions>>();
-		data.Token = JwtUtil.CreateToken(options, user.Id.ToString());
-		data.RefreshToken = token.Token;
-		data.RefreshTokenExpiration = token.Expires;
+        // Revoke current refresh oldToken
+        refreshToken.Revoked = DateTime.UtcNow;
 
-		return data;
-	}
+        // Generate a new refresh oldToken
+        RefreshToken token = TokenUtil.CreateRefreshToken();
+        user.RefreshTokens.Add(token);
+        try
+        {
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch
+        {
+            return new TokenResponseData {
+                Status = StatusCodes.Status500InternalServerError,
+                IsAuthenticated = false,
+                Message = "Failed to save data"
+            };
+        }
 
-	public async Task<RevokeTokenData> RevokeToken(string oldToken)
-	{
-		if (string.IsNullOrWhiteSpace(oldToken))
-			return new RevokeTokenData {
-				Succeeded = false,
-				Message = "Invalid oldToken"
-			};
+        // Generate new JWT
+        var data = new TokenResponseData {
+            Id = user.Id,
+            IsAuthenticated = true
+        };
 
-		var repo = _unitOfWork.GetRepository<User>();
+        var options = _provider.GetRequiredService<IOptions<JwtOptions>>();
+        data.Token = JwtUtil.CreateToken(options, user.Id.ToString());
+        data.RefreshToken = token.Token;
+        data.RefreshTokenExpiration = token.Expires;
 
-		var user = await repo.GetFirstOrDefaultAsync(
-			predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
-		if (user == null)
-			return new RevokeTokenData {
-				Succeeded = false,
-				Message = "Token did not match any users"
-			};
+        return data;
+    }
 
-		var token = user.RefreshTokens.Single(t => t.Token == oldToken);
-		if (!token.IsActive)
-			return new RevokeTokenData {
-				Succeeded = true,
-				Message = "Token not active already"
-			};
 
-		token.Revoked = DateTime.UtcNow;
-		try {
-			await _unitOfWork.SaveChangesAsync();
-		} catch {
-			return new RevokeTokenData {
-				Status = StatusCodes.Status500InternalServerError,
-				Succeeded = false,
-				Message = "Failed to save data"
-			};
-		}
+    public async Task<RevokeTokenData> RevokeToken(string oldToken)
+    {
+        if (string.IsNullOrWhiteSpace(oldToken))
+            return new RevokeTokenData {
+                Succeeded = false,
+                Message = "Invalid oldToken"
+            };
 
-		return new RevokeTokenData {
-			Succeeded = true,
-			Message = "Token revoked"
-		};
-	}
+        IRepository<User> repo = _unitOfWork.GetRepository<User>();
+
+        User? user = await repo.GetFirstOrDefaultAsync(
+            predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
+        if (user == null)
+            return new RevokeTokenData {
+                Succeeded = false,
+                Message = "Token did not match any users"
+            };
+
+        RefreshToken token = user.RefreshTokens.Single(t => t.Token == oldToken);
+        if (!token.IsActive)
+            return new RevokeTokenData {
+                Succeeded = true,
+                Message = "Token not active already"
+            };
+
+        token.Revoked = DateTime.UtcNow;
+        try
+        {
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch
+        {
+            return new RevokeTokenData {
+                Status = StatusCodes.Status500InternalServerError,
+                Succeeded = false,
+                Message = "Failed to save data"
+            };
+        }
+
+        return new RevokeTokenData {
+            Succeeded = true,
+            Message = "Token revoked"
+        };
+    }
 }

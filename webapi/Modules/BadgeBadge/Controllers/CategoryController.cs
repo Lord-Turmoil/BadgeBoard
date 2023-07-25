@@ -1,4 +1,7 @@
-﻿using BadgeBoard.Api.Extensions.Module;
+﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
+// Licensed under the BSD 2-Clause License.
+
+using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
@@ -82,7 +85,7 @@ public class CategoryController : BaseController<CategoryController>
 	[Route("get")]
 	public async Task<ApiResponse> GetCategory([FromQuery] int id)
 	{
-		return await _service.GetCategories(id, false);
+		return await _service.GetCategories(id);
 	}
 
 	[HttpGet]

@@ -32,14 +32,15 @@ public class Category : TimeRecordModel
 
 	public static async Task<Category> CreateAsync(IRepository<Category> repo, string Name, User user, CategoryOption option)
 	{
+		var now = DateTime.Now;
 		var entry = await repo.InsertAsync(new Category {
 			Id = KeyGenerator.GenerateKey(),
 			Name = Name,
 			Size = 0,
 			User = user,
 			Option = option,
-			CreatedTime = DateTime.Now,
-			UpdatedTime = DateTime.Now
+			CreatedTime = now,
+			UpdatedTime = now
 		});
 		return entry.Entity;
 	}

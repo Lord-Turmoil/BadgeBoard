@@ -11,6 +11,13 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 
 public static class CategoryUtil
 {
+	public static async Task<Category> CreateCategoryAsync(IUnitOfWork unitOfWork, string name, User user)
+	{
+		var option = await CategoryOption.CreateAsync(unitOfWork.GetRepository<CategoryOption>());
+		var category = await Category.CreateAsync(unitOfWork.GetRepository<Category>(), name, user, option);
+		return category;
+	}
+
 	public static async Task<bool> HasCategoryOfUserAsync(IRepository<Category> repo, int id, string name)
 	{
 		var category = await repo.GetFirstOrDefaultAsync(predicate: x => x.UserId == id && x.Name == name);
@@ -60,15 +67,49 @@ public static class CategoryUtil
 		return category;
 	}
 
-	public static async Task<List<DeleteBadgeErrorData>> DeleteCategoryAsync(IUnitOfWork unitOfWork, Category category,
-		User user)
+	public static async Task<List<DeleteBadgeErrorData>> EraseCategoryAsync(
+		IUnitOfWork unitOfWork, Category category, User user)
 	{
+		if (category.UserId != user.Id) {
+			return new List<DeleteBadgeErrorData> {
+				new DeleteBadgeErrorData {
+					Id = 0,
+					Message = $"Category {category.Id} does not belong to user {user.Id}"
+				}
+			};
+		}
+
 		var badges = await unitOfWork.GetRepository<Badge>().GetAllAsync(predicate: x => x.CategoryId == category.Id);
+		var errors = BadgeUtil.EraseBadges(unitOfWork, badges, user, true);
 
-		var errors = BadgeUtil.DeleteBadges(unitOfWork, badges, user, true);
+		unitOfWork.GetRepository<Category>().Delete(category);
+		unitOfWork.GetRepository<CategoryOption>().Delete(category.CategoryOptionId);
 
-		var repo = unitOfWork.GetRepository<Category>();
-		repo.Delete(category);
+		return errors;
+	}
+
+	public static async Task<List<DeleteBadgeErrorData>> EraseCategoriesAsync(
+		IUnitOfWork unitOfWork, IEnumerable<Category> categories, User user)
+	{
+		var badgeRepo = unitOfWork.GetRepository<Badge>();
+		var categoryRepo = unitOfWork.GetRepository<Category>();
+		var optionRepo = unitOfWork.GetRepository<CategoryOption>();
+		var errors = new List<DeleteBadgeErrorData>();
+
+		foreach (var category in categories) {
+			if (category.UserId != user.Id) {
+				errors.Add(new DeleteBadgeErrorData {
+					Id = 0,
+					Message = $"Category {category.Id} does not belong to user {user.Id}"
+				});
+				continue;
+			}
+
+			var badges = await badgeRepo.GetAllAsync(predicate: x => x.CategoryId == category.Id);
+			errors.AddRange(BadgeUtil.EraseBadges(unitOfWork, badges, user, true));
+			categoryRepo.Delete(category);
+			optionRepo.Delete(category.CategoryOptionId);
+		}
 
 		return errors;
 	}

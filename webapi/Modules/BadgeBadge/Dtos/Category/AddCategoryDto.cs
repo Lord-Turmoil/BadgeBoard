@@ -8,7 +8,6 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 
 public class AddCategoryDto : BaseCategoryDto, IApiRequestDto
 {
-	public int Id { get; set; }
 	public bool Verify()
 	{
 		if (Name == null || Option == null) return false;

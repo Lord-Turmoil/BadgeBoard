@@ -43,7 +43,7 @@ public class CategoryService : BaseService, ICategoryService
 		if (await CategoryUtil.HasCategoryOfUserAsync(repo, id, dto.Name))
 			return new GoodResponse(new CategoryAlreadyExistsDto());
 
-		var category = await Category.CreateAsync(repo, dto.Name, user);
+		var category = await CategoryUtil.CreateCategoryAsync(_unitOfWork, dto.Name, user);
 		CategoryUtil.UpdateCategory(category, dto);
 		try {
 			await _unitOfWork.SaveChangesAsync();
@@ -77,7 +77,7 @@ public class CategoryService : BaseService, ICategoryService
 
 			// do merge to default
 			if (dto.Merge) await CategoryUtil.MergeCategoriesAsync(_unitOfWork, category, null);
-			await CategoryUtil.DeleteCategoryAsync(_unitOfWork, category, user);
+			await CategoryUtil.EraseCategoryAsync(_unitOfWork, category, user);
 		}
 
 		try {
@@ -140,7 +140,7 @@ public class CategoryService : BaseService, ICategoryService
 		}
 
 		await CategoryUtil.MergeCategoriesAsync(_unitOfWork, src, dst);
-		if (dto.Delete && src != null) await CategoryUtil.DeleteCategoryAsync(_unitOfWork, src, user);
+		if (dto.Delete && src != null) await CategoryUtil.EraseCategoryAsync(_unitOfWork, src, user);
 
 		try {
 			await _unitOfWork.SaveChangesAsync();

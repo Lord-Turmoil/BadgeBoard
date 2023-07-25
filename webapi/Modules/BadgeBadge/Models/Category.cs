@@ -30,13 +30,14 @@ public class Category : TimeRecordModel
 
 	[ForeignKey("CategoryOptionId")] public CategoryOption Option { get; set; }
 
-	public static async Task<Category> CreateAsync(IRepository<Category> repo, string Name, User user)
+	public static async Task<Category> CreateAsync(IRepository<Category> repo, string Name, User user, CategoryOption option)
 	{
 		var entry = await repo.InsertAsync(new Category {
 			Id = KeyGenerator.GenerateKey(),
 			Name = Name,
 			Size = 0,
 			User = user,
+			Option = option,
 			CreatedTime = DateTime.Now,
 			UpdatedTime = DateTime.Now
 		});

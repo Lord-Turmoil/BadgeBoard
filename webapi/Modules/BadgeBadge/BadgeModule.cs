@@ -4,6 +4,7 @@
 using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
+using BadgeBoard.Api.Modules.BadgeBadge.Services;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge;
 
@@ -16,6 +17,9 @@ public class BadgeModule : BaseModule
 			.AddCustomRepository<MemoryPayload, MemoryPayloadRepository>()
 			.AddCustomRepository<Category, CategoryRepository>()
 			.AddCustomRepository<CategoryOption, CategoryOptionRepository>();
+
+		services.AddScoped<IBadgeService, BadgeService>()
+			.AddScoped<ICategoryService, CategoryService>();
 
 		return services;
 	}

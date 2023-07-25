@@ -40,10 +40,11 @@ public class CategoryService : BaseService, ICategoryService
 		if (user == null) return new GoodResponse(new UserNotExistsDto());
 
 		var repo = _unitOfWork.GetRepository<Category>();
-		if (await CategoryUtil.HasCategoryOfUserAsync(repo, id, dto.Name))
+		// dto.Name is checked in dto.Verify(), it is not null here.
+		if (await CategoryUtil.HasCategoryOfUserAsync(repo, id, dto.Name!))
 			return new GoodResponse(new CategoryAlreadyExistsDto());
 
-		var category = await CategoryUtil.CreateCategoryAsync(_unitOfWork, dto.Name, user);
+		var category = await CategoryUtil.CreateCategoryAsync(_unitOfWork, dto.Name!, user);
 		CategoryUtil.UpdateCategory(category, dto);
 		try {
 			await _unitOfWork.SaveChangesAsync();

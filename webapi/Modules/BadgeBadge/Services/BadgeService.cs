@@ -11,6 +11,7 @@ using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeGlobal;
 using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
+using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 
@@ -66,6 +67,16 @@ public class BadgeService : BaseService, IBadgeService
 
 		// create new badge
 		var pack = await BadgeUtil.AddQuestionBadgeAsync(_unitOfWork, dto, sender, receiver, category);
+
+		// add unread record
+		try {
+			var unread = await UnreadRecord.GetAsync(_unitOfWork.GetRepository<UnreadRecord>(), receiver.UnreadRecordId);
+			unread.QuestionCount++;
+		} catch (MissingReferenceException ex) {
+			return new InternalServerErrorResponse(new MissingReferenceDto(data: ex));
+		}
+
+		// save changes
 		try {
 			await _unitOfWork.SaveChangesAsync();
 		} catch (Exception ex) {
@@ -113,6 +124,17 @@ public class BadgeService : BaseService, IBadgeService
 
 		// create new badge
 		var pack = await BadgeUtil.AddMemoryBadgeAsync(_unitOfWork, dto, sender, receiver, category);
+
+		// add record if not sending for self
+		if (!(sender != null && sender.Id == receiver.Id)) {
+			try {
+				var unread = await UnreadRecord.GetAsync(_unitOfWork.GetRepository<UnreadRecord>(), receiver.UnreadRecordId);
+				unread.MemoryCount++;
+			} catch (MissingReferenceException ex) {
+				return new InternalServerErrorResponse(new MissingReferenceDto(data: ex));
+			}
+		}
+
 		try {
 			await _unitOfWork.SaveChangesAsync();
 		} catch (Exception ex) {
@@ -191,7 +213,17 @@ public class BadgeService : BaseService, IBadgeService
 		if (payload == null) return new GoodResponse(new PayloadNotExistsDto());
 
 		payload.Answer = dto.Answer;
-		badge.IsChecked = payload.Answer != null;
+		if (!badge.IsChecked && payload.Answer != null) {
+			badge.IsChecked = true;
+			try {
+				var unread = await UnreadRecord.GetAsync(_unitOfWork.GetRepository<UnreadRecord>(), user.UnreadRecordId);
+				if (unread.QuestionCount > 0) {
+					unread.QuestionCount--;
+				}
+			} catch (MissingReferenceException ex) {
+				return new InternalServerErrorResponse(new MissingReferenceDto(data: ex));
+			}
+		}
 
 		try {
 			await _unitOfWork.SaveChangesAsync();

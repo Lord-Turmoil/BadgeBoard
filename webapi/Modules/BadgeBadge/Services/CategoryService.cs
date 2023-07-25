@@ -160,7 +160,8 @@ public class CategoryService : BaseService, ICategoryService
 		var repo = _unitOfWork.GetRepository<Category>();
 		var categoryList = await repo.GetAllAsync(
 			predicate: x => x.UserId == id,
-			include: source => source.Include(x => x.Option));
+			include: source => source.Include(x => x.Option),
+			orderBy: source => source.OrderBy(x => x.Name));
 
 		var data = new GetCategoryDto();
 		foreach (var category in categoryList) {

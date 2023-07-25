@@ -1,4 +1,7 @@
-﻿using BadgeBoard.Api.Extensions.Email;
+﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
+// Licensed under the BSD 2-Clause License.
+
+using BadgeBoard.Api.Extensions.Email;
 using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
 using Microsoft.Extensions.Options;
 

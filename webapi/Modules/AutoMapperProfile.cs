@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
+// Licensed under the BSD 2-Clause License.
+
+using AutoMapper;
 using BadgeBoard.Api.Modules.BadgeAccount.Dtos;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;

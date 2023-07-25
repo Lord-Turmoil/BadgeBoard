@@ -1,4 +1,7 @@
-﻿using MailKit.Net.Smtp;
+﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
+// Licensed under the BSD 2-Clause License.
+
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;

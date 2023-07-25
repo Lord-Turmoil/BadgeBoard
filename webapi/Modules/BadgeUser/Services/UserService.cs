@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
+// Licensed under the BSD 2-Clause License.
+
+using System.Globalization;
 using Arch.EntityFrameworkCore.UnitOfWork;
 using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;

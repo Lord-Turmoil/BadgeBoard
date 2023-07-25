@@ -1,4 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
+// Licensed under the BSD 2-Clause License.
+
+using System.Security.Cryptography;
 using BadgeBoard.Api.Extensions.Jwt;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 

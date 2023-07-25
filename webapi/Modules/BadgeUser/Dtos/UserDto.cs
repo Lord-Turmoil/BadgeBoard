@@ -1,4 +1,7 @@
-﻿using BadgeBoard.Api.Modules.BadgeAccount.Dtos;
+﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
+// Licensed under the BSD 2-Clause License.
+
+using BadgeBoard.Api.Modules.BadgeAccount.Dtos;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Unread;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 

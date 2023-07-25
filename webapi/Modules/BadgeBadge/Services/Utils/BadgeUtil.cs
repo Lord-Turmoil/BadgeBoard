@@ -1,4 +1,7 @@
-﻿using Arch.EntityFrameworkCore.UnitOfWork;
+﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
+// Licensed under the BSD 2-Clause License.
+
+using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Models;

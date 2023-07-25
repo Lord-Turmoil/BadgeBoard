@@ -45,6 +45,6 @@ public static class TokenUtil
 
 	public static int GetUserIdFromJwtBearerToken(string token)
 	{
-		return TryGetUserIdFromJwtBearerToken(token) ?? throw new ArgumentException();
+		return TryGetUserIdFromJwtBearerToken(token) ?? throw new ArgumentException(token);
 	}
 }

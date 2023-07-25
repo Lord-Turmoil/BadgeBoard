@@ -19,8 +19,8 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services;
 
 public class BadgeService : BaseService, IBadgeService
 {
-	protected BadgeService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider,
-		unitOfWork, mapper)
+	public BadgeService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
+		: base(provider, unitOfWork, mapper)
 	{
 	}
 
@@ -70,7 +70,8 @@ public class BadgeService : BaseService, IBadgeService
 
 		// add unread record
 		try {
-			var unread = await UnreadRecord.GetAsync(_unitOfWork.GetRepository<UnreadRecord>(), receiver.UnreadRecordId);
+			var unread =
+				await UnreadRecord.GetAsync(_unitOfWork.GetRepository<UnreadRecord>(), receiver.UnreadRecordId);
 			unread.QuestionCount++;
 		} catch (MissingReferenceException ex) {
 			return new InternalServerErrorResponse(new MissingReferenceDto(data: ex));
@@ -126,14 +127,14 @@ public class BadgeService : BaseService, IBadgeService
 		var pack = await BadgeUtil.AddMemoryBadgeAsync(_unitOfWork, dto, sender, receiver, category);
 
 		// add record if not sending for self
-		if (!(sender != null && sender.Id == receiver.Id)) {
+		if (!(sender != null && sender.Id == receiver.Id))
 			try {
-				var unread = await UnreadRecord.GetAsync(_unitOfWork.GetRepository<UnreadRecord>(), receiver.UnreadRecordId);
+				var unread =
+					await UnreadRecord.GetAsync(_unitOfWork.GetRepository<UnreadRecord>(), receiver.UnreadRecordId);
 				unread.MemoryCount++;
 			} catch (MissingReferenceException ex) {
 				return new InternalServerErrorResponse(new MissingReferenceDto(data: ex));
 			}
-		}
 
 		try {
 			await _unitOfWork.SaveChangesAsync();
@@ -216,10 +217,9 @@ public class BadgeService : BaseService, IBadgeService
 		if (!badge.IsChecked && payload.Answer != null) {
 			badge.IsChecked = true;
 			try {
-				var unread = await UnreadRecord.GetAsync(_unitOfWork.GetRepository<UnreadRecord>(), user.UnreadRecordId);
-				if (unread.QuestionCount > 0) {
-					unread.QuestionCount--;
-				}
+				var unread =
+					await UnreadRecord.GetAsync(_unitOfWork.GetRepository<UnreadRecord>(), user.UnreadRecordId);
+				if (unread.QuestionCount > 0) unread.QuestionCount--;
 			} catch (MissingReferenceException ex) {
 				return new InternalServerErrorResponse(new MissingReferenceDto(data: ex));
 			}

@@ -17,8 +17,8 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services;
 
 public class CategoryService : BaseService, ICategoryService
 {
-	protected CategoryService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider,
-		unitOfWork, mapper)
+	public CategoryService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
+		: base(provider, unitOfWork, mapper)
 	{
 	}
 

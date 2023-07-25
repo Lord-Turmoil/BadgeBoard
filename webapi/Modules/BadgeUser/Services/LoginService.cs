@@ -18,8 +18,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services;
 
 public class LoginService : BaseService, ILoginService
 {
-	public LoginService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider, unitOfWork,
-		mapper)
+	public LoginService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
+		: base(provider, unitOfWork, mapper)
 	{
 	}
 

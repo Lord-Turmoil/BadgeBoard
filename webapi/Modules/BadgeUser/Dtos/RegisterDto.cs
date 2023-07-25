@@ -22,17 +22,4 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 			return this;
 		}
 	}
-
-	internal class RegisterSuccessData : ApiResponseData
-	{
-		public UserCompleteDto User { get; set; }
-	}
-
-	public class RegisterSuccessDto : GoodDto
-	{
-		public RegisterSuccessDto(UserCompleteDto user) : base("Welcome, my friend!")
-		{
-			Data = new RegisterSuccessData { User = user };
-		}
-	}
 }

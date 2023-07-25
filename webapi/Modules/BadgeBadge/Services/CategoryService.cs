@@ -96,16 +96,17 @@ public class CategoryService : BaseService, ICategoryService
 		if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
 
 		var user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
-		if (user != null) return new GoodResponse(new UserNotExistsDto());
+		if (user == null) return new GoodResponse(new UserNotExistsDto());
 
 		var repo = _unitOfWork.GetRepository<Category>();
 		var category = await Category.FindAsync(repo, dto.Id, true);
 		if (category == null) return new GoodResponse(new CategoryNotExistsDto());
 
 		// Check name duplication
-		if (category.Name != dto.Name)
+		if (dto.Name != null && category.Name != dto.Name) {
 			if (await CategoryUtil.HasCategoryOfUserAsync(repo, id, dto.Name))
 				return new GoodResponse(new CategoryAlreadyExistsDto());
+		}
 
 		// Update whole category.
 		CategoryUtil.UpdateCategory(category, dto);

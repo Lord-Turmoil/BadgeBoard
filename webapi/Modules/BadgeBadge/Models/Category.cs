@@ -49,7 +49,8 @@ public class Category : TimeRecordModel
 		if (include)
 			return await repo.GetFirstOrDefaultAsync(
 				predicate: x => x.Id == id,
-				include: source => source.Include(x => x.Option)
+				include: source => source.Include(x => x.Option),
+				disableTracking: false
 			) ?? throw new MissingReferenceException("Category");
 
 		return await repo.FindAsync(id) ?? throw new MissingReferenceException("Category");
@@ -60,7 +61,8 @@ public class Category : TimeRecordModel
 		if (include)
 			return await repo.GetFirstOrDefaultAsync(
 				predicate: x => x.Id == id,
-				include: source => source.Include(x => x.Option)
+				include: source => source.Include(x => x.Option),
+				disableTracking: false
 			);
 
 		return await repo.FindAsync(id);

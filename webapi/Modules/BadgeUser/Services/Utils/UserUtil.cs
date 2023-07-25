@@ -14,7 +14,7 @@ public static class UserUtil
 {
 	public static async Task<User?> GetUserByEmailAsync(IRepository<User> repo, string email)
 	{
-		return await repo.GetFirstOrDefaultAsync(predicate: x => x.Account.Email.Equals(email));
+		return await repo.GetFirstOrDefaultAsync(predicate: x => x.Account.Email.Equals(email), disableTracking: false);
 	}
 
 	public static User? FindUserByEmail(IRepository<User> repo, string email)
@@ -29,7 +29,7 @@ public static class UserUtil
 
 	public static async Task<User?> FindUserByUsernameAsync(IRepository<User> repo, string username)
 	{
-		return await repo.GetFirstOrDefaultAsync(predicate: x => x.Username.Equals(username));
+		return await repo.GetFirstOrDefaultAsync(predicate: x => x.Username.Equals(username), disableTracking: false);
 	}
 
 	public static async Task<bool> HasUserByUsernameAsync(IRepository<User> repo, string username)

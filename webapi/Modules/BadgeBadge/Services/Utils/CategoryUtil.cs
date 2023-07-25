@@ -56,7 +56,7 @@ public static class CategoryUtil
 				updated = true;
 			}
 
-			if (dto.Option.IsPublic != category.Option.AllowMemory) {
+			if (dto.Option.AllowMemory != category.Option.AllowMemory) {
 				category.Option.AllowMemory = dto.Option.AllowMemory;
 				updated = true;
 			}

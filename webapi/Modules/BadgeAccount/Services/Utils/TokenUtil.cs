@@ -42,4 +42,9 @@ public static class TokenUtil
 
 		return int.TryParse(value, out var id) ? id : null;
 	}
+
+	public static int GetUserIdFromJwtBearerToken(string token)
+	{
+		return TryGetUserIdFromJwtBearerToken(token) ?? throw new ArgumentException();
+	}
 }

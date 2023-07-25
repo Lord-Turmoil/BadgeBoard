@@ -81,7 +81,7 @@ public class RegisterService : BaseService, IRegisterService
 		try {
 			await _unitOfWork.SaveChangesAsync();
 		} catch (Exception ex) {
-			return new InternalServerErrorResponse(new FailedToSaveChangesDto());
+			return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
 		}
 
 		return new GoodResponse(new GoodDto("Users canceled"));

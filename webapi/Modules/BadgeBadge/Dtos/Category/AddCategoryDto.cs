@@ -6,16 +6,18 @@ using BadgeBoard.Api.Modules.BadgeGlobal;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 
-public class AddCategoryDto : CategoryDto, IApiRequestDto
+public class AddCategoryDto : BaseCategoryDto, IApiRequestDto
 {
+	public int Id { get; set; }
 	public bool Verify()
 	{
+		if (Name == null || Option == null) return false;
 		return Name.Length is > 0 and < Globals.MaxCategoryNameLength;
 	}
 
 	public IApiRequestDto Format()
 	{
-		Name = Name.Trim();
+		Name = Name?.Trim();
 		return this;
 	}
 }

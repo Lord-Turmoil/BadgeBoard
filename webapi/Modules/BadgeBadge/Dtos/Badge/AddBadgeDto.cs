@@ -30,7 +30,7 @@ public class AddBadgeDto : IApiRequestDto
 
 	public string? Style { get; set; }
 
-	public bool Verify()
+	public virtual bool Verify()
 	{
 		if (!Models.Badge.Types.IsValid(Type)) return false;
 		if (Style is { Length: > Globals.MaxStyleLength }) return false;
@@ -38,7 +38,7 @@ public class AddBadgeDto : IApiRequestDto
 		return true;
 	}
 
-	public IApiRequestDto Format()
+	public virtual IApiRequestDto Format()
 	{
 		Style = Style?.Trim();
 		return this;
@@ -50,14 +50,14 @@ public class AddQuestionBadgeDto : AddBadgeDto
 	public string Question { get; set; }
 	// Request here won't need Answer, right? :P
 
-	public bool Verify()
+	public override bool Verify()
 	{
 		if (!base.Verify()) return false;
 
 		return Question.Length is > 0 and < Globals.MaxQuestionLength;
 	}
 
-	public AddQuestionBadgeDto Format()
+	public override IApiRequestDto Format()
 	{
 		base.Format();
 		Question = Question.Trim();
@@ -69,14 +69,14 @@ public class AddMemoryBadgeDto : AddBadgeDto
 {
 	public string Memory { get; set; }
 
-	public bool Verify()
+	public override bool Verify()
 	{
 		if (!base.Verify()) return false;
 
 		return Memory.Length is > 0 and < Globals.MaxMemoryLength;
 	}
 
-	public AddMemoryBadgeDto Format()
+	public override IApiRequestDto Format()
 	{
 		base.Format();
 		Memory = Memory.Trim();

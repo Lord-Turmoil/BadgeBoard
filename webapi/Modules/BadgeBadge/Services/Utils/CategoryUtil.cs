@@ -22,33 +22,37 @@ public static class CategoryUtil
 		return await repo.GetAllAsync(predicate: x => x.UserId == id);
 	}
 
-	public static Category UpdateCategory(Category category, CategoryDto dto)
+	public static Category UpdateCategory(Category category, BaseCategoryDto dto)
 	{
 		var updated = false;
 
-		if (!dto.Name.Equals(category.Name)) {
-			category.Name = dto.Name;
-			updated = true;
+		if (dto.Name != null) {
+			if (!dto.Name.Equals(category.Name)) {
+				category.Name = dto.Name;
+				updated = true;
+			}
 		}
 
-		if (dto.Option.IsPublic != category.Option.IsPublic) {
-			category.Option.IsPublic = dto.Option.IsPublic;
-			updated = true;
-		}
+		if (dto.Option != null) {
+			if (dto.Option.IsPublic != category.Option.IsPublic) {
+				category.Option.IsPublic = dto.Option.IsPublic;
+				updated = true;
+			}
 
-		if (dto.Option.AllowAnonymity != category.Option.AllowAnonymity) {
-			category.Option.AllowAnonymity = dto.Option.AllowAnonymity;
-			updated = true;
-		}
+			if (dto.Option.AllowAnonymity != category.Option.AllowAnonymity) {
+				category.Option.AllowAnonymity = dto.Option.AllowAnonymity;
+				updated = true;
+			}
 
-		if (dto.Option.AllowQuestion != category.Option.AllowQuestion) {
-			category.Option.AllowQuestion = dto.Option.AllowQuestion;
-			updated = true;
-		}
+			if (dto.Option.AllowQuestion != category.Option.AllowQuestion) {
+				category.Option.AllowQuestion = dto.Option.AllowQuestion;
+				updated = true;
+			}
 
-		if (dto.Option.IsPublic != category.Option.AllowMemory) {
-			category.Option.AllowMemory = dto.Option.AllowMemory;
-			updated = true;
+			if (dto.Option.IsPublic != category.Option.AllowMemory) {
+				category.Option.AllowMemory = dto.Option.AllowMemory;
+				updated = true;
+			}
 		}
 
 		if (updated) category.UpdatedTime = DateTime.Now;

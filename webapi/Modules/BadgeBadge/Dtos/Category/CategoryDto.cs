@@ -23,3 +23,9 @@ public class CategoryBriefDto
 	public int Id { get; set; }
 	public string Name { get; set; }
 }
+
+public class BaseCategoryDto
+{
+	public string? Name { get; set; }
+	public CategoryOptionDto? Option { get; set; }
+}

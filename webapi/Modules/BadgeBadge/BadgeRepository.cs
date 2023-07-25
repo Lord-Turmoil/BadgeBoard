@@ -38,4 +38,11 @@ namespace BadgeBoard.Api.Modules.BadgeBadge
 		{
 		}
 	}
+
+	public class UnreadRecordRepository : Repository<UnreadRecord>
+	{
+		public UnreadRecordRepository(BadgeContext dbContext) : base(dbContext)
+		{
+		}
+	}
 }

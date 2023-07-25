@@ -28,6 +28,8 @@ namespace BadgeBoard.Api.Modules
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<CategoryOption> CategoriesOptions { get; set; }
 
+		public DbSet<UnreadRecord> UnreadRecords { get; set; }
+
 		public BadgeContext(DbContextOptions<BadgeContext> options) : base(options)
 		{
 		}

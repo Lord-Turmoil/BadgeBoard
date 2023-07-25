@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
+using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,13 +42,25 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 		// Refresh tokens
 		public List<RefreshToken> RefreshTokens { get; set; }
 
-		public static async Task<User> CreateAsync(IRepository<User> repo, string username, UserAccount account, UserPreference preference, UserInfo info)
+		// Unread record
+		public int UnreadRecordId { get; set; }
+		[ForeignKey("UnreadRecordId")]
+		public UnreadRecord Unread { get; set; }
+
+		public static async Task<User> CreateAsync(
+			IRepository<User> repo,
+			string username,
+			UserAccount account,
+			UserPreference preference,
+			UserInfo info,
+			UnreadRecord unread)
 		{
 			var entry = await repo.InsertAsync(new User {
 				Username = username,
 				Account = account,
 				Preference = preference,
-				Info = info
+				Info = info,
+				Unread = unread
 			});
 			return entry.Entity;
 		}
@@ -73,6 +86,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Models
 			user.Account = await UserAccount.GetAsync(unitOfWork.GetRepository<UserAccount>(), user.Id);
 			user.Preference = await UserPreference.GetAsync(unitOfWork.GetRepository<UserPreference>(), user.UserPreferenceId);
 			user.Info = await UserInfo.GetAsync(unitOfWork.GetRepository<UserInfo>(), user.UserInfoId);
+			user.Unread = await UnreadRecord.GetAsync(unitOfWork.GetRepository<UnreadRecord>(), user.UnreadRecordId);
 			return user;
 		}
 	}

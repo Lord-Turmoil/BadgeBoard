@@ -1,4 +1,5 @@
 ﻿using BadgeBoard.Api.Modules.BadgeAccount.Dtos;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Unread;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 
 namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
@@ -33,6 +34,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Dtos
 
 		public UserPreferenceDto Preference { get; set; }
 		public UserInfoDto Info { get; set; }
+		public UnreadRecordDto Unread { get; set; }
 	}
 
 	public class UserGeneralDto : BaseUserDto

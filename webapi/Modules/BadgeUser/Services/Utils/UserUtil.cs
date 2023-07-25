@@ -1,6 +1,7 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
+using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 
@@ -46,7 +47,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 			var account = await UserAccount.CreateAsync(unitOfWork.GetRepository<UserAccount>(), salt, hash);
 			var preference = await UserPreference.CreateAsync(unitOfWork.GetRepository<UserPreference>());
 			var info = await UserInfo.CreateAsync(unitOfWork.GetRepository<UserInfo>());
-			var user = await User.CreateAsync(unitOfWork.GetRepository<User>(), dto.Username, account, preference, info);
+			var unreadRecord = await UnreadRecord.CreateAsync(unitOfWork.GetRepository<UnreadRecord>());
+			var user = await User.CreateAsync(unitOfWork.GetRepository<User>(), dto.Username, account, preference, info, unreadRecord);
 
 			return user;
 		}
@@ -57,6 +59,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services.Utils
 			unitOfWork.GetRepository<UserAccount>().Delete(user.Id);
 			unitOfWork.GetRepository<UserPreference>().Delete(user.UserPreferenceId);
 			unitOfWork.GetRepository<UserInfo>().Delete(user.UserInfoId);
+			unitOfWork.GetRepository<UnreadRecord>().Delete(user.UnreadRecordId);
 		}
 	}
 }

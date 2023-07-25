@@ -32,13 +32,14 @@ public class UserController : BaseController<UserController>
 	[HttpPost]
 	[Route("preference")]
 	[Authorize]
-	public async Task<ApiResponse> UpdatePreference([FromHeader] string authorization,
-		[FromBody] UpdateUserPreferenceDto dto)
+	public async Task<ApiResponse> UpdatePreference([FromHeader] string authorization, [FromBody] UpdateUserPreferenceDto dto)
 	{
-		var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
-		if (id == null) return new UnauthorizedResponse(new BadUserJwtDto());
-
-		return await _service.UpdatePreference((int)id, dto);
+		try {
+			var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+			return await _service.UpdatePreference(id, dto);
+		} catch (ArgumentException) {
+			return new UnauthorizedResponse(new BadUserJwtDto());
+		}
 	}
 
 	[HttpPost]
@@ -46,23 +47,25 @@ public class UserController : BaseController<UserController>
 	[Authorize]
 	public async Task<ApiResponse> UpdateInfo([FromHeader] string authorization, [FromBody] UpdateUserInfoDto dto)
 	{
-		var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
-		if (id == null) return new UnauthorizedResponse(new BadUserJwtDto());
-
-		return await _service.UpdateInfo((int)id, dto);
+		try {
+			var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+			return await _service.UpdateInfo(id, dto);
+		} catch (ArgumentException) {
+			return new UnauthorizedResponse(new BadUserJwtDto());
+		}
 	}
 
 	[HttpPost]
 	[Route("username")]
 	[Authorize]
-	public async Task<ApiResponse> UpdateUsername(
-		[FromHeader] string authorization,
-		[FromBody] UpdateUsernameDto dto)
+	public async Task<ApiResponse> UpdateUsername([FromHeader] string authorization, [FromBody] UpdateUsernameDto dto)
 	{
-		var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
-		if (id == null) return new UnauthorizedResponse(new BadUserJwtDto());
-
-		return await _service.UpdateUsername((int)id, dto);
+		try {
+			var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+			return await _service.UpdateUsername(id, dto);
+		} catch (ArgumentException) {
+			return new UnauthorizedResponse(new BadUserJwtDto());
+		}
 	}
 
 	[HttpPost]
@@ -70,10 +73,12 @@ public class UserController : BaseController<UserController>
 	[Authorize]
 	public async Task<ApiResponse> UpdateAvatar([FromHeader] string authorization, [FromBody] UpdateAvatarDto dto)
 	{
-		var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
-		if (id == null) return new UnauthorizedResponse(new BadUserJwtDto());
-
-		return await _service.UpdateAvatar((int)id, dto);
+		try {
+			var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+			return await _service.UpdateAvatar(id, dto);
+		} catch (ArgumentException) {
+			return new UnauthorizedResponse(new BadUserJwtDto());
+		}
 	}
 
 
@@ -91,9 +96,11 @@ public class UserController : BaseController<UserController>
 	[Authorize]
 	public async Task<ApiResponse> GetCurrentUser([FromHeader] string authorization)
 	{
-		var id = TokenUtil.TryGetUserIdFromJwtBearerToken(authorization);
-		if (id == null) return new UnauthorizedResponse(new BadUserJwtDto());
-
-		return await _service.GetCurrentUser((int)id);
+		try {
+			var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+			return await _service.GetCurrentUser(id);
+		} catch (ArgumentException) {
+			return new UnauthorizedResponse(new BadUserJwtDto());
+		}
 	}
 }

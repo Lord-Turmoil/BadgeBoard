@@ -1,6 +1,7 @@
 ﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
 // Licensed under the BSD 2-Clause License.
 
+using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 
@@ -11,7 +12,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services;
 ///     authorization, denoting the user who is making change of his/her
 ///     own categories.
 /// </summary>
-public interface ICategoryService
+public interface ICategoryService : IService
 {
     public Task<ApiResponse> Exists(int id, string name);
 

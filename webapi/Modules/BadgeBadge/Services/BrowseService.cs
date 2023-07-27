@@ -50,55 +50,61 @@ public class BrowseService : BaseService, IBrowseService
     }
 
 
-    public async Task<ApiResponse> GetBadgesOfUser(int userId)
+    public async Task<ApiResponse> GetBadgesOfUser(BrowseAllBadgeDto dto)
     {
-        User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), userId);
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+
+        User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), dto.UserId);
         if (user == null) return new GoodResponse(new UserNotExistsDto());
 
         IList<Badge> badges = await _unitOfWork.GetRepository<Badge>().GetAllAsync(
-            x => x.IsPublic && x.UserId == userId,
+            x => x.IsPublic && x.UserId == dto.UserId,
             source => source.OrderByDescending(x => x.CreatedTime));
         IList<BadgeDto> badgeDtos = await BadgeDtoUtil.GetBadgeDtosAsync(_unitOfWork, _mapper, badges);
 
-        var dto = new BrowseBadgeSuccessDto {
+        var data = new BrowseBadgeSuccessDto {
             Count = badgeDtos.Count,
             Badges = badgeDtos
         };
-        return new GoodResponse(new GoodWithDataDto(dto));
+        return new GoodResponse(new GoodWithDataDto(data));
     }
 
 
-    public async Task<ApiResponse> GetBadgesOfUser(int id, int userId)
+    public async Task<ApiResponse> GetBadgesOfUser(int id, BrowseAllBadgeDto dto)
     {
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+
         User? initiator = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
         if (initiator == null) return new GoodResponse(new UserNotExistsDto("Initiator not exists"));
-        User? user = userId == id ? initiator : await User.FindAsync(_unitOfWork.GetRepository<User>(), userId);
+        User? user = dto.UserId == id ? initiator : await User.FindAsync(_unitOfWork.GetRepository<User>(), dto.UserId);
         if (user == null) return new GoodResponse(new UserNotExistsDto());
 
         Expression<Func<Badge, bool>> predicate;
         if (initiator == user || initiator.IsAdmin)
-            predicate = x => x.UserId == userId;
+            predicate = x => x.UserId == dto.UserId;
         else
-            predicate = x => x.IsPublic && x.UserId == userId;
+            predicate = x => x.IsPublic && x.UserId == dto.UserId;
         IList<Badge> badges = await _unitOfWork.GetRepository<Badge>().GetAllAsync(
             predicate, source => source.OrderByDescending(x => x.CreatedTime));
         IList<BadgeDto> badgeDtos = await BadgeDtoUtil.GetBadgeDtosAsync(_unitOfWork, _mapper, badges);
 
-        var dto = new BrowseBadgeSuccessDto {
+        var data = new BrowseBadgeSuccessDto {
             Count = badgeDtos.Count,
             Badges = badgeDtos
         };
-        return new GoodResponse(new GoodWithDataDto(dto));
+        return new GoodResponse(new GoodWithDataDto(data));
     }
 
-    public async Task<ApiResponse> GetBadgesOfCategory(int userId, int categoryId)
+    public async Task<ApiResponse> GetBadgesOfCategory(BrowseCategoryBadgeDto dto)
     {
-        User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), userId);
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+
+        User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), dto.UserId);
         if (user == null) return new GoodResponse(new UserNotExistsDto());
         Category? category = null;
-        if (categoryId != 0)
+        if (dto.CategoryId != 0)
         {
-            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), categoryId, true);
+            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.CategoryId, true);
             if (category == null) return new GoodResponse(new CategoryNotExistsDto());
         }
 
@@ -108,30 +114,33 @@ public class BrowseService : BaseService, IBrowseService
             if (!category.Option.IsPublic) return new GoodResponse(new CategoryIsPrivateDto());
         }
 
+        // here, it is obvious that badges of category belong to the user
         var dbCategoryId = category?.Id;
         IList<Badge> badges = await _unitOfWork.GetRepository<Badge>().GetAllAsync(
             x => x.CategoryId == dbCategoryId,
             source => source.OrderBy(x => x.CreatedTime));
         IList<BadgeDto> badgeDtos = await BadgeDtoUtil.GetBadgeDtosAsync(_unitOfWork, _mapper, badges);
 
-        var dto = new BrowseBadgeSuccessDto {
+        var data = new BrowseBadgeSuccessDto {
             Count = badgeDtos.Count,
             Badges = badgeDtos
         };
-        return new GoodResponse(new GoodWithDataDto(dto));
+        return new GoodResponse(new GoodWithDataDto(data));
     }
 
 
-    public async Task<ApiResponse> GetBadgesOfCategory(int id, int userId, int categoryId)
+    public async Task<ApiResponse> GetBadgesOfCategory(int id, BrowseCategoryBadgeDto dto)
     {
-        User? initiator = await User.FindAsync(_unitOfWork.GetRepository<User>(), userId);
+        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+
+        User? initiator = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
         if (initiator == null) return new GoodResponse(new UserNotExistsDto("Initiator not exist"));
-        User? user = userId == id ? initiator : await User.FindAsync(_unitOfWork.GetRepository<User>(), userId);
+        User? user = dto.UserId == id ? initiator : await User.FindAsync(_unitOfWork.GetRepository<User>(), dto.UserId);
         if (user == null) return new GoodResponse(new UserNotExistsDto());
         Category? category = null;
-        if (categoryId != 0)
+        if (dto.CategoryId != 0)
         {
-            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), categoryId, true);
+            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.CategoryId, true);
             if (category == null) return new GoodResponse(new CategoryNotExistsDto());
         }
 
@@ -147,10 +156,10 @@ public class BrowseService : BaseService, IBrowseService
             source => source.OrderBy(x => x.CreatedTime));
         IList<BadgeDto> badgeDtos = await BadgeDtoUtil.GetBadgeDtosAsync(_unitOfWork, _mapper, badges);
 
-        var dto = new BrowseBadgeSuccessDto {
+        var data = new BrowseBadgeSuccessDto {
             Count = badgeDtos.Count,
             Badges = badgeDtos
         };
-        return new GoodResponse(new GoodWithDataDto(dto));
+        return new GoodResponse(new GoodWithDataDto(data));
     }
 }

@@ -3,6 +3,7 @@
 
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services;
 
@@ -16,11 +17,9 @@ public interface IBrowseService : IService
     Task<ApiResponse> GetBadge(int badgeId);
     Task<ApiResponse> GetBadge(int id, int badgeId);
 
-    Task<ApiResponse> GetBadgesOfUser(int userId);
-    Task<ApiResponse> GetBadgesOfUser(int id, int userId);
+    Task<ApiResponse> GetBadgesOfUser(BrowseAllBadgeDto dto);
+    Task<ApiResponse> GetBadgesOfUser(int id, BrowseAllBadgeDto dto);
 
-
-    // categoryId == 0 means default category
-    Task<ApiResponse> GetBadgesOfCategory(int userId, int categoryId);
-    Task<ApiResponse> GetBadgesOfCategory(int id, int userId, int categoryId);
+    Task<ApiResponse> GetBadgesOfCategory(BrowseCategoryBadgeDto dto);
+    Task<ApiResponse> GetBadgesOfCategory(int id, BrowseCategoryBadgeDto dto);
 }

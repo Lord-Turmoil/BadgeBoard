@@ -8,27 +8,26 @@ public class BrowseBadgeDto : IApiRequestDto
 {
     // target user id
     public int UserId { get; set; }
-    public int CategoryId { get; set; }
     public string Timestamp { get; set; }
 
     [JsonIgnore] public DateTime BeforeTime { get; set; }
     [JsonIgnore] private bool BadTimestamp { get; set; }
 
 
-    public bool Verify()
+    public virtual bool Verify()
     {
         return !BadTimestamp;
     }
 
 
-    public IApiRequestDto Format()
+    public virtual IApiRequestDto Format()
     {
         try
         {
             BeforeTime = BadgeDtoUtil.ParseTimestamp(Timestamp);
             BadTimestamp = false;
         }
-        catch (FormatException ex)
+        catch (FormatException)
         {
             BadTimestamp = true;
         }
@@ -37,7 +36,15 @@ public class BrowseBadgeDto : IApiRequestDto
     }
 }
 
+public class BrowseAllBadgeDto : BrowseBadgeDto
+{
+}
 
+public class BrowseCategoryBadgeDto : BrowseBadgeDto
+{
+    // 0 means default
+    public int CategoryId { get; set; }
+}
 
 public class BrowseBadgeSuccessDto : ApiResponseData
 {

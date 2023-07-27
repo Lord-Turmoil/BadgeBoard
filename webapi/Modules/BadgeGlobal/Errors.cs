@@ -28,9 +28,13 @@ public static class Errors
     public const int CategoryAlreadyExists = 4001;
     public const int CategoryNotExits = 4002;
     public const int CategoryMergeSelf = 4003;
+    public const int CategoryNotMatchUser = 4004;
+    public const int CategoryIsPrivate = 4005;
 
     // Badge
     public const int FailedToGetBadge = 5001;
     public const int BadgeNotExists = 5002;
     public const int PayloadNotExists = 5003;
+    public const int BadgeIsPrivate = 5004;
+    public const int BadgeCorrupted = 5005;
 }

@@ -15,3 +15,14 @@ public class PayloadNotExistsDto : OrdinaryDto
 {
     public PayloadNotExistsDto(string? message = "Payload does not exists") : base(Errors.PayloadNotExists, message) { }
 }
+
+public class BadgeIsPrivateDto : OrdinaryDto
+{
+    public BadgeIsPrivateDto(string? message = "Required badge is private") : base(Errors.BadgeIsPrivate, message) { }
+}
+
+public class BadgeCorruptedDto : BadDto
+{
+    public BadgeCorruptedDto(string? message = "Badge corrupted", object? data = null)
+        : base(Errors.BadgeCorrupted, message, data) { }
+}

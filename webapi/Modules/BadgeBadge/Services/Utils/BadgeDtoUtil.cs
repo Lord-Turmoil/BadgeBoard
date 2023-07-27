@@ -1,6 +1,7 @@
 ﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
 // Licensed under the BSD 2-Clause License.
 
+using System.Globalization;
 using Arch.EntityFrameworkCore.UnitOfWork;
 using AutoMapper;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
@@ -35,6 +36,7 @@ public static class BadgeDtoUtil
         user = await User.FindAsync(userRepo, badgeDto.Receiver);
         if (user == null) throw new MissingReferenceException("Receiver in badge");
         badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
+        badgeDto.Timestamp = FormatTimestamp(badgeDto.CreatedTime);
 
         return badgeDto;
     }
@@ -62,6 +64,7 @@ public static class BadgeDtoUtil
         user = await User.FindAsync(userRepo, badgeDto.Receiver);
         if (user == null) throw new MissingReferenceException("Receiver in badge");
         badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
+        badgeDto.Timestamp = FormatTimestamp(badgeDto.CreatedTime);
 
         return badgeDto;
     }
@@ -75,8 +78,8 @@ public static class BadgeDtoUtil
         IRepository<MemoryPayload> memoryRepo = unitOfWork.GetRepository<MemoryPayload>();
 
         BadgeDto badgeDto = badge.Type switch {
-            Badge.Types.Question => await GetQuestionBadgeDtoAsync(questionRepo, mapper, badge),
-            Badge.Types.Memory => await GetMemoryBadgeDtoAsync(memoryRepo, mapper, badge),
+            Badge.Types.Question => await _GetQuestionBadgeDtoAsync(questionRepo, mapper, badge),
+            Badge.Types.Memory => await _GetMemoryBadgeDtoAsync(memoryRepo, mapper, badge),
             _ => throw new Exception($"Invalid badge type {badge.Type}")
         };
 
@@ -97,12 +100,13 @@ public static class BadgeDtoUtil
         user = await User.FindAsync(userRepo, badgeDto.Receiver);
         if (user == null) throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
         badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
+        badgeDto.Timestamp = FormatTimestamp(badgeDto.CreatedTime);
 
         return badgeDto;
     }
 
 
-    public static async Task<IList<BadgeDto>> GetBadgeDtoListAsync(
+    public static async Task<IList<BadgeDto>> GetBadgeDtosAsync(
         IUnitOfWork unitOfWork, IMapper mapper, IEnumerable<Badge> badges)
     {
         var badgeDtoList = new List<BadgeDto>();
@@ -114,8 +118,8 @@ public static class BadgeDtoUtil
         foreach (Badge badge in badges)
         {
             BadgeDto badgeDto = badge.Type switch {
-                Badge.Types.Question => await GetQuestionBadgeDtoAsync(questionRepo, mapper, badge),
-                Badge.Types.Memory => await GetMemoryBadgeDtoAsync(memoryRepo, mapper, badge),
+                Badge.Types.Question => await _GetQuestionBadgeDtoAsync(questionRepo, mapper, badge),
+                Badge.Types.Memory => await _GetMemoryBadgeDtoAsync(memoryRepo, mapper, badge),
                 _ => throw new Exception($"Invalid badge type {badge.Type}")
             };
 
@@ -137,6 +141,7 @@ public static class BadgeDtoUtil
             user = await User.FindAsync(userRepo, badgeDto.Receiver);
             if (user == null) throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
             badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
+            badgeDto.Timestamp = FormatTimestamp(badgeDto.CreatedTime);
 
             badgeDtoList.Add(badgeDto);
         }
@@ -145,14 +150,13 @@ public static class BadgeDtoUtil
     }
 
 
-    private static async Task<QuestionBadgeDto> GetQuestionBadgeDtoAsync(IRepository<QuestionPayload> repo,
-        IMapper mapper, Badge badge)
+    private static async Task<QuestionBadgeDto> _GetQuestionBadgeDtoAsync(
+        IRepository<QuestionPayload> repo, IMapper mapper, Badge badge)
     {
         QuestionBadgeDto? badgeDto = mapper.Map<Badge, QuestionBadgeDto>(badge);
 
         QuestionPayload? payload = await QuestionPayload.FindAsync(repo, badge.PayloadId);
-        if (payload == null)
-            throw new MissingReferenceException($"Missing QuestionPayload {badge.PayloadId} in {badge.Id}");
+        if (payload == null) throw new MissingReferenceException($"Missing QuestionPayload {badge.PayloadId} in {badge.Id}");
 
         badgeDto.Payload = mapper.Map<QuestionPayload, QuestionPayloadDto>(payload);
 
@@ -160,8 +164,8 @@ public static class BadgeDtoUtil
     }
 
 
-    private static async Task<MemoryBadgeDto> GetMemoryBadgeDtoAsync(IRepository<MemoryPayload> repo, IMapper mapper,
-        Badge badge)
+    private static async Task<MemoryBadgeDto> _GetMemoryBadgeDtoAsync(
+        IRepository<MemoryPayload> repo, IMapper mapper, Badge badge)
     {
         MemoryBadgeDto? badgeDto = mapper.Map<Badge, MemoryBadgeDto>(badge);
 
@@ -172,5 +176,27 @@ public static class BadgeDtoUtil
         badgeDto.Payload = mapper.Map<MemoryPayload, MemoryPayloadDto>(payload);
 
         return badgeDto;
+    }
+
+
+    private const string TimestampFormat = "yyyy-MM-dd HH:mm:ss.ffffff";
+
+
+    public static string FormatTimestamp(DateTime timestamp)
+    {
+        return timestamp.ToString(TimestampFormat, CultureInfo.InvariantCulture);
+    }
+
+
+    public static DateTime ParseTimestamp(string timestamp)
+    {
+        try
+        {
+            return DateTime.ParseExact(timestamp, TimestampFormat, CultureInfo.InvariantCulture);
+        }
+        catch (Exception ex)
+        {
+            throw new FormatException("Bad time format", ex);
+        }
     }
 }

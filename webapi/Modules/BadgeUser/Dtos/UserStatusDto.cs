@@ -13,7 +13,7 @@ public class UserAlreadyExistsDto : OrdinaryDto
 
 public class UserNotExistsDto : OrdinaryDto
 {
-    public UserNotExistsDto() : base(Errors.UserNotExists, "User does not exists") { }
+    public UserNotExistsDto(string? message = "User does not exists") : base(Errors.UserNotExists, message) { }
 }
 
 public class BadUserJwtDto : OrdinaryDto

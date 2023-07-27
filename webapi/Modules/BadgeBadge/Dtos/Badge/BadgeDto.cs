@@ -25,6 +25,9 @@ public class BadgeDto
     public string? Style { get; set; }
 
     public CategoryBriefDto? Category { get; set; }
+
+    [JsonIgnore] public DateTime CreatedTime { get; set; }
+    public string Timestamp { get; set; }
 }
 
 public class QuestionBadgeDto : BadgeDto

@@ -8,12 +8,12 @@ class UserUtil {
     }
 
     static getPreference() {
-        var user = this.get();
+        const user = this.get();
         return (user == null) ? null : user.preference;
     }
 
     static getInfo() {
-        var user = this.get();
+        const user = this.get();
         return (user == null) ? null : user.info;
     }
 
@@ -22,7 +22,7 @@ class UserUtil {
     }
 
     static savePreference(preference) {
-        var user = this.get();
+        const user = this.get();
         if (user != null) {
             user.preference = preference;
             this.save(user);
@@ -30,7 +30,7 @@ class UserUtil {
     }
 
     static saveInfo(info) {
-        var user = this.get();
+        const user = this.get();
         if (user != null) {
             user.info = info;
             this.save(user);
@@ -48,7 +48,7 @@ class UserUtil {
             return null;
         }
 
-        var dto = await api.get('user/user', { id: uid })
+        const dto = await api.get('user/user', { id: uid });
         if (dto.meta.status == 0) {
             return dto.data;
         } else {
@@ -58,11 +58,13 @@ class UserUtil {
 
     // get flat user
     static flat(user) {
-        return user ? {
-            ...user.info,
-            username: user.username,
-            avatarUrl: user.avatarUrl
-        } : null;
+        return user
+            ? {
+                ...user.info,
+                username: user.username,
+                avatarUrl: user.avatarUrl
+            }
+            : null;
     }
 
     // detailed getter and setter
@@ -81,9 +83,12 @@ class UserUtil {
     // data format
     static getSexText(no) {
         switch (no) {
-            case 1: return "Male";
-            case 2: return "Female";
-            default: return "Unknown";
+        case 1:
+            return 'Male';
+        case 2:
+            return 'Female';
+        default:
+            return 'Unknown';
         }
     }
 
@@ -92,9 +97,12 @@ class UserUtil {
             return 0;
         }
         switch (text.toLowerCase()) {
-            case "male": return 1;
-            case "female": return 2;
-            default: return 0;
+        case 'male':
+            return 1;
+        case 'female':
+            return 2;
+        default:
+            return 0;
         }
     }
 }
@@ -109,47 +117,13 @@ export const useLocalUser = (update = null, callback = null) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        let didCancel = false;
+            let didCancel = false;
 
-        setError(null);
-        (async () => {
-            try {
-                setLoading(true);
-                var dto = await api.get('user/current');
-                if (dto.meta.status != 0) {
-                    throw new Error(dto.meta.message);
-                }
-                setData(dto.data);
-                console.log('🚀 > dto.data:', dto.data);
-            } catch (err) {
-                setError(err);
-                callback && callback();
-            } finally {
-                setLoading(false);
-            }
-        })();
-        return () => {
-            didCancel = true;
-        }
-    }, [update]);
-
-    return { data, setData, loading, error };
-}
-
-export const useUser = (uid, callback = null) => {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        let didCancel = false;
-
-        setError(null);
-        if (uid) {
+            setError(null);
             (async () => {
                 try {
                     setLoading(true);
-                    var dto = await api.get('user/user', { id: uid });
+                    const dto = await api.get('user/current');
                     if (dto.meta.status != 0) {
                         throw new Error(dto.meta.message);
                     }
@@ -162,15 +136,51 @@ export const useUser = (uid, callback = null) => {
                     setLoading(false);
                 }
             })();
-        } else {
-            setData(null);
-            setLoading(false);
-            callback && callback();
-        }
-        return () => {
-            didCancel = true;
-        }
-    }, [uid]);
+            return () => {
+                didCancel = true;
+            };
+        },
+        [update]);
 
     return { data, setData, loading, error };
-}
+};
+
+export const useUser = (uid, callback = null) => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+            let didCancel = false;
+
+            setError(null);
+            if (uid) {
+                (async () => {
+                    try {
+                        setLoading(true);
+                        const dto = await api.get('user/user', { id: uid });
+                        if (dto.meta.status != 0) {
+                            throw new Error(dto.meta.message);
+                        }
+                        setData(dto.data);
+                        console.log('🚀 > dto.data:', dto.data);
+                    } catch (err) {
+                        setError(err);
+                        callback && callback();
+                    } finally {
+                        setLoading(false);
+                    }
+                })();
+            } else {
+                setData(null);
+                setLoading(false);
+                callback && callback();
+            }
+            return () => {
+                didCancel = true;
+            };
+        },
+        [uid]);
+
+    return { data, setData, loading, error };
+};

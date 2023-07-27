@@ -8,7 +8,7 @@ import UserPageMobile from './mobile/UserPageMobile';
 function UserPage() {
     return (
         <div className="user-main">
-            {isMobile ? <UserPageMobile /> : <UserPagePC />}
+            {isMobile ? <UserPageMobile/> : <UserPagePC/>}
         </div>
     );
 }

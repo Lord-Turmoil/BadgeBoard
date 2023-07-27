@@ -24,7 +24,7 @@ const USERNAME_REGEX = new RegExp(/^[ a-z0-9_-]{3,20}$/i);
 
 const CHECK_DELAY = 300;
 const DUP_CHECK_DELAY = 3000;
-var timer = null;    // none state variable should be declared outside...
+var timer = null; // none state variable should be declared outside...
 
 var usernameText = '';
 var passwordText = '';
@@ -33,9 +33,11 @@ var confirmText = '';
 function setUsernameText(str) {
     usernameText = str;
 }
+
 function setPasswordText(str) {
     passwordText = str;
 }
+
 function setConfirmText(str) {
     confirmText = str;
 }
@@ -69,9 +71,9 @@ export default function RegisterPage() {
             timer = null;
         }
         if (good && newUsername.length > 0) {
-            timer = setTimeout(async function () { await checkDuplication(newUsername); }, DUP_CHECK_DELAY);
+            timer = setTimeout(async function() { await checkDuplication(newUsername); }, DUP_CHECK_DELAY);
         }
-    }
+    };
 
     const onPasswordChange = (event) => {
         // it is async, so won't be updated right away
@@ -83,14 +85,14 @@ export default function RegisterPage() {
             setPassword({ ...password, value: newPassword, error: false });
         }
         checkConfirm();
-    }
+    };
 
     const onConfirmChange = (event) => {
         var newConfirm = event.target.value;
         setConfirmText(newConfirm);
         setConfirm({ ...confirm, value: newConfirm, error: false });
         checkConfirm();
-    }
+    };
 
     // Bad async!!!
     const checkConfirm = () => {
@@ -99,7 +101,7 @@ export default function RegisterPage() {
         } else {
             setConfirm({ ...confirm, value: confirmText, error: false, hint: '' });
         }
-    }
+    };
 
     // action button
     const onClickReset = (event) => {
@@ -113,7 +115,7 @@ export default function RegisterPage() {
         passwordRef.current.getElementsByTagName('input')[0].value = '';
         confirmRef.current.getElementsByTagName('input')[0].value = '';
         notifier.info('All cleared!', true);
-    }
+    };
 
     const onClickSubmit = async (event) => {
         if (!isReady()) {
@@ -129,10 +131,11 @@ export default function RegisterPage() {
             setLoading(false);
             return;
         }
-        var dto = await stall(api.post('auth/register', {
-            username: usernameText,
-            password: passwordText
-        }));
+        var dto = await stall(api.post('auth/register',
+            {
+                username: usernameText,
+                password: passwordText
+            }));
         console.log('🚀 > onClickSubmit > dto:', dto);
         notifier.auto(dto.meta);
 
@@ -142,26 +145,27 @@ export default function RegisterPage() {
         }
 
         setLoading(false);
-    }
+    };
 
     // ready
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
-        if (isReady()) {
-            setReady(true);
-        } else {
-            setReady(false);
-        }
-    }, [username, password, confirm]);
+            if (isReady()) {
+                setReady(true);
+            } else {
+                setReady(false);
+            }
+        },
+        [username, password, confirm]);
 
     const checkField = (field) => {
-        return (!field.error) && (field.value.length > 0)
+        return (!field.error) && (field.value.length > 0);
     };
 
     const isReady = () => {
         return (checkField(username) && checkField(password) && checkField(confirm));
-    }
+    };
 
     // user name duplication check
     const checkDuplication = async (name) => {
@@ -172,16 +176,17 @@ export default function RegisterPage() {
         }
         // return operation succeeded or not, not existence
         return true;
-    }
+    };
 
     const isExist = async (name) => {
-        return await api.get('user/exists', {
-            type: 'username',
-            value: name
-        }).then(dto => {
+        return await api.get('user/exists',
+            {
+                type: 'username',
+                value: name
+            }).then(dto => {
             return { status: dto.data, message: dto.meta.message ? 'Username already occupied' : '' };
         });
-    }
+    };
 
     // loading effect
     const [loading, setLoading] = useState(false);
@@ -206,9 +211,11 @@ export default function RegisterPage() {
                                     onChange={_debounce(onUsernameChange, CHECK_DELAY)}
                                     disabled={loading}
                                     sx={{
-                                        id: 'username', ref: usernameRef, label: 'Username',
-                                        icon: <AccountCircleRoundedIcon fontSize='large' />
-                                    }} />
+                                        id: 'username',
+                                        ref: usernameRef,
+                                        label: 'Username',
+                                        icon: <AccountCircleRoundedIcon fontSize='large'/>
+                                    }}/>
                             </div>
                             <div className="input-item">
                                 <PasswordField
@@ -219,7 +226,7 @@ export default function RegisterPage() {
                                     sx={{
                                         id: 'password',
                                         ref: passwordRef
-                                    }} />
+                                    }}/>
                             </div>
                             <div className="input-item">
                                 <PasswordField
@@ -227,17 +234,21 @@ export default function RegisterPage() {
                                     hint={confirm.hint}
                                     onChange={_debounce(onConfirmChange, CHECK_DELAY)}
                                     disabled={loading}
-                                    sx={{ id: 'confirm', ref: confirmRef, label: 'Confirm Password' }} />
+                                    sx={{ id: 'confirm', ref: confirmRef, label: 'Confirm Password' }}/>
                             </div>
                         </div>
 
                         <div className="action-wrapper">
-                            <div className='reset'>
-                                <Button fullWidth variant='contained' onClick={loading ? null : onClickReset}>Reset</Button>
+                            <div className="reset">
+                                <Button fullWidth variant="contained" onClick={loading ? null : onClickReset
+}>Reset</Button>
                             </div>
-                            <div className='submit'>
-                                <Button fullWidth variant='contained' color='success' disabled={!ready || loading} onClick={loading ? null : onClickSubmit}>
-                                    {loading ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : 'Sign up'}
+                            <div className="submit">
+                                <Button fullWidth variant="contained" color="success" disabled={!ready || loading
+} onClick={loading ? null : onClickSubmit}>
+                                    {loading
+                                        ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse/>&nbsp;</span>
+                                        : 'Sign up'}
                                 </Button>
                             </div>
                         </div>

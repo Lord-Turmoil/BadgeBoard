@@ -2,8 +2,8 @@ class ImageUtil {
     static createImage(url) {
         return new Promise((resolve, reject) => {
             const image = new Image();
-            image.addEventListener("load", () => resolve(image));
-            image.addEventListener("error", (error) => reject(error));
+            image.addEventListener('load', () => resolve(image));
+            image.addEventListener('error', (error) => reject(error));
             // image.setAttribute("crossOrigin", "anonymous");
             image.src = url;
         });
@@ -15,8 +15,8 @@ class ImageUtil {
 
     static async getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
         const image = await this.createImage(imageSrc);
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
 
         const maxSize = Math.max(image.width, image.height);
         const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2));
@@ -32,7 +32,7 @@ class ImageUtil {
         ctx.translate(-safeArea / 2, -safeArea / 2);
 
         // draw white background
-        ctx.fillStyle = "white";
+        ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // draw rotated image and store data.

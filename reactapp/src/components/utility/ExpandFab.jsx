@@ -8,7 +8,7 @@ export default function ExpandFab({ disabled = false, open = false, onClick = nu
             <ExpandMoreRounded fontSize="large" sx={{
                 transition: 'transform 0.3s',
                 transform: open ? 'rotate(0deg)' : 'rotate(180deg)'
-            }} />
+            }}/>
         </Fab>
     );
 }

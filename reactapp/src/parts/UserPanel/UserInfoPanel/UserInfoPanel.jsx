@@ -49,12 +49,12 @@ export default function UserInfoPanel({
             return false;
         }
         return visitor.account.id == user.account.id;
-    }
+    };
 
     const onUserChangeInner = (data) => {
         user && onUserChange && onUserChange(data);
         visitor && onVisitorChange && onVisitorChange(data);
-    }
+    };
 
     // editing
     const [enableEdit, setEnableEdit] = useState(false);
@@ -64,10 +64,10 @@ export default function UserInfoPanel({
         setShadow(flat);
         setSex(UserUtil.getSexText(flat.sex));
         setEnableEdit(true);
-    }
+    };
     const turnOffEdit = () => {
         setEnableEdit(false);
-    }
+    };
 
     useEffect(() => {
         if (disabled) {
@@ -81,7 +81,7 @@ export default function UserInfoPanel({
 
     useEffect(() => {
         if (user && (shadow == null)) {
-            var flat = UserUtil.flat(user);
+            const flat = UserUtil.flat(user);
             setShadow(flat);
             setSex(UserUtil.getSexText(flat.sex));
             setAvatarKey(avatarKey + 1); // refresh avatar
@@ -101,15 +101,15 @@ export default function UserInfoPanel({
 
     const onMottoChange = (event) => {
         setShadow({ ...shadow, motto: event.target.value.trim().replace(/[\r\n]/g, '') });
-    }
+    };
 
     const onUsernameChange = (event) => {
         setShadow({ ...shadow, username: event.target.value.trim().replace(/[\r\n]/g, '') });
-    }
+    };
 
     // error handling
-    const [mottoError, setMottoError] = useState({ err: false, hint: "" });
-    const [usernameError, setUsernameError] = useState({ err: false, hint: "" });
+    const [mottoError, setMottoError] = useState({ err: false, hint: '' });
+    const [usernameError, setUsernameError] = useState({ err: false, hint: '' });
 
     const validateMotto = (str) => {
         if (str == null) {
@@ -127,7 +127,7 @@ export default function UserInfoPanel({
             setMottoError({ ...mottoError, err: false });
             return true;
         }
-    }
+    };
 
     const validateUsername = (str) => {
         if (str == null) {
@@ -143,12 +143,12 @@ export default function UserInfoPanel({
             setUsernameError({ ...usernameError, err: false });
             return true;
         }
-    }
+    };
 
     // submitting
     const isReady = () => {
         return !(mottoError.err || usernameError.err);
-    }
+    };
 
     const [onSubmitting, setOnSubmitting] = useState(false);
     const onClickSubmit = async (event) => {
@@ -159,11 +159,11 @@ export default function UserInfoPanel({
         setOnSubmitting(true);
         var status = await stall(submitAll());
         if (status) {
-            notifier.success("Profile updated!");
+            notifier.success('Profile updated!');
             turnOffEdit();
         }
         setOnSubmitting(false);
-    }
+    };
 
     const submitAll = async () => {
         var ret = true;
@@ -174,74 +174,74 @@ export default function UserInfoPanel({
             ret = false;
         }
         return ret;
-    }
+    };
 
     const submitUserInfo = async () => {
         if (isEqual(user.info, { motto: shadow.motto, birthday: shadow.birthday, sex: shadow.sex })) {
             return true;
         }
 
-        var dto = await api.post("user/info", {
+        var dto = await api.post('user/info', {
             motto: (shadow.motto == user.info.motto) ? null : shadow.motto,
             birthday: (shadow.birthday == user.info.motto) ? null : shadow.birthday,
             sex: (shadow.sex == user.info.sex) ? null : shadow.sex
         });
-        console.log("🚀 > submitUserInfo > dto :", dto);
+        console.log('🚀 > submitUserInfo > dto :', dto);
         if (dto.meta.status != 0) {
             notifier.error(dto.meta.message);
             return false;
         }
         setShadow({ ...shadow, ...dto.data });
-        onUserChangeInner({ key: "info", value: dto.data });
+        onUserChangeInner({ key: 'info', value: dto.data });
         return true;
-    }
+    };
 
     const submitUsername = async () => {
         if (shadow.username == user.username) {
             return true;
         }
 
-        var dto = await api.post("user/username", { username: shadow.username });
-        console.log("🚀 > submitUsername > dto:", dto);
+        var dto = await api.post('user/username', { username: shadow.username });
+        console.log('🚀 > submitUsername > dto:', dto);
         if (dto.meta.status != 0) {
             notifier.error(dto.meta.message);
             return false;
         }
         setShadow({ ...shadow, username: dto.data });
-        onUserChangeInner({ key: "username", value: dto.data });
+        onUserChangeInner({ key: 'username', value: dto.data });
         return true;
-    }
+    };
 
     // data format and rendering
     const formatBirthday = (day) => {
         if (day == null) {
             return null;
-        } else if (day == "") {
+        } else if (day == '') {
             return moment();
         }
-        return moment(day, "YYYY-MM-DD");
-    }
+        return moment(day, 'YYYY-MM-DD');
+    };
 
     const renderBirthday = (str) => {
         if (str == null || str.length == 0) {
-            return <span style={{ color: "rgba(0, 0, 0, 0.5)" }}>????-??-??</span>
+            return <span style={{ color: 'rgba(0, 0, 0, 0.5)' }}>????-??-??</span>;
         } else {
             return str;
         }
-    }
+    };
 
     const renderMotto = (str) => {
         if (str == null || str.length == 0) {
-            return <span style={{ color: "rgba(0, 0, 0, 0.5)" }}>Nothing to say...</span>
+            return <span style={{ color: 'rgba(0, 0, 0, 0.5)' }}>Nothing to say...</span>;
         } else {
             return str;
         }
-    }
+    };
 
     // avatar
     const onAvatarChange = (avatarUrl) => {
-        onUserChangeInner({ key: "avatarUrl", data: avatarUrl });
-    }
+        onUserChangeInner({ key: 'avatarUrl', data: avatarUrl });
+    };
 
     // click away
     var canClose = false;
@@ -251,7 +251,7 @@ export default function UserInfoPanel({
         } else {
             canClose = true;
         }
-    }
+    };
 
     return (
         <ClickAwayListener onClickAway={onClickAway}>
@@ -263,71 +263,69 @@ export default function UserInfoPanel({
                             src={shadow && shadow.avatarUrl}
                             disabled={!enableEdit}
                             onAvatarChange={onAvatarChange}
-                            key={avatarKey}
-                        />
+                            key={avatarKey}/>
                     </div>
                     <div className="info-wrapper">
                         <SubtleInput
-                            cls='username'
-                            sx={enableEdit ? { marginTop: "15px" } : null}
+                            cls="username"
+                            sx={enableEdit ? { marginTop: '15px' } : null}
                             error={usernameError.err}
                             helperText={usernameError.hint}
-                            placeholder='Username'
+                            placeholder="Username"
                             enabled={enableEdit}
                             defaultValue={shadow && shadow.username}
                             onChange={onUsernameChange}
-                            variant='outlined'
-                            label='Username'
-                        />
-                        <Divider sx={{ height: "1px", display: enableEdit ? "none" : "block" }} />
+                            variant="outlined"
+                            label="Username"/>
+                        <Divider sx={{ height: '1px', display: enableEdit ? 'none' : 'block' }}/>
                         <div className="info">
                             {enableEdit ?
                                 <div className="birthday">
                                     <LocalizationProvider dateAdapter={AdapterMoment}>
                                         <MobileDatePicker
                                             disableFuture
-                                            sx={enableEdit ? { marginTop: "15px" } : null}
+                                            sx={enableEdit ? { marginTop: '15px' } : null}
                                             readOnly={!enableEdit}
                                             value={formatBirthday(shadow ? shadow.birthday : null)}
-                                            onChange={(newValue) => { setShadow({ ...shadow, birthday: newValue.format("YYYY-MM-DD") }) }}
+                                            onChange={(newValue) => { setShadow({ ...shadow, birthday: newValue.format('YYYY-MM-DD') }) }}
                                             label="Birthday" />
                                     </LocalizationProvider>
                                 </div>
                                 :
-                                <div className='birthday'>
+                                <div className="birthday">
                                     <CakeRoundedIcon sx={{ verticalAlign: 'bottom' }} />{renderBirthday(shadow && shadow.birthday)}
                                 </div>
                             }
-                            <div className="motto" style={{ display: enableEdit ? "none" : "block" }}>
-                                <DriveFileRenameOutlineRoundedIcon sx={{ verticalAlign: 'bottom' }} />{renderMotto(shadow && shadow.motto)}
+                            <div className="motto" style={{ display: enableEdit ? 'none' : 'block' }}>
+                                <DriveFileRenameOutlineRoundedIcon sx={{ verticalAlign: 'bottom' }}/>{renderMotto(shadow && shadow.motto)}
                             </div>
                         </div>
-                        <div style={{ display: enableEdit ? "block" : "none" }}>
-                            <FormControl fullWidth sx={enableEdit ? { marginTop: "5px" } : null}>
+                        <div style={{ display: enableEdit ? 'block' : 'none' }}>
+                            <FormControl fullWidth sx={enableEdit ? { marginTop: '5px' } : null}>
                                 <FormLabel sx={{ fontSize: '0.8rem', paddingLeft: '14px' }}>Gender</FormLabel>
                                 <RadioGroup row sx={{ justifyContent: 'center' }} value={sex} onChange={(event) => { setSex(event.target.value); }}>
-                                    <FormControlLabel value="Unknown" control={<Radio color='error' />} label={<QuestionMarkRoundedIcon color='error' />} />
-                                    <FormControlLabel value="Male" control={<Radio color='primary' />} label={<MaleRoundedIcon color='primary' />} />
-                                    <FormControlLabel sx={{ marginRight: '0' }} value="Female" control={<Radio color='secondary' />} label={<FemaleRoundedIcon color='secondary' />} />
+                                    <FormControlLabel value="Unknown" control={<Radio color="error" />} label={<QuestionMarkRoundedIcon color="error" />}/>
+                                    <FormControlLabel value="Male" control={<Radio color="primary" />} label={<MaleRoundedIcon color="primary" />}/>
+                                    <FormControlLabel sx={{ marginRight: '0' }} value="Female" control={<Radio color="secondary" />} label={<FemaleRoundedIcon color="secondary" />}/>
                                 </RadioGroup>
                             </FormControl>
                         </div>
                     </div>
                 </div>
-                <Divider />
+                <Divider/>
                 {enableEdit ?
-                    <div style={{ padding: "5px 10px" }}>
+                    <div style={{ padding: '5px 10px' }}>
                         <TextField
                             fullWidth
-                            sx={{ marginTop: "15px" }}
+                            sx={{ marginTop: '15px' }}
                             error={mottoError.err}
-                            helperText={mottoError.err ? mottoError.hint : ""}
-                            placeholder='Personalized signature'
+                            helperText={mottoError.err ? mottoError.hint : ''}
+                            placeholder="Personalized signature"
                             multiline
                             defaultValue={shadow && shadow.motto}
                             onChange={onMottoChange}
-                            variant='outlined'
-                            label='Personalized Signature'
+                            variant="outlined"
+                            label="Personalized Signature"
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position='end'>
@@ -342,11 +340,11 @@ export default function UserInfoPanel({
                         {enableEdit ?
                             <Grid container spacing={2}>
                                 <Grid item xs={6}>
-                                    <Button fullWidth variant='contained' color='error' onClick={turnOffEdit}>Cancel</Button>
+                                    <Button fullWidth variant="contained" color="error" onClick={turnOffEdit}>Cancel</Button>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Button disabled={!isReady() || onSubmitting} fullWidth variant='contained' color='success' onClick={onClickSubmit}>
-                                        {onSubmitting ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : "Done"}
+                                    <Button disabled={!isReady() || onSubmitting} fullWidth variant="contained" color="success" onClick={onClickSubmit}>
+                                        {onSubmitting ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : 'Done'}
                                     </Button>
                                 </Grid>
                             </Grid>

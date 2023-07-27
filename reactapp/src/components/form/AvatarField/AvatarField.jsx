@@ -1,16 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
-import { Avatar } from "@mui/material";
+import { Avatar } from '@mui/material';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 
-import notifier from "~/services/notifier";
-import AvatarUtil from "~/services/user/AvatarUtil";
+import notifier from '~/services/notifier';
+import AvatarUtil from '~/services/user/AvatarUtil';
 import ImageUtil from '~/services/image/ImageUtil'
-import PopupModal from "~/components/layout/PopupModal";
-import ImageCrop from "~/components/utility/ImageCrop/ImageCrop";
+import PopupModal from '~/components/layout/PopupModal';
+import ImageCrop from '~/components/utility/ImageCrop/ImageCrop';
 
 import './AvatarField.css';
-import api from "~/services/api";
+import api from '~/services/api';
 
 export default function AvatarField({
     size = 100,
@@ -31,7 +31,7 @@ export default function AvatarField({
         input.accept = 'image/*';
         input.addEventListener('change', handleFileSelection);
         input.click();
-    }
+    };
 
     const handleFileSelection = async (event) => {
         event.preventDefault();
@@ -43,7 +43,7 @@ export default function AvatarField({
                 file = event.target.files[0];
             }
             if (file.size / 1024 / 1024 > 3.0) {
-                notifier.error("Avatar should be less than 3 MB");
+                notifier.error('Avatar should be less than 3 MB');
                 return;
             }
             const reader = new FileReader();
@@ -57,35 +57,36 @@ export default function AvatarField({
             };
             reader.readAsDataURL(file);
         } catch (error) {
-            console.log("🚀 > handleFileSelect > error:", error);
+            console.log('🚀 > handleFileSelect > error:', error);
         }
-    }
+    };
 
     // cropped area (in pixel integer)
-    const [croppedArea, setCroppedArea] = useState("");
+    const [croppedArea, setCroppedArea] = useState('');
 
     const getCroppedImage = useCallback(async () => {
-        try {
-            return await ImageUtil.getCroppedImg(imageData, croppedArea, 0);
-        } catch (error) {
-            notifier.error(error.message);
-            console.error("🚀 > getCroppedImage > error:", error);
-            return null;
-        }
-    }, [croppedArea, imageData]);
+            try {
+                return await ImageUtil.getCroppedImg(imageData, croppedArea, 0);
+            } catch (error) {
+                notifier.error(error.message);
+                console.error('🚀 > getCroppedImage > error:', error);
+                return null;
+            }
+        },
+        [croppedArea, imageData]);
 
     // cancellation and confirmation
     const onCancelSelection = () => {
         setImageData(oldImageData ?? src);
         setShowDialog(false);
-    }
+    };
 
     const onConfirmSelection = async () => {
         setShowDialog(false);
 
         const data = await getCroppedImage();
         if (data == null) {
-            notifier.error("Failed to crop avatar");
+            notifier.error('Failed to crop avatar');
             return;
         }
         setImageData(data);
@@ -93,13 +94,14 @@ export default function AvatarField({
         if (avatarUrl) {
             onAvatarChange && onAvatarChange(avatarUrl);
         }
-    }
+    };
 
     const uploadAvatar = async (data) => {
-        var dto = await api.post("user/avatar", {
-            extension: "jpeg",
-            data: data
-        });
+        var dto = await api.post('user/avatar',
+            {
+                extension: 'jpeg',
+                data: data
+            });
         notifier.auto(dto.meta);
 
         if (dto.meta.status != 0) {
@@ -108,14 +110,14 @@ export default function AvatarField({
         }
 
         return dto.data;
-    }
+    };
 
     return (
         <div className="AvatarField">
-            <Avatar sx={{ width: size, height: size }} src={AvatarUtil.getUrl(imageData)} alt="Avatar" />
-            <div className={`AvatarField__mask${disabled ? "" : " AvatarField__active"}`}>
+            <Avatar sx={{ width: size, height: size }} src={AvatarUtil.getUrl(imageData)} alt="Avatar"/>
+            <div className={`AvatarField__mask${disabled ? '' : ' AvatarField__active'}`}>
                 <div className="AvatarField__upload" onClick={disabled ? null : onClickUpload}>
-                    <CameraAltRoundedIcon />
+                    <CameraAltRoundedIcon/>
                 </div>
             </div>
             <PopupModal
@@ -123,13 +125,11 @@ export default function AvatarField({
                 title="Edit Avatar"
                 onClose={onCancelSelection}
                 onCancel={onCancelSelection}
-                onConfirm={onConfirmSelection}
-            >
+                onConfirm={onConfirmSelection}>
                 <ImageCrop
                     image={AvatarUtil.getUrl(imageData)}
                     croppedArea={croppedArea}
-                    onCroppedAreaChange={setCroppedArea}
-                />
+                    onCroppedAreaChange={setCroppedArea}/>
             </PopupModal>
         </div>
     );

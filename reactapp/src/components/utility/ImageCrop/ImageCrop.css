@@ -1,25 +1,20 @@
 .ImageCrop .ImageCrop__cropper {
+    /* ReSharper disable once CssNotResolved */
+    aspect-ratio: 1/1;
+    background-color: rgba(0, 0, 0, 0.2);
     position: relative;
     width: 100%;
-    /* ReSharper disable once CssNotResolved */
-    aspect-ratio: 1 / 1;
-    background-color: rgba(0, 0, 0, 0.2);
 }
 
 /* override default styles */
-.ImageCrop .ImageCrop__cropper .reactEasyCrop_CropArea {
-    box-shadow: none;
-}
+
+.ImageCrop .ImageCrop__cropper .reactEasyCrop_CropArea { box-shadow: none; }
 
 .ImageCrop .ImageCrop__cropper .reactEasyCrop_CropAreaGrid {
     border: 1px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.3) inset;
 }
 
-.ImageCrop .ImageCrop__cropper .reactEasyCrop_CropAreaGrid::before {
-    border: 1px solid rgba(255, 255, 255, 0.8);
-}
+.ImageCrop .ImageCrop__cropper .reactEasyCrop_CropAreaGrid::before { border: 1px solid rgba(255, 255, 255, 0.8); }
 
-.ImageCrop .ImageCrop__cropper .reactEasyCrop_CropAreaGrid::after {
-    border: 1px solid rgba(255, 255, 255, 0.8);
-}
+.ImageCrop .ImageCrop__cropper .reactEasyCrop_CropAreaGrid::after { border: 1px solid rgba(255, 255, 255, 0.8); }

@@ -1,16 +1,16 @@
-import { ClickAwayListener, Grow, MenuList, Paper, Popper } from "@mui/material";
+import { ClickAwayListener, Grow, MenuList, Paper, Popper } from '@mui/material';
 
 export default function PopperMenu({
     open,
     onClose = null,
     anchorEl,
-    placement = "bottom-start",
-    transformOrigin = "left top",
+    placement = 'bottom-start',
+    transformOrigin = 'left top',
     children
 }) {
     const handleClickAway = () => {
         onClose && onClose();
-    }
+    };
 
     const handleListKeyDown = (event) => {
         if (event.key === 'Tab') {
@@ -19,7 +19,7 @@ export default function PopperMenu({
         } else if (event.key === 'Escape') {
             onClose && onClose();
         }
-    }
+    };
 
     return (
         <Popper
@@ -27,13 +27,11 @@ export default function PopperMenu({
             anchorEl={anchorEl}
             placement={placement}
             transition
-            disablePortal
-        >
+            disablePortal>
             {({ TransitionProps, placement }) => (
                 <Grow
                     {...TransitionProps}
-                    style={{ transformOrigin: transformOrigin }}
-                >
+                    style={{ transformOrigin: transformOrigin }}>
                     <Paper>
                         <ClickAwayListener onClickAway={handleClickAway}>
                             <MenuList autoFocusItem={open} onKeyDown={handleListKeyDown}>

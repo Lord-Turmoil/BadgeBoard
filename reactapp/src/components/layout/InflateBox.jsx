@@ -12,10 +12,11 @@ export default function InflateBox({ children, overflow=false, sx={} }) {
     }
 
     useEffect(() => {
-        onResize();
-        window.removeEventListener('resize', onResize);
-        window.addEventListener('resize', onResize);
-    }, []);
+            onResize();
+            window.removeEventListener('resize', onResize);
+            window.addEventListener('resize', onResize);
+        },
+        []);
 
     return (
         <div className="Inflate_Box" style={{ ...sx, height: height, minHeight: minHeight }}>

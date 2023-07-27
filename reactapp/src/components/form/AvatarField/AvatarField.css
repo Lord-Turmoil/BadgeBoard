@@ -1,32 +1,28 @@
 .AvatarField {
-    position: relative;
     border-radius: 50%;
     overflow: hidden;
+    position: relative;
 }
 
 .AvatarField .AvatarField__mask {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 1;
+    align-items: center;
     background-color: rgba(0, 0, 0, 0.3);
+    bottom: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    left: 0;
     opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
     transition: opacity 0.3s;
+    z-index: 1;
 }
 
-.AvatarField .AvatarField__mask.AvatarField__active {
-    cursor: pointer;
-}
+.AvatarField .AvatarField__mask.AvatarField__active { cursor: pointer; }
 
-.AvatarField .AvatarField__mask.AvatarField__active:hover {
-    opacity: 1.0;
-}
+.AvatarField .AvatarField__mask.AvatarField__active:hover { opacity: 1.0; }
 
 .AvatarField .AvatarField__mask svg {
     color: whitesmoke;

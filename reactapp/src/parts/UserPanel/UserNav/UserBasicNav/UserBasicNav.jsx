@@ -28,62 +28,62 @@ export default function UserBasicNav({
 
     const onClickAvatar = (event) => {
         setMenuAnchor(event.currentTarget);
-    }
+    };
 
     const onMenuClose = () => {
         setMenuAnchor(null);
-    }
+    };
 
     const onClickLogout = async () => {
-        var dto = await api.post("auth/token/revoke");
-        notifier.auto(dto.meta, "See you later then~");
+        var dto = await api.post('auth/token/revoke');
+        notifier.auto(dto.meta, 'See you later then~');
         UserUtil.drop();
         api.dropToken();
         onMenuClose();
         setTimeout(() => {
-            window.location.reload(false);
-        }, 1000);
-    }
+                window.location.reload(false);
+            },
+            1000);
+    };
 
     const onClickRefresh = async () => {
-        var dto = await api.post("auth/token/refresh");
+        var dto = await api.post('auth/token/refresh');
         notifier.auto(dto.meta);
         onMenuClose();
-    }
+    };
 
     return (
         <div className="UserNav UserBasicNav">
-            <Button sx={{ borderRadius: "50%" }} onClick={onClickAvatar}>
+            <Button sx={{ borderRadius: '50%' }} onClick={onClickAvatar}>
                 <Avatar
-                    sx={{ width: "50px", height: "50px" }}
-                    src={AvatarUtil.getUrlFromUser(user)}
-                />
+                    sx={{ width: '50px', height: '50px' }}
+                    src={AvatarUtil.getUrlFromUser(user)}/>
             </Button>
             <PopperMenu anchorEl={menuAnchor} open={onlineOpen} onClose={onMenuClose} transformOrigin="right top">
-                <MenuItem onClick={() => { navigate("/") }}>
+                <MenuItem onClick={() => { navigate('/') }}>
                     <ListItemIcon>
-                        <HomeRoundedIcon />
+                        <HomeRoundedIcon/>
                     </ListItemIcon>
                     <ListItemText>Home</ListItemText>
                 </MenuItem>
-                <Divider />
+                <Divider/>
                 <MenuItem onClick={onClickLogout}>
                     <ListItemIcon>
-                        <LogoutRoundedIcon />
+                        <LogoutRoundedIcon/>
                     </ListItemIcon>
                     <ListItemText>Logout</ListItemText>
                 </MenuItem>
             </PopperMenu>
             <PopperMenu anchorEl={menuAnchor} open={offlineOpen} onClose={onMenuClose} transformOrigin="right top">
-                <MenuItem onClick={() => { navigate("/register"); }}>
+                <MenuItem onClick={() => { navigate('/register'); }}>
                     <ListItemIcon>
-                        <AppRegistrationRounded />
+                        <AppRegistrationRounded/>
                     </ListItemIcon>
                     <ListItemText>Register</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={() => { navigate("/login"); }}>
+                <MenuItem onClick={() => { navigate('/login'); }}>
                     <ListItemIcon>
-                        <LoginRoundedIcon />
+                        <LoginRoundedIcon/>
                     </ListItemIcon>
                     <ListItemText>Login</ListItemText>
                 </MenuItem>

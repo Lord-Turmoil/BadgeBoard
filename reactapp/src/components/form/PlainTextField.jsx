@@ -16,11 +16,10 @@ export default function PlainTextField({ sx, error, hint, disabled, onChange }) 
                 <Input
                     id={props.id}
                     ref={props.ref}
-                    type='text'
+                    type="text"
                     label={props.label ? props.label : 'Text'}
                     onChange={onChange}
-                    disabled={disabled}
-                />
+                    disabled={disabled}/>
                 <FormHelperText style={{
                     position: 'absolute',
                     top: '95%',

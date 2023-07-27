@@ -54,7 +54,7 @@ export default function LoginPage() {
         } else {
             setUsername({ ...username, value: newUsername, error: false });
         }
-    }
+    };
 
     const onPasswordChange = (event) => {
         // it is async, so won't be updated right away
@@ -65,7 +65,7 @@ export default function LoginPage() {
         } else {
             setPassword({ ...password, value: newPassword, error: false });
         }
-    }
+    };
 
     // action button
     const onClickReset = (event) => {
@@ -76,7 +76,7 @@ export default function LoginPage() {
         usernameRef.current.getElementsByTagName('input')[0].value = '';
         passwordRef.current.getElementsByTagName('input')[0].value = '';
         notifier.info('All cleared!😀', true);
-    }
+    };
 
     const onClickSubmit = async (event) => {
         if (!isReady()) {
@@ -85,10 +85,11 @@ export default function LoginPage() {
 
         setLoading(true);
 
-        var dto = await stall(api.post('auth/login', {
-            username: usernameText,
-            password: passwordText
-        }));
+        var dto = await stall(api.post('auth/login',
+            {
+                username: usernameText,
+                password: passwordText
+            }));
         console.log('🚀 > onClickSubmit > dto:', dto);
         notifier.auto(dto.meta);
 
@@ -99,7 +100,7 @@ export default function LoginPage() {
         }
 
         setLoading(false);
-    }
+    };
 
     const login = async () => {
         var uid = UserUtil.getUid();
@@ -108,37 +109,39 @@ export default function LoginPage() {
             return;
         }
 
-        var dto = await api.post('auth/token/get', {
-            id: uid,
-            password: passwordText
-        });
+        var dto = await api.post('auth/token/get',
+            {
+                id: uid,
+                password: passwordText
+            });
         console.log('🚀 > login > dto:', dto);
         notifier.auto(dto.meta);
 
         if (dto.meta.status == 0) {
             api.saveToken(dto.data.token);
-            setTimeout(() => { navigate('/user/' + uid); }, 1000);
+            setTimeout(() => { navigate(`/user/${uid}`); }, 1000);
         }
-    }
+    };
 
     // ready
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
-        if (isReady()) {
-            setReady(true);
-        } else {
-            setReady(false);
-        }
-    }, [username, password]);
+            if (isReady()) {
+                setReady(true);
+            } else {
+                setReady(false);
+            }
+        },
+        [username, password]);
 
     const checkField = (field) => {
-        return (!field.error) && (field.value.length > 0)
+        return (!field.error) && (field.value.length > 0);
     };
 
     const isReady = () => {
         return (checkField(username) && checkField(password));
-    }
+    };
 
     // loading effect
     const [loading, setLoading] = useState(false);
@@ -163,9 +166,11 @@ export default function LoginPage() {
                                     onChange={_debounce(onUsernameChange, CHECK_DELAY)}
                                     disabled={loading}
                                     sx={{
-                                        id: 'username', ref: usernameRef, label: 'Username',
-                                        icon: <AccountCircleRoundedIcon fontSize='large' />
-                                    }} />
+                                        id: 'username',
+                                        ref: usernameRef,
+                                        label: 'Username',
+                                        icon: <AccountCircleRoundedIcon fontSize='large'/>
+                                    }}/>
                             </div>
                             <div className="input-item">
                                 <PasswordField
@@ -176,17 +181,21 @@ export default function LoginPage() {
                                     sx={{
                                         id: 'password',
                                         ref: passwordRef
-                                    }} />
+                                    }}/>
                             </div>
                         </div>
 
                         <div className="action-wrapper">
-                            <div className='reset'>
-                                <Button fullWidth variant='contained' disabled={loading} onClick={onClickReset}>Reset</Button>
+                            <div className="reset">
+                                <Button fullWidth variant="contained" disabled={loading} onClick={onClickReset
+}>Reset</Button>
                             </div>
-                            <div className='submit'>
-                                <Button fullWidth variant='contained' color='success' disabled={!ready || loading} onClick={loading ? null : onClickSubmit}>
-                                    {loading ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse />&nbsp;</span> : 'Sign in'}
+                            <div className="submit">
+                                <Button fullWidth variant="contained" color="success" disabled={!ready || loading
+} onClick={loading ? null : onClickSubmit}>
+                                    {loading
+                                        ? <span>&nbsp;<FontAwesomeIcon icon={faSpinner} spinPulse/>&nbsp;</span>
+                                        : 'Sign in'}
                                 </Button>
                             </div>
                         </div>

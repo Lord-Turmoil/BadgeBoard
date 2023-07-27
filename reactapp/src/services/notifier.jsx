@@ -14,33 +14,33 @@ const EMOJI_GOOD = ['🙂', '🙂', '😌', '🤠', '🤪', '😝', '😜', '�
 const EMOJI_BAD = ['😶', '😥', '😫', '😓', '😣', '😖', '😩', '😰', '😱', '😵', '😵‍💫', '🥴', '🤕', '🤒'];
 
 function getRandom(arr) {
-    return arr[Math.min(Math.floor(Math.random() * arr.length), arr.length)]
+    return arr[Math.min(Math.floor(Math.random() * arr.length), arr.length)];
 }
 
 class Notifier {
     success(msg, dismiss = false, wait = NOTIFY_WAIT) {
-        var a = alertify.notify(msg + getRandom(EMOJI_HAPPY), 'c-success', wait);
+        const a = alertify.notify(msg + getRandom(EMOJI_HAPPY), 'c-success', wait);
         if (dismiss) {
             a.dismissOthers();
         }
     }
 
     info(msg, dismiss = false, wait = NOTIFY_WAIT) {
-        var a = alertify.notify(msg + getRandom(EMOJI_GOOD), 'c-info', wait);
+        const a = alertify.notify(msg + getRandom(EMOJI_GOOD), 'c-info', wait);
         if (dismiss) {
             a.dismissOthers();
         }
     }
 
     warning(msg, dismiss = false, wait = NOTIFY_WAIT) {
-        var a = alertify.notify(msg, 'c-warning', wait);
+        const a = alertify.notify(msg, 'c-warning', wait);
         if (dismiss) {
             a.dismissOthers();
         }
     }
 
     error(msg, dismiss = false, wait = NOTIFY_WAIT) {
-        var a = alertify.notify(msg + getRandom(EMOJI_BAD), 'c-error', wait);
+        const a = alertify.notify(msg + getRandom(EMOJI_BAD), 'c-error', wait);
         if (dismiss) {
             a.dismissOthers();
         }

@@ -9,7 +9,7 @@ class Api {
         });
         this._api.interceptors.request.use(config => {
             config.headers.Authorization = window.localStorage.getItem('token');
-            return config
+            return config;
         });
     }
 
@@ -22,19 +22,19 @@ class Api {
             return {
                 meta: {
                     status: 101,
-                    message: "Connection error, try again later"
+                    message: 'Connection error, try again later'
                 },
                 data: {
                     name: err.name,
                     message: err.message
                 }
-            }
+            };
         }
         const response = err.response;
-        var ret = { meta: { status: response.status ?? 66, message: err.message }, data: null }
+        const ret = { meta: { status: response.status ?? 66, message: err.message }, data: null };
 
         // no data
-        if (!response.data || response.data == "") {
+        if (!response.data || response.data == '') {
             return ret;
         }
 
@@ -48,7 +48,7 @@ class Api {
                     message: data.title
                 },
                 data: null
-            }
+            };
         }
     }
 
@@ -84,7 +84,7 @@ class Api {
 
         if (await this.refresh() == null) {
             // failed to refresh
-            return dto
+            return dto;
         }
 
         return await this._post(url, body);
@@ -113,7 +113,7 @@ class Api {
     }
 
     saveToken(token) {
-        window.localStorage.setItem('token', 'bearer ' + token);
+        window.localStorage.setItem('token', `bearer ${token}`);
     }
 
     dropToken() {

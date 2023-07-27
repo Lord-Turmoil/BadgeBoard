@@ -37,14 +37,13 @@ export default function PasswordField({ sx, error, disabled, hint, onChange }) {
                                 onClick={handleClickShowPassword}
                                 onMouseDown={handleMouseDownPassword}
                                 edge="end">
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                {showPassword ? <VisibilityOff/> : <Visibility/>}
                             </IconButton>
                         </InputAdornment>
                     }
                     label={props.label ? props.label : 'Password'}
                     onChange={onChange}
-                    disabled={disabled}
-                />
+                    disabled={disabled}/>
                 <FormHelperText style={{
                     position: 'absolute',
                     top: '95%',

@@ -4,28 +4,29 @@ import { useEffect, useRef, useState } from 'react';
 export default function SubtleInput({
     sx = null,
     cls = '',
-    placeholder = "",
+    placeholder = '',
     error = false,
-    helperText = "",
+    helperText = '',
     multiline = false,
     defaultValue = '',
     enabled = true,
     onChange = null,
-    variant = "standard",
+    variant = 'standard',
     label = null
 }) {
-    let inputRef = useRef();
+    const inputRef = useRef();
     const [text, setText] = useState(defaultValue);
 
     useEffect(() => {
-        if (enabled) {
-            if (multiline) {
-                inputRef.current.getElementsByTagName("textarea")[0].value = defaultValue;
-            } else {
-                inputRef.current.getElementsByTagName("input")[0].value = defaultValue;
+            if (enabled) {
+                if (multiline) {
+                    inputRef.current.getElementsByTagName('textarea')[0].value = defaultValue;
+                } else {
+                    inputRef.current.getElementsByTagName('input')[0].value = defaultValue;
+                }
             }
-        }
-    }, [enabled]);
+        },
+        [enabled]);
 
     return (
         <div className={`Subtle_Input ${cls ? cls : ''}`} style={{ ...sx }}>
@@ -34,14 +35,14 @@ export default function SubtleInput({
                 fullWidth
                 error={error}
                 placeholder={placeholder}
-                helperText={error ? helperText : ""}
+                helperText={error ? helperText : ''}
                 multiline={multiline}
                 maxRows={5}
                 ref={inputRef}
                 variant={variant}
                 label={label}
                 sx={enabled ? null : { display: 'none' }}
-                onChange={onChange} />
+                onChange={onChange}/>
         </div>
     );
 }

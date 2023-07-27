@@ -10,10 +10,8 @@ using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
-using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
-using Microsoft.VisualBasic;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services;
 
@@ -82,6 +80,7 @@ public class BrowseService : BaseService, IBrowseService
         return new GoodResponse(new GoodWithDataDto(data));
     }
 
+
     public async Task<ApiResponse> GetBadgesOfCategory(BrowseCategoryBadgeDto dto)
     {
         if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
@@ -122,17 +121,14 @@ public class BrowseService : BaseService, IBrowseService
         var dbCategoryId = category?.Id;
         Expression<Func<Badge, bool>> predicate;
         if (initiator.IsAdmin || category == null || category.UserId == initiator.Id)
-        {
             predicate = x => x.CategoryId == dbCategoryId;
-        }
         else
-        {
             predicate = x => x.CategoryId == dbCategoryId && x.IsPublic;
-        }
         BrowseBadgeSuccessDto data = await _GetBadgeDtosData(predicate);
 
         return new GoodResponse(new GoodWithDataDto(data));
     }
+
 
     private async Task<BrowseBadgeSuccessDto> _GetBadgeDtosData(Expression<Func<Badge, bool>> predicate)
     {

@@ -14,6 +14,9 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 
 public static class BadgeDtoUtil
 {
+    private const string TimestampFormat = "yyyy-MM-dd HH:mm:ss.ffffff";
+
+
     public static async Task<BadgeDto> GetQuestionBadgeDtoAsync(
         IUnitOfWork unitOfWork, IMapper mapper, QuestionBadgePack pack)
     {
@@ -156,7 +159,8 @@ public static class BadgeDtoUtil
         QuestionBadgeDto? badgeDto = mapper.Map<Badge, QuestionBadgeDto>(badge);
 
         QuestionPayload? payload = await QuestionPayload.FindAsync(repo, badge.PayloadId);
-        if (payload == null) throw new MissingReferenceException($"Missing QuestionPayload {badge.PayloadId} in {badge.Id}");
+        if (payload == null)
+            throw new MissingReferenceException($"Missing QuestionPayload {badge.PayloadId} in {badge.Id}");
 
         badgeDto.Payload = mapper.Map<QuestionPayload, QuestionPayloadDto>(payload);
 
@@ -177,9 +181,6 @@ public static class BadgeDtoUtil
 
         return badgeDto;
     }
-
-
-    private const string TimestampFormat = "yyyy-MM-dd HH:mm:ss.ffffff";
 
 
     public static string FormatTimestamp(DateTime timestamp)

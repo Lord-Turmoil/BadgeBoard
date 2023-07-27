@@ -1,13 +1,17 @@
-﻿using BadgeBoard.Api.Extensions.Response;
+﻿// Copyright (C) 2018 - 2023 Tony's Studio. All rights reserved.
+// Licensed under the BSD 2-Clause License.
 
-namespace BadgeBoard.Api.Modules.BadgeGlobal.Exceptions
+using BadgeBoard.Api.Extensions.Response;
+
+namespace BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
+
+public class ResponseException : Exception
 {
-    public class ResponseException : Exception
+    public ApiResponse Response { get; private set; }
+
+
+    public ResponseException(ApiResponse response)
     {
-        public ApiResponse Response { get; private set; }
-        public ResponseException(ApiResponse response)
-        {
-            Response = response;
-        }
+        Response = response;
     }
 }

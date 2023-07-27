@@ -28,7 +28,9 @@ public class BadgeController : BaseController<BadgeController>
     [HttpPost]
     [Route("delete")]
     [Authorize]
-    public async Task<ApiResponse> DeleteBadge([FromHeader] string authorization, [FromBody] DeleteBadgeDto dto)
+    public async Task<ApiResponse> DeleteBadge(
+        [FromHeader] string authorization,
+        [FromBody] DeleteBadgeDto dto)
     {
         try
         {
@@ -45,7 +47,9 @@ public class BadgeController : BaseController<BadgeController>
     [HttpPost]
     [Route("update")]
     [Authorize]
-    public async Task<ApiResponse> UpdateBadge([FromHeader] string authorization, [FromBody] UpdateBadgeDto dto)
+    public async Task<ApiResponse> UpdateBadge(
+        [FromHeader] string authorization,
+        [FromBody] UpdateBadgeDto dto)
     {
         try
         {
@@ -62,7 +66,9 @@ public class BadgeController : BaseController<BadgeController>
     [HttpPost]
     [Route("move")]
     [Authorize]
-    public async Task<ApiResponse> MoveBadge([FromHeader] string authorization, [FromBody] MoveBadgeDto dto)
+    public async Task<ApiResponse> MoveBadge(
+        [FromHeader] string authorization,
+        [FromBody] MoveBadgeDto dto)
     {
         try
         {

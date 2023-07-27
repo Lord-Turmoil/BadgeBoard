@@ -36,7 +36,9 @@ public class CategoryController : BaseController<CategoryController>
     [HttpPost]
     [Route("add")]
     [Authorize]
-    public async Task<ApiResponse> AddCategory([FromHeader] string authorization, [FromBody] AddCategoryDto dto)
+    public async Task<ApiResponse> AddCategory(
+        [FromHeader] string authorization,
+        [FromBody] AddCategoryDto dto)
     {
         try
         {

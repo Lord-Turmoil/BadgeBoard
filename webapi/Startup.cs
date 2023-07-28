@@ -29,7 +29,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        ConfigureDatabase<BadgeContext>(services);
+        _ConfigureDatabase<BadgeContext>(services);
         services.AddUnitOfWork<BadgeContext>();
         services.RegisterModules();
 
@@ -124,7 +124,7 @@ public class Startup
     }
 
 
-    private void ConfigureDatabase<TContext>(IServiceCollection services) where TContext : DbContext
+    private void _ConfigureDatabase<TContext>(IServiceCollection services) where TContext : DbContext
     {
         var profile = Configuration["Profile"] ?? "Default";
         var database = Configuration.GetConnectionString("Database") ?? throw new Exception("Missing database");

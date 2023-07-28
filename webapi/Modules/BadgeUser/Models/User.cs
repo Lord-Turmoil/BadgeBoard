@@ -16,7 +16,7 @@ public class User
 {
     [Key] public int Id { get; set; }
 
-    [ForeignKey("Id")] public UserAccount Account { get; set; }
+    [ForeignKey(nameof(Id))] public UserAccount Account { get; set; }
 
     // User self fields
     [Column(TypeName = "varchar(63)")] public string Username { get; set; }
@@ -32,11 +32,11 @@ public class User
     public int UserPreferenceId { get; set; }
 
     // reference navigation property
-    [ForeignKey("UserPreferenceId")] public UserPreference Preference { get; set; }
+    [ForeignKey(nameof(UserPreferenceId))] public UserPreference Preference { get; set; }
 
     public int UserInfoId { get; set; }
 
-    [ForeignKey("UserInfoId")] public UserInfo Info { get; set; }
+    [ForeignKey(nameof(UserInfoId))] public UserInfo Info { get; set; }
 
     // Refresh tokens
     public List<RefreshToken> RefreshTokens { get; set; }
@@ -44,7 +44,7 @@ public class User
     // Unread record
     public int UnreadRecordId { get; set; }
 
-    [ForeignKey("UnreadRecordId")] public UnreadRecord Unread { get; set; }
+    [ForeignKey(nameof(UnreadRecordId))] public UnreadRecord Unread { get; set; }
 
 
     public static async Task<User> CreateAsync(

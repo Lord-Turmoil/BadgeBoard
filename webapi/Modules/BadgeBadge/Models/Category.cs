@@ -25,11 +25,11 @@ public class Category : TimeRecordModel
 
     public int UserId { get; set; }
 
-    [ForeignKey("UserId")] public User User { get; set; }
+    [ForeignKey(nameof(UserId))] public User User { get; set; }
 
     public int CategoryOptionId { get; set; }
 
-    [ForeignKey("CategoryOptionId")] public CategoryOption Option { get; set; }
+    [ForeignKey(nameof(CategoryOptionId))] public CategoryOption Option { get; set; }
 
 
     public static async Task<Category> CreateAsync(IRepository<Category> repo, string Name, User user,

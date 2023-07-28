@@ -37,10 +37,10 @@ public class Badge : TimeRecordModel
 
     // Foreign keys
     public int? CategoryId { get; set; }
-    [ForeignKey("CategoryId")] public Category? Category { get; set; }
+    [ForeignKey(nameof(CategoryId))] public Category? Category { get; set; }
 
     public int UserId { get; set; }
-    [ForeignKey("UserId")] public User User { get; set; }
+    [ForeignKey(nameof(UserId))] public User User { get; set; }
 
 
     public static async Task<Badge> CreateAsync(

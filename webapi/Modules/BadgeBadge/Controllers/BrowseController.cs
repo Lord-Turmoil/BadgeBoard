@@ -28,8 +28,8 @@ public class BrowseController : BaseController<BrowseController>
 
 
     [HttpGet]
-    [Route("anonymous/{badgeId}")]
-    public async Task<ApiResponse> GetBadge([FromQuery] int badgeId)
+    [Route("anonymous/badge/{badgeId}")]
+    public async Task<ApiResponse> GetBadge(int badgeId)
     {
         try
         {
@@ -43,11 +43,9 @@ public class BrowseController : BaseController<BrowseController>
 
 
     [HttpGet]
-    [Route("identified/{badgeId}")]
+    [Route("identified/badge/{badgeId}")]
     [Authorize]
-    public async Task<ApiResponse> GetBadge(
-        int badgeId,
-        [FromHeader] string authorization)
+    public async Task<ApiResponse> GetBadge(int badgeId, [FromHeader] string authorization)
     {
         try
         {
@@ -63,9 +61,7 @@ public class BrowseController : BaseController<BrowseController>
 
     [HttpGet]
     [Route("anonymous/{userId}")]
-    public async Task<ApiResponse> GetBadgesOfUser(
-        int userId,
-        [FromQuery] string timestamp)
+    public async Task<ApiResponse> GetBadgesOfUser(int userId, [FromQuery] string timestamp)
     {
         try
         {

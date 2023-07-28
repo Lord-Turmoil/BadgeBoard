@@ -17,7 +17,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services;
 
 public class BrowseService : BaseService, IBrowseService
 {
-    protected BrowseService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
+    public BrowseService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper)
         : base(provider, unitOfWork, mapper) { }
 
 

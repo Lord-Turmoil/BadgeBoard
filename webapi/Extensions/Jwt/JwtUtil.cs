@@ -34,13 +34,19 @@ public static class JwtUtil
     public static string? GetValueFromBearerToken(string token)
     {
         JwtSecurityToken? jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
-        if (jwt == null) return null;
+        if (jwt == null)
+        {
+            return null;
+        }
 
         using IEnumerator<Claim> it = jwt.Claims.GetEnumerator();
         while (it.MoveNext())
         {
             Claim? claim = it.Current;
-            if (claim is not { Type: JwtRegisteredClaimNames.Name }) continue;
+            if (claim is not { Type: JwtRegisteredClaimNames.Name })
+            {
+                continue;
+            }
 
             return claim.Value;
         }

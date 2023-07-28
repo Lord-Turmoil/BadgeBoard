@@ -21,7 +21,10 @@ public class EmailImpl : BaseImpl
     {
         IRepository<User> repo = _unitOfWork.GetRepository<User>();
         User? user = UserUtil.FindUserByEmail(repo, dto.Email);
-        if (user != null) return new GoodResponse(new UserAlreadyExistsDto());
+        if (user != null)
+        {
+            return new GoodResponse(new UserAlreadyExistsDto());
+        }
 
         return new GoodResponse(new GoodDto("Verification code sent"));
     }
@@ -31,7 +34,10 @@ public class EmailImpl : BaseImpl
     {
         IRepository<User> repo = _unitOfWork.GetRepository<User>();
         User? user = UserUtil.FindUserByEmail(repo, dto.Email);
-        if (user == null) return new GoodResponse(new UserNotExistsDto());
+        if (user == null)
+        {
+            return new GoodResponse(new UserNotExistsDto());
+        }
 
         return new GoodResponse(new GoodDto("Retrieval code sent"));
     }

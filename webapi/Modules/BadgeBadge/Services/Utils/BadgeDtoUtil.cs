@@ -28,7 +28,11 @@ public static class BadgeDtoUtil
         if (badgeDto.Sender != 0)
         {
             user = await User.FindAsync(userRepo, badgeDto.Sender);
-            if (user == null) throw new MissingReferenceException("Sender in badge");
+            if (user == null)
+            {
+                throw new MissingReferenceException("Sender in badge");
+            }
+
             badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
         }
         else
@@ -37,7 +41,11 @@ public static class BadgeDtoUtil
         }
 
         user = await User.FindAsync(userRepo, badgeDto.Receiver);
-        if (user == null) throw new MissingReferenceException("Receiver in badge");
+        if (user == null)
+        {
+            throw new MissingReferenceException("Receiver in badge");
+        }
+
         badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
         badgeDto.Timestamp = FormatTimestamp(badgeDto.CreatedTime);
 
@@ -56,7 +64,11 @@ public static class BadgeDtoUtil
         if (badgeDto.Sender != 0)
         {
             user = await User.FindAsync(userRepo, badgeDto.Sender);
-            if (user == null) throw new MissingReferenceException("Sender in badge");
+            if (user == null)
+            {
+                throw new MissingReferenceException("Sender in badge");
+            }
+
             badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
         }
         else
@@ -65,7 +77,11 @@ public static class BadgeDtoUtil
         }
 
         user = await User.FindAsync(userRepo, badgeDto.Receiver);
-        if (user == null) throw new MissingReferenceException("Receiver in badge");
+        if (user == null)
+        {
+            throw new MissingReferenceException("Receiver in badge");
+        }
+
         badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
         badgeDto.Timestamp = FormatTimestamp(badgeDto.CreatedTime);
 
@@ -91,7 +107,11 @@ public static class BadgeDtoUtil
         if (badgeDto.Sender != 0)
         {
             user = await User.FindAsync(userRepo, badgeDto.Sender);
-            if (user == null) throw new MissingReferenceException($"Sender {badgeDto.Sender}");
+            if (user == null)
+            {
+                throw new MissingReferenceException($"Sender {badgeDto.Sender}");
+            }
+
             badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
         }
         else
@@ -101,7 +121,11 @@ public static class BadgeDtoUtil
 
         // receiver
         user = await User.FindAsync(userRepo, badgeDto.Receiver);
-        if (user == null) throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
+        if (user == null)
+        {
+            throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
+        }
+
         badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
         badgeDto.Timestamp = FormatTimestamp(badgeDto.CreatedTime);
 
@@ -131,7 +155,10 @@ public static class BadgeDtoUtil
             if (badgeDto.Sender != 0)
             {
                 user = await User.FindAsync(userRepo, badgeDto.Sender);
-                if (user == null) throw new MissingReferenceException($"Sender {badgeDto.Sender}");
+                if (user == null)
+                {
+                    throw new MissingReferenceException($"Sender {badgeDto.Sender}");
+                }
 
                 badgeDto.SrcUser = mapper.Map<User, UserBriefDto>(user);
             }
@@ -142,7 +169,11 @@ public static class BadgeDtoUtil
 
             // receiver
             user = await User.FindAsync(userRepo, badgeDto.Receiver);
-            if (user == null) throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
+            if (user == null)
+            {
+                throw new MissingReferenceException($"Receiver {badgeDto.Receiver}");
+            }
+
             badgeDto.DstUser = mapper.Map<User, UserBriefDto>(user);
             badgeDto.Timestamp = FormatTimestamp(badgeDto.CreatedTime);
 
@@ -160,7 +191,9 @@ public static class BadgeDtoUtil
 
         QuestionPayload? payload = await QuestionPayload.FindAsync(repo, badge.PayloadId);
         if (payload == null)
+        {
             throw new MissingReferenceException($"Missing QuestionPayload {badge.PayloadId} in {badge.Id}");
+        }
 
         badgeDto.Payload = mapper.Map<QuestionPayload, QuestionPayloadDto>(payload);
 
@@ -175,7 +208,9 @@ public static class BadgeDtoUtil
 
         MemoryPayload? payload = await MemoryPayload.FindAsync(repo, badge.PayloadId);
         if (payload == null)
+        {
             throw new MissingReferenceException($"Missing QuestionPayload {badge.PayloadId} in {badge.Id}");
+        }
 
         badgeDto.Payload = mapper.Map<MemoryPayload, MemoryPayloadDto>(payload);
 

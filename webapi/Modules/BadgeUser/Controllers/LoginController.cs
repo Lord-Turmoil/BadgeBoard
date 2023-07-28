@@ -46,7 +46,10 @@ public class LoginController : BaseController<LoginController>
         try
         {
             TokenResponseData data = await _service.GetToken(dto);
-            if (!data.IsAuthenticated) return new ApiResponse(data.Status, new GetTokenFailedDto(data.Message));
+            if (!data.IsAuthenticated)
+            {
+                return new ApiResponse(data.Status, new GetTokenFailedDto(data.Message));
+            }
 
             SetRefreshTokenInCookie(data.RefreshToken);
 
@@ -66,10 +69,16 @@ public class LoginController : BaseController<LoginController>
         try
         {
             var refreshToken = Request.Cookies[TokenUtil.RefreshTokenCookiesName];
-            if (refreshToken == null) return new BadRequestResponse(new BadRequestDto("Missing essential cookies"));
+            if (refreshToken == null)
+            {
+                return new BadRequestResponse(new BadRequestDto("Missing essential cookies"));
+            }
 
             TokenResponseData data = await _service.RefreshToken(refreshToken);
-            if (!data.IsAuthenticated) return new ApiResponse(data.Status, new RefreshTokenFailedDto(data.Message));
+            if (!data.IsAuthenticated)
+            {
+                return new ApiResponse(data.Status, new RefreshTokenFailedDto(data.Message));
+            }
 
             SetRefreshTokenInCookie(data.RefreshToken);
 
@@ -89,10 +98,16 @@ public class LoginController : BaseController<LoginController>
         try
         {
             var refreshToken = Request.Cookies[TokenUtil.RefreshTokenCookiesName];
-            if (refreshToken == null) return new GoodResponse(new GoodDto("No cookies"));
+            if (refreshToken == null)
+            {
+                return new GoodResponse(new GoodDto("No cookies"));
+            }
 
             RevokeTokenData data = await _service.RevokeToken(refreshToken);
-            if (!data.Succeeded) return new ApiResponse(data.Status, new RevokeTokenFailedDto(data.Message));
+            if (!data.Succeeded)
+            {
+                return new ApiResponse(data.Status, new RevokeTokenFailedDto(data.Message));
+            }
 
             return new GoodResponse(new GoodDto(data.Message));
         }

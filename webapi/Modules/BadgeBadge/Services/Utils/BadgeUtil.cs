@@ -15,6 +15,10 @@ public static class BadgeUtil
         User? sender, User receiver, Category? category)
     {
         var payload = await QuestionPayload.CreateAsync(unitOfWork.GetRepository<QuestionPayload>(), dto.Question);
+        // WARNING! Since payload and badge are not connected by foreign key,
+        // we can only get payload id after changes are saved!!! :(
+        await unitOfWork.SaveChangesAsync();
+
         var badge = await Badge.CreateAsync(unitOfWork.GetRepository<Badge>(),
             dto.Type, payload.Id, sender, receiver, category, dto.Style);
 
@@ -38,9 +42,13 @@ public static class BadgeUtil
     {
         unitOfWork.GetRepository<Badge>().Delete(badge.Id);
         if (badge.Type == Badge.Types.Question)
+        {
             unitOfWork.GetRepository<QuestionPayload>().Delete(badge.PayloadId);
+        }
         else
+        {
             unitOfWork.GetRepository<MemoryPayload>().Delete(badge.PayloadId);
+        }
     }
 
 
@@ -78,6 +86,7 @@ public static class BadgeUtil
         var errors = new List<DeleteBadgeErrorData>();
 
         foreach (Badge badge in badges)
+        {
             if (badge.UserId == user.Id)
             {
                 // delete badge of user him/her self
@@ -87,12 +96,16 @@ public static class BadgeUtil
             {
                 // admin can delete other user's badge in force mode
                 if (force)
+                {
                     EraseBadge(unitOfWork, badge);
+                }
                 else
+                {
                     errors.Add(new DeleteBadgeErrorData {
                         Id = badge.Id,
                         Message = "Not in force mode"
                     });
+                }
             }
             else
             {
@@ -102,6 +115,7 @@ public static class BadgeUtil
                     Message = "Permission denied"
                 });
             }
+        }
 
         return errors;
     }

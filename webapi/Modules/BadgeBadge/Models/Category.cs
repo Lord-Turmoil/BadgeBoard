@@ -52,11 +52,13 @@ public class Category : TimeRecordModel
     public static async Task<Category> GetAsync(IRepository<Category> repo, int id, bool include = false)
     {
         if (include)
+        {
             return await repo.GetFirstOrDefaultAsync(
                 predicate: x => x.Id == id,
                 include: source => source.Include(x => x.Option),
                 disableTracking: false
             ) ?? throw new MissingReferenceException("Category");
+        }
 
         return await repo.FindAsync(id) ?? throw new MissingReferenceException("Category");
     }
@@ -65,11 +67,13 @@ public class Category : TimeRecordModel
     public static async Task<Category?> FindAsync(IRepository<Category> repo, int id, bool include = false)
     {
         if (include)
+        {
             return await repo.GetFirstOrDefaultAsync(
                 predicate: x => x.Id == id,
                 include: source => source.Include(x => x.Option),
                 disableTracking: false
             );
+        }
 
         return await repo.FindAsync(id);
     }

@@ -10,7 +10,11 @@ public class AddCategoryDto : BaseCategoryDto, IApiRequestDto
 {
     public bool Verify()
     {
-        if (Name == null || Option == null) return false;
+        if (Name == null || Option == null)
+        {
+            return false;
+        }
+
         return Name.Length is > 0 and < Globals.MaxCategoryNameLength;
     }
 

@@ -17,7 +17,10 @@ public class UpdateQuestionBadgeDto : IApiRequestDto
 
     public bool Verify()
     {
-        if (Answer != null) return Answer.Length is > 0 and < Globals.MaxAnswerLength;
+        if (Answer != null)
+        {
+            return Answer.Length is > 0 and < Globals.MaxAnswerLength;
+        }
 
         return true;
     }

@@ -13,7 +13,10 @@ public class UpdateCategoryDto : BaseCategoryDto, IApiRequestDto
 
     public bool Verify()
     {
-        if (Name != null) return Name.Length is > 0 and < Globals.MaxCategoryNameLength;
+        if (Name != null)
+        {
+            return Name.Length is > 0 and < Globals.MaxCategoryNameLength;
+        }
 
         return true;
     }

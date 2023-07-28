@@ -33,8 +33,16 @@ public class UpdateUserInfoDto : IApiRequestDto
 
     public bool Verify()
     {
-        if (Motto is { Length: > Globals.MaxMottoLength }) return false;
-        if (Sex != null && !UserSex.IsValid((int)Sex)) return false;
+        if (Motto is { Length: > Globals.MaxMottoLength })
+        {
+            return false;
+        }
+
+        if (Sex != null && !UserSex.IsValid((int)Sex))
+        {
+            return false;
+        }
+
         return true;
     }
 

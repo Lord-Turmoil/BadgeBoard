@@ -30,7 +30,11 @@ public static class ModuleExtensions
 
     public static WebApplication MapEndpoints(this WebApplication app)
     {
-        foreach (IModule module in registeredModules) module.MapEndpoints(app);
+        foreach (IModule module in registeredModules)
+        {
+            module.MapEndpoints(app);
+        }
+
         return app;
     }
 

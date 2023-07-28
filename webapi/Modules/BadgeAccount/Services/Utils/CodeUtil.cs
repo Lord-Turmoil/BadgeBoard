@@ -21,10 +21,17 @@ public static class CodeUtil
     {
         var charset = string.Empty;
         if ((options & Options.Upper) != 0)
+        {
             charset += UpperAlphaSet;
+        }
         else if ((options & Options.Lower) != 0)
+        {
             charset += LowerAlphaSet;
-        else if ((options & Options.Digit) != 0) charset += DigitSet;
+        }
+        else if ((options & Options.Digit) != 0)
+        {
+            charset += DigitSet;
+        }
 
         return _GenerateCode(length, charset);
     }
@@ -33,10 +40,16 @@ public static class CodeUtil
     private static string _GenerateCode(int length, string charset)
     {
         var upper = charset.Length;
-        if (upper == 0) return string.Empty;
+        if (upper == 0)
+        {
+            return string.Empty;
+        }
 
         var code = string.Empty;
-        for (var i = 0; i < length; i++) code += CodeCharSet[(int)Random.Shared.NextInt64(upper)];
+        for (var i = 0; i < length; i++)
+        {
+            code += CodeCharSet[(int)Random.Shared.NextInt64(upper)];
+        }
 
         return code;
     }

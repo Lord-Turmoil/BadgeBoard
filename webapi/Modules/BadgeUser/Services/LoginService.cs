@@ -24,11 +24,17 @@ public class LoginService : BaseService, ILoginService
 
     public async Task<ApiResponse> Login(LoginDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
 
         IRepository<User> repo = _unitOfWork.GetRepository<User>();
         User? user = await UserUtil.FindUserByUsernameAsync(repo, dto.Username);
-        if (user == null) return new GoodResponse(new UserNotExistsDto());
+        if (user == null)
+        {
+            return new GoodResponse(new UserNotExistsDto());
+        }
 
         try
         {
@@ -40,7 +46,9 @@ public class LoginService : BaseService, ILoginService
         }
 
         if (!AccountUtil.VerifyPasswordHash(dto.Password, user.Account.Salt, user.Account.Password))
+        {
             return new GoodResponse(new LoginWrongPasswordDto());
+        }
 
         UserLoginDto? userDto = _mapper.Map<User, UserLoginDto>(user);
 
@@ -51,20 +59,24 @@ public class LoginService : BaseService, ILoginService
     public async Task<TokenResponseData> GetToken(TokenDto dto)
     {
         if (!dto.Format().Verify())
+        {
             return new TokenResponseData {
                 IsAuthenticated = false,
                 Status = StatusCodes.Status400BadRequest,
                 Message = "Request format error"
             };
+        }
 
         // verify user existence
         IRepository<User> repo = _unitOfWork.GetRepository<User>();
         User? user = await User.FindAsync(repo, dto.Id);
         if (user == null)
+        {
             return new TokenResponseData {
                 IsAuthenticated = false,
                 Message = "No such user"
             };
+        }
 
         // verify password
         try
@@ -81,10 +93,12 @@ public class LoginService : BaseService, ILoginService
         }
 
         if (!AccountUtil.VerifyPasswordHash(dto.Password, user.Account.Salt, user.Account.Password))
+        {
             return new TokenResponseData {
                 IsAuthenticated = false,
                 Message = "Wrong password"
             };
+        }
 
         // verification complete
         var data = new TokenResponseData {
@@ -127,29 +141,35 @@ public class LoginService : BaseService, ILoginService
     public async Task<TokenResponseData> RefreshToken(string oldToken)
     {
         if (string.IsNullOrWhiteSpace(oldToken))
+        {
             return new TokenResponseData {
                 IsAuthenticated = false,
                 Status = StatusCodes.Status400BadRequest,
                 Message = "Invalid oldToken"
             };
+        }
 
         IRepository<User> repo = _unitOfWork.GetRepository<User>();
 
         // Get oldToken owner
         User? user = await repo.GetFirstOrDefaultAsync(predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
         if (user == null)
+        {
             return new TokenResponseData {
                 IsAuthenticated = false,
                 Message = "Token did not match any users"
             };
+        }
 
         // Get refresh oldToken
         RefreshToken refreshToken = user.RefreshTokens.Single(x => x.Token == oldToken);
         if (!refreshToken.IsActive)
+        {
             return new TokenResponseData {
                 IsAuthenticated = false,
                 Message = "Token not active"
             };
+        }
 
         // Revoke current refresh oldToken
         refreshToken.Revoked = DateTime.UtcNow;
@@ -188,27 +208,33 @@ public class LoginService : BaseService, ILoginService
     public async Task<RevokeTokenData> RevokeToken(string oldToken)
     {
         if (string.IsNullOrWhiteSpace(oldToken))
+        {
             return new RevokeTokenData {
                 Succeeded = false,
                 Message = "Invalid oldToken"
             };
+        }
 
         IRepository<User> repo = _unitOfWork.GetRepository<User>();
 
         User? user = await repo.GetFirstOrDefaultAsync(
             predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
         if (user == null)
+        {
             return new RevokeTokenData {
                 Succeeded = false,
                 Message = "Token did not match any users"
             };
+        }
 
         RefreshToken token = user.RefreshTokens.Single(t => t.Token == oldToken);
         if (!token.IsActive)
+        {
             return new RevokeTokenData {
                 Succeeded = true,
                 Message = "Token not active already"
             };
+        }
 
         token.Revoked = DateTime.UtcNow;
         try

@@ -6,7 +6,6 @@ using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
-using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Services.Impl;
@@ -22,8 +21,15 @@ public class RegisterService : BaseService, IRegisterService
 
     public ApiResponse SendCode(VerificationCodeDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
-        if (!AccountVerifier.VerifyEmail(dto.Email)) return new BadRequestResponse(new VerificationCodeEmailErrorDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
+
+        if (!AccountVerifier.VerifyEmail(dto.Email))
+        {
+            return new BadRequestResponse(new VerificationCodeEmailErrorDto());
+        }
 
         var emailType = dto.Type switch {
             "register" => EmailTypes.Register,
@@ -31,7 +37,9 @@ public class RegisterService : BaseService, IRegisterService
             _ => EmailTypes.Invalid
         };
         if (emailType == EmailTypes.Invalid)
+        {
             return new BadRequestResponse(new BadRequestDto($"Invalid type: {dto.Type}"));
+        }
 
         // Intended to be asynchronous.
         var impl = new EmailImpl(_provider, _unitOfWork, _mapper);
@@ -51,11 +59,16 @@ public class RegisterService : BaseService, IRegisterService
 
     public async Task<ApiResponse> Register(RegisterDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
 
         IRepository<User> repo = _unitOfWork.GetRepository<User>();
         if (await UserUtil.HasUserByUsernameAsync(repo, dto.Username))
+        {
             return new GoodResponse(new UserAlreadyExistsDto());
+        }
 
         try
         {
@@ -74,23 +87,23 @@ public class RegisterService : BaseService, IRegisterService
 
     public async Task<ApiResponse> Cancel(CancelDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
 
         IRepository<User> repo = _unitOfWork.GetRepository<User>();
         foreach (var username in dto.Users.Where(username => !string.IsNullOrEmpty(username)))
         {
             User? user = await UserUtil.FindUserByUsernameAsync(repo, username);
-            if (user != null) UserUtil.EraseUser(_unitOfWork, user);
+            if (user != null)
+            {
+                UserUtil.EraseUser(_unitOfWork, user);
+            }
         }
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
-        }
+        await _unitOfWork.SaveChangesAsync();
+
 
         return new GoodResponse(new GoodDto("Users canceled"));
     }

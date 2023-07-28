@@ -36,11 +36,20 @@ public class BadgeService : BaseService, IBadgeService
     /// <returns></returns>
     public async Task<ApiResponse> AddQuestionBadge(int id, AddQuestionBadgeDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
 
-        if (dto.Type != Badge.Types.Question) return new BadRequestResponse(new BadRequestDto("Wrong badge type"));
+        if (dto.Type != Badge.Types.Question)
+        {
+            return new BadRequestResponse(new BadRequestDto("Wrong badge type"));
+        }
 
-        if (dto.SrcId != id) return new BadRequestResponse(new BadRequestDto("Sender inconsistent"));
+        if (dto.SrcId != id)
+        {
+            return new BadRequestResponse(new BadRequestDto("Sender inconsistent"));
+        }
 
         // get sender and receiver
         IRepository<User> userRepo = _unitOfWork.GetRepository<User>();
@@ -48,7 +57,10 @@ public class BadgeService : BaseService, IBadgeService
         if (dto.SrcId != 0)
         {
             sender = await User.FindAsync(userRepo, dto.SrcId);
-            if (sender == null) return new GoodResponse(new UserNotExistsDto());
+            if (sender == null)
+            {
+                return new GoodResponse(new UserNotExistsDto());
+            }
         }
 
         User receiver;
@@ -66,7 +78,10 @@ public class BadgeService : BaseService, IBadgeService
         if (dto.Category != 0)
         {
             category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category);
-            if (category == null) return new GoodResponse(new CategoryNotExistsDto());
+            if (category == null)
+            {
+                return new GoodResponse(new CategoryNotExistsDto());
+            }
         }
 
         // create new badge
@@ -85,14 +100,7 @@ public class BadgeService : BaseService, IBadgeService
         }
 
         // save changes
-        try
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
-        }
+        await _unitOfWork.SaveChangesAsync();
 
         // return single badge dto
         try
@@ -109,11 +117,20 @@ public class BadgeService : BaseService, IBadgeService
 
     public async Task<ApiResponse> AddMemoryBadge(int id, AddMemoryBadgeDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
 
-        if (dto.Type != Badge.Types.Memory) return new BadRequestResponse(new BadRequestDto("Wrong badge type"));
+        if (dto.Type != Badge.Types.Memory)
+        {
+            return new BadRequestResponse(new BadRequestDto("Wrong badge type"));
+        }
 
-        if (dto.SrcId != id) return new BadRequestResponse(new BadRequestDto("Sender inconsistent"));
+        if (dto.SrcId != id)
+        {
+            return new BadRequestResponse(new BadRequestDto("Sender inconsistent"));
+        }
 
         // get sender and receiver
         IRepository<User> userRepo = _unitOfWork.GetRepository<User>();
@@ -121,7 +138,10 @@ public class BadgeService : BaseService, IBadgeService
         if (dto.SrcId != 0)
         {
             sender = await User.FindAsync(userRepo, dto.SrcId);
-            if (sender == null) return new GoodResponse(new UserNotExistsDto());
+            if (sender == null)
+            {
+                return new GoodResponse(new UserNotExistsDto());
+            }
         }
 
         User receiver;
@@ -139,7 +159,10 @@ public class BadgeService : BaseService, IBadgeService
         if (dto.Category != 0)
         {
             category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category);
-            if (category == null) return new GoodResponse(new CategoryNotExistsDto());
+            if (category == null)
+            {
+                return new GoodResponse(new CategoryNotExistsDto());
+            }
         }
 
         // create new badge
@@ -147,6 +170,7 @@ public class BadgeService : BaseService, IBadgeService
 
         // add record if not sending for self
         if (!(sender != null && sender.Id == receiver.Id))
+        {
             try
             {
                 UnreadRecord unread =
@@ -157,15 +181,9 @@ public class BadgeService : BaseService, IBadgeService
             {
                 return new InternalServerErrorResponse(new MissingReferenceDto(data: ex));
             }
+        }
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
-        }
+        await _unitOfWork.SaveChangesAsync();
 
         // return single badge dto
         try
@@ -182,23 +200,22 @@ public class BadgeService : BaseService, IBadgeService
 
     public async Task<ApiResponse> DeleteBadge(int id, DeleteBadgeDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
 
         User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
-        if (user == null) return new GoodResponse(new UserNotExistsDto());
+        if (user == null)
+        {
+            return new GoodResponse(new UserNotExistsDto());
+        }
 
         var data = new DeleteBadgeSuccessDto {
             Errors = await BadgeUtil.EraseBadgesAsync(_unitOfWork, dto.Badges, user, dto.Force)
         };
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
-        }
+        await _unitOfWork.SaveChangesAsync();
 
         var message = data.Errors.Count == 0 ? "Deletion succeeded" : "Deletion partial succeeded";
 
@@ -208,26 +225,27 @@ public class BadgeService : BaseService, IBadgeService
 
     public async Task<ApiResponse> UpdateBadge(int id, UpdateBadgeDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
 
         User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
-        if (user == null) return new GoodResponse(new UserNotExistsDto());
+        if (user == null)
+        {
+            return new GoodResponse(new UserNotExistsDto());
+        }
 
         Badge? badge = await Badge.FindAsync(_unitOfWork.GetRepository<Badge>(), dto.Id);
-        if (badge == null) return new GoodResponse(new BadgeNotExistsDto());
+        if (badge == null)
+        {
+            return new GoodResponse(new BadgeNotExistsDto());
+        }
 
         badge.Style = dto.Style;
         badge.IsPublic = dto.IsPublic;
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
-        }
-
+        await _unitOfWork.SaveChangesAsync();
         var data = new UpdateBadgeSuccessDto {
             IsPublic = badge.IsPublic,
             Style = badge.Style
@@ -238,17 +256,29 @@ public class BadgeService : BaseService, IBadgeService
 
     public async Task<ApiResponse> UpdateQuestionBadge(int id, UpdateQuestionBadgeDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
 
         User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
-        if (user == null) return new GoodResponse(new UserNotExistsDto());
+        if (user == null)
+        {
+            return new GoodResponse(new UserNotExistsDto());
+        }
 
         Badge? badge = await Badge.FindAsync(_unitOfWork.GetRepository<Badge>(), dto.Id);
-        if (badge == null) return new GoodResponse(new BadgeNotExistsDto());
+        if (badge == null)
+        {
+            return new GoodResponse(new BadgeNotExistsDto());
+        }
 
         QuestionPayload? payload = await QuestionPayload.FindAsync(
             _unitOfWork.GetRepository<QuestionPayload>(), badge.PayloadId);
-        if (payload == null) return new GoodResponse(new PayloadNotExistsDto());
+        if (payload == null)
+        {
+            return new GoodResponse(new PayloadNotExistsDto());
+        }
 
         payload.Answer = dto.Answer;
         if (!badge.IsChecked && payload.Answer != null)
@@ -258,7 +288,10 @@ public class BadgeService : BaseService, IBadgeService
             {
                 UnreadRecord unread =
                     await UnreadRecord.GetAsync(_unitOfWork.GetRepository<UnreadRecord>(), user.UnreadRecordId);
-                if (unread.QuestionCount > 0) unread.QuestionCount--;
+                if (unread.QuestionCount > 0)
+                {
+                    unread.QuestionCount--;
+                }
             }
             catch (MissingReferenceException ex)
             {
@@ -266,14 +299,7 @@ public class BadgeService : BaseService, IBadgeService
             }
         }
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
-        }
+        await _unitOfWork.SaveChangesAsync();
 
         var data = new UpdateQuestionBadgeSuccessDto {
             Answer = payload.Answer
@@ -284,28 +310,33 @@ public class BadgeService : BaseService, IBadgeService
 
     public async Task<ApiResponse> UpdateMemoryBadge(int id, UpdateMemoryBadgeDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
 
         User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
-        if (user == null) return new GoodResponse(new UserNotExistsDto());
+        if (user == null)
+        {
+            return new GoodResponse(new UserNotExistsDto());
+        }
 
         Badge? badge = await Badge.FindAsync(_unitOfWork.GetRepository<Badge>(), dto.Id);
-        if (badge == null) return new GoodResponse(new BadgeNotExistsDto());
+        if (badge == null)
+        {
+            return new GoodResponse(new BadgeNotExistsDto());
+        }
 
         MemoryPayload? payload = await MemoryPayload.FindAsync(
             _unitOfWork.GetRepository<MemoryPayload>(), badge.PayloadId);
-        if (payload == null) return new GoodResponse(new PayloadNotExistsDto());
+        if (payload == null)
+        {
+            return new GoodResponse(new PayloadNotExistsDto());
+        }
 
         payload.Memory = dto.Memory;
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
-        }
+        await _unitOfWork.SaveChangesAsync();
 
         var data = new UpdateMemoryBadgeSuccessDto {
             Memory = payload.Memory
@@ -316,13 +347,22 @@ public class BadgeService : BaseService, IBadgeService
 
     public async Task<ApiResponse> MoveBadge(int id, MoveBadgeDto dto)
     {
-        if (!dto.Format().Verify()) return new BadRequestResponse(new BadRequestDto());
+        if (!dto.Format().Verify())
+        {
+            return new BadRequestResponse(new BadRequestDto());
+        }
 
         User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
-        if (user == null) return new GoodResponse(new UserNotExistsDto());
+        if (user == null)
+        {
+            return new GoodResponse(new UserNotExistsDto());
+        }
 
         Badge? badge = await Badge.FindAsync(_unitOfWork.GetRepository<Badge>(), dto.Id);
-        if (badge == null) return new GoodResponse(new BadgeNotExistsDto());
+        if (badge == null)
+        {
+            return new GoodResponse(new BadgeNotExistsDto());
+        }
 
         // Well, hope front end will handle requests that moves to itself.
         var name = "Default";
@@ -334,19 +374,16 @@ public class BadgeService : BaseService, IBadgeService
         {
             Category? category = await Category.FindAsync(
                 _unitOfWork.GetRepository<Category>(), dto.Category);
-            if (category == null) return new GoodResponse(new CategoryNotExistsDto());
+            if (category == null)
+            {
+                return new GoodResponse(new CategoryNotExistsDto());
+            }
+
             badge.CategoryId = category.Id;
             name = category.Name;
         }
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            return new InternalServerErrorResponse(new FailedToSaveChangesDto(data: ex));
-        }
+        await _unitOfWork.SaveChangesAsync();
 
         return new GoodResponse(new GoodDto($"Badge moved to {name}"));
     }

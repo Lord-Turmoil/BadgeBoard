@@ -33,8 +33,15 @@ public class AddBadgeDto : IApiRequestDto
 
     public virtual bool Verify()
     {
-        if (!Models.Badge.Types.IsValid(Type)) return false;
-        if (Style is { Length: > Globals.MaxStyleLength }) return false;
+        if (!Models.Badge.Types.IsValid(Type))
+        {
+            return false;
+        }
+
+        if (Style is { Length: > Globals.MaxStyleLength })
+        {
+            return false;
+        }
 
         return true;
     }
@@ -55,7 +62,10 @@ public class AddQuestionBadgeDto : AddBadgeDto
 
     public override bool Verify()
     {
-        if (!base.Verify()) return false;
+        if (!base.Verify())
+        {
+            return false;
+        }
 
         return Question.Length is > 0 and < Globals.MaxQuestionLength;
     }
@@ -76,7 +86,10 @@ public class AddMemoryBadgeDto : AddBadgeDto
 
     public override bool Verify()
     {
-        if (!base.Verify()) return false;
+        if (!base.Verify())
+        {
+            return false;
+        }
 
         return Memory.Length is > 0 and < Globals.MaxMemoryLength;
     }

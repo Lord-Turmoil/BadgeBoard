@@ -11,10 +11,16 @@ public static class AvatarUtil
 
     public static bool DeleteAvatar(string? avatarUrl)
     {
-        if (avatarUrl == null) return true;
+        if (avatarUrl == null)
+        {
+            return true;
+        }
 
         var fullPath = Path.Join(AvatarRootPath, avatarUrl);
-        if (!File.Exists(fullPath)) return true;
+        if (!File.Exists(fullPath))
+        {
+            return true;
+        }
 
         try
         {
@@ -35,7 +41,10 @@ public static class AvatarUtil
         var filename = Guid.NewGuid().ToString("N") + "." + ext;
         var avatarUrl = Path.Join(AvatarPath, filename);
         var path = Path.Join(AvatarRootPath, avatarUrl);
-        if (File.Exists(path)) return null;
+        if (File.Exists(path))
+        {
+            return null;
+        }
 
         try
         {

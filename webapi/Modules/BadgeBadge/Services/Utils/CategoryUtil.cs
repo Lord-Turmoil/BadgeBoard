@@ -37,11 +37,13 @@ public static class CategoryUtil
         var updated = false;
 
         if (dto.Name != null)
+        {
             if (!dto.Name.Equals(category.Name))
             {
                 category.Name = dto.Name;
                 updated = true;
             }
+        }
 
         if (dto.Option != null)
         {
@@ -70,7 +72,10 @@ public static class CategoryUtil
             }
         }
 
-        if (updated) category.UpdatedTime = DateTime.Now;
+        if (updated)
+        {
+            category.UpdatedTime = DateTime.Now;
+        }
 
         return category;
     }
@@ -80,12 +85,14 @@ public static class CategoryUtil
         IUnitOfWork unitOfWork, Category category, User user)
     {
         if (category.UserId != user.Id)
+        {
             return new List<DeleteBadgeErrorData> {
                 new() {
                     Id = 0,
                     Message = $"Category {category.Id} does not belong to user {user.Id}"
                 }
             };
+        }
 
         IList<Badge> badges = await unitOfWork.GetRepository<Badge>()
             .GetAllAsync(predicate: x => x.CategoryId == category.Id);
@@ -134,12 +141,22 @@ public static class CategoryUtil
 
         IList<Badge> badges;
         if (src == null)
+        {
             badges = await repo.GetAllAsync(predicate: x => x.CategoryId == null);
+        }
         else
+        {
             badges = await repo.GetAllAsync(predicate: x => x.CategoryId == src.Id);
+        }
 
-        foreach (Badge badge in badges) badge.CategoryId = dst?.Id;
+        foreach (Badge badge in badges)
+        {
+            badge.CategoryId = dst?.Id;
+        }
 
-        if (dst != null) dst.UpdatedTime = DateTime.Now;
+        if (dst != null)
+        {
+            dst.UpdatedTime = DateTime.Now;
+        }
     }
 }

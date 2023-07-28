@@ -41,9 +41,16 @@ public static class TokenUtil
 
     public static int? TryGetUserIdFromJwtBearerToken(string token)
     {
-        if (token.StartsWith("bearer ", StringComparison.OrdinalIgnoreCase)) token = token[7..];
+        if (token.StartsWith("bearer ", StringComparison.OrdinalIgnoreCase))
+        {
+            token = token[7..];
+        }
+
         var value = JwtUtil.GetValueFromBearerToken(token);
-        if (value == null) return null;
+        if (value == null)
+        {
+            return null;
+        }
 
         return int.TryParse(value, out var id) ? id : null;
     }

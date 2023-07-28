@@ -15,7 +15,10 @@ public class UpdateBadgeDto : IApiRequestDto
 
     public bool Verify()
     {
-        if (Style is { Length: > Globals.MaxStyleLength }) return false;
+        if (Style is { Length: > Globals.MaxStyleLength })
+        {
+            return false;
+        }
 
         return true;
     }

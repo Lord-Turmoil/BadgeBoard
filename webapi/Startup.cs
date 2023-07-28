@@ -75,20 +75,29 @@ public class Startup
         var corsOptions = new CorsOptions();
         Configuration.GetRequiredSection(CorsOptions.CorsSection).Bind(corsOptions);
         if (corsOptions.Enable)
+        {
             services.AddCors(options => {
                 options.AddPolicy(
                     CorsOptions.CorsPolicyName,
                     policy => {
                         if (corsOptions.AllowAny)
+                        {
                             policy.AllowAnyOrigin();
+                        }
                         else
+                        {
                             foreach (var origin in corsOptions.Origins)
+                            {
                                 policy.WithOrigins(origin);
+                            }
+                        }
+
                         policy.AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
                     });
             });
+        }
     }
 
 

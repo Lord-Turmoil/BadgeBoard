@@ -31,6 +31,7 @@ public static class BadgeUtil
         User? sender, User receiver, Category? category)
     {
         var payload = await MemoryPayload.CreateAsync(unitOfWork.GetRepository<MemoryPayload>(), dto.Memory);
+        await unitOfWork.SaveChangesAsync();
         var badge = await Badge.CreateAsync(unitOfWork.GetRepository<Badge>(),
             dto.Type, payload.Id, sender, receiver, category, dto.Style);
 

@@ -34,6 +34,8 @@ public class AutoMapperProfile : MapperConfigurationExpression
         CreateMap<CategoryOption, CategoryOptionDto>().ReverseMap();
 
         CreateMap<Badge, BadgeDto>().ReverseMap();
+        CreateMap<Badge, QuestionBadgeDto>().ReverseMap();
+        CreateMap<Badge, MemoryBadgeDto>().ReverseMap();
         CreateMap<QuestionPayload, QuestionPayloadDto>().ReverseMap();
         CreateMap<MemoryPayload, MemoryPayloadDto>().ReverseMap();
 

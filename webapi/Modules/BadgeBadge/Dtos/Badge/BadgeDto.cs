@@ -40,7 +40,7 @@ public class MemoryBadgeDto : BadgeDto
     public MemoryPayloadDto Payload { get; set; }
 }
 
-public class QuestionPayloadDto : BadgeDto
+public class QuestionPayloadDto
 {
     public string Question { get; set; }
     public string Answer { get; set; }

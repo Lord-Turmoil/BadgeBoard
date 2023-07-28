@@ -54,15 +54,19 @@ public class Badge : TimeRecordModel
         bool isLocked = false,
         bool isPublic = true)
     {
+        var timestamp = DateTime.Now;
         EntityEntry<Badge> entry = await repo.InsertAsync(new Badge {
             Type = type,
             PayloadId = payload,
             Sender = sender?.Id ?? 0,
+            Receiver = receiver.Id,
             Style = style,
             IsLocked = isLocked,
             IsPublic = isPublic,
             Category = category,
-            User = receiver
+            User = receiver,
+            CreatedTime = timestamp,
+            UpdatedTime = timestamp
         });
         return entry.Entity;
     }

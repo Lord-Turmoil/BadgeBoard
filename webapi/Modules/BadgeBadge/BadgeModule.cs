@@ -19,7 +19,8 @@ public class BadgeModule : BaseModule
             .AddCustomRepository<CategoryOption, CategoryOptionRepository>();
 
         services.AddScoped<IBadgeService, BadgeService>()
-            .AddScoped<ICategoryService, CategoryService>();
+            .AddScoped<ICategoryService, CategoryService>()
+            .AddScoped<IBrowseService, BrowseService>();
 
         return services;
     }

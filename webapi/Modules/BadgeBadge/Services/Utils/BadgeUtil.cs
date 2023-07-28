@@ -40,7 +40,6 @@ public static class BadgeUtil
 
     public static void EraseBadge(IUnitOfWork unitOfWork, Badge badge)
     {
-        unitOfWork.GetRepository<Badge>().Delete(badge.Id);
         if (badge.Type == Badge.Types.Question)
         {
             unitOfWork.GetRepository<QuestionPayload>().Delete(badge.PayloadId);
@@ -49,6 +48,7 @@ public static class BadgeUtil
         {
             unitOfWork.GetRepository<MemoryPayload>().Delete(badge.PayloadId);
         }
+        unitOfWork.GetRepository<Badge>().Delete(badge);
     }
 
 

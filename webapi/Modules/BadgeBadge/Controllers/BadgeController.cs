@@ -6,6 +6,8 @@ using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 using BadgeBoard.Api.Modules.BadgeBadge.Services;
+using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
+using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,9 +39,13 @@ public class BadgeController : BaseController<BadgeController>
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
             return await _service.DeleteBadge(id, dto);
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
         }
     }
 
@@ -56,9 +62,13 @@ public class BadgeController : BaseController<BadgeController>
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
             return await _service.UpdateBadge(id, dto);
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
         }
     }
 
@@ -75,9 +85,13 @@ public class BadgeController : BaseController<BadgeController>
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
             return await _service.MoveBadge(id, dto);
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
         }
     }
 }

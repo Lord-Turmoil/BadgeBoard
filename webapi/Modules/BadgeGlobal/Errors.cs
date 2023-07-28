@@ -8,6 +8,7 @@ public static class Errors
     // Internal server errors
     public const int FailedToSaveChanges = 6601;
     public const int MissingReference = 6602;
+    public const int UnexpectedError = 6699;
 
     // User status
     public const int UserAlreadyExists = 1001;

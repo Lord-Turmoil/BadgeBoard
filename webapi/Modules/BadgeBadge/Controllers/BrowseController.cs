@@ -6,6 +6,8 @@ using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 using BadgeBoard.Api.Modules.BadgeBadge.Services;
+using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
+using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +31,14 @@ public class BrowseController : BaseController<BrowseController>
     [Route("anonymous/{badgeId}")]
     public async Task<ApiResponse> GetBadge([FromQuery] int badgeId)
     {
-        return await _service.GetBadge(badgeId);
+        try
+        {
+            return await _service.GetBadge(badgeId);
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
+        }
     }
 
 
@@ -45,7 +54,7 @@ public class BrowseController : BaseController<BrowseController>
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
             return await _service.GetBadge(id, badgeId);
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
         }
@@ -58,10 +67,17 @@ public class BrowseController : BaseController<BrowseController>
         int userId,
         [FromQuery] string timestamp)
     {
-        return await _service.GetBadgesOfUser(new BrowseAllBadgeDto {
-            UserId = userId,
-            Timestamp = timestamp
-        });
+        try
+        {
+            return await _service.GetBadgesOfUser(new BrowseAllBadgeDto {
+                UserId = userId,
+                Timestamp = timestamp
+            });
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
+        }
     }
 
 
@@ -81,9 +97,13 @@ public class BrowseController : BaseController<BrowseController>
                 Timestamp = timestamp
             });
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
         }
     }
 
@@ -95,11 +115,18 @@ public class BrowseController : BaseController<BrowseController>
         int categoryId,
         [FromQuery] string timestamp)
     {
-        return await _service.GetBadgesOfCategory(new BrowseCategoryBadgeDto {
-            UserId = userId,
-            CategoryId = categoryId,
-            Timestamp = timestamp
-        });
+        try
+        {
+            return await _service.GetBadgesOfCategory(new BrowseCategoryBadgeDto {
+                UserId = userId,
+                CategoryId = categoryId,
+                Timestamp = timestamp
+            });
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
+        }
     }
 
 
@@ -120,9 +147,13 @@ public class BrowseController : BaseController<BrowseController>
                 Timestamp = timestamp
             });
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
         }
     }
 }

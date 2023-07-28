@@ -4,6 +4,7 @@
 using System.Security.Cryptography;
 using BadgeBoard.Api.Extensions.Jwt;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
+using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 
 namespace BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
 
@@ -50,6 +51,6 @@ public static class TokenUtil
 
     public static int GetUserIdFromJwtBearerToken(string token)
     {
-        return TryGetUserIdFromJwtBearerToken(token) ?? throw new ArgumentException(token);
+        return TryGetUserIdFromJwtBearerToken(token) ?? throw new BadJwtTokenException(token);
     }
 }

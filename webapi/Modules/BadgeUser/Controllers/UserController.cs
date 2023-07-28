@@ -4,6 +4,8 @@
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
+using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
+using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -28,7 +30,14 @@ public class UserController : BaseController<UserController>
     [Route("exists")]
     public async Task<ApiResponse> Exists([FromQuery] string type, [FromQuery] string value)
     {
-        return await _service.Exists(type, value);
+        try
+        {
+            return await _service.Exists(type, value);
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
+        }
     }
 
 
@@ -43,9 +52,13 @@ public class UserController : BaseController<UserController>
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
             return await _service.UpdatePreference(id, dto);
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
         }
     }
 
@@ -60,9 +73,13 @@ public class UserController : BaseController<UserController>
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
             return await _service.UpdateInfo(id, dto);
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
         }
     }
 
@@ -77,9 +94,13 @@ public class UserController : BaseController<UserController>
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
             return await _service.UpdateUsername(id, dto);
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
         }
     }
 
@@ -94,9 +115,13 @@ public class UserController : BaseController<UserController>
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
             return await _service.UpdateAvatar(id, dto);
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
         }
     }
 
@@ -105,9 +130,14 @@ public class UserController : BaseController<UserController>
     [Route("user")]
     public async Task<ApiResponse> GetUser([FromQuery] int id)
     {
-        if (id < 0) return new BadRequestResponse(new BadRequestDto("Bad ID"));
-
-        return await _service.GetUser(id);
+        try
+        {
+            return await _service.GetUser(id);
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
+        }
     }
 
 
@@ -121,9 +151,13 @@ public class UserController : BaseController<UserController>
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
             return await _service.GetCurrentUser(id);
         }
-        catch (ArgumentException)
+        catch (BadJwtTokenException)
         {
             return new UnauthorizedResponse(new BadUserJwtDto());
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
         }
     }
 }

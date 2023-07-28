@@ -3,6 +3,7 @@
 
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
+using BadgeBoard.Api.Modules.BadgeGlobal.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,14 @@ public class RegisterController : BaseController<RegisterController>
     [Route("code")]
     public ApiResponse SendCode([FromBody] VerificationCodeDto dto)
     {
-        return _service.SendCode(dto);
+        try
+        {
+            return _service.SendCode(dto);
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
+        }
     }
 
 
@@ -34,7 +42,14 @@ public class RegisterController : BaseController<RegisterController>
     [Route("register")]
     public async Task<ApiResponse> Register([FromBody] RegisterDto dto)
     {
-        return await _service.Register(dto);
+        try
+        {
+            return await _service.Register(dto);
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
+        }
     }
 
 
@@ -42,6 +57,13 @@ public class RegisterController : BaseController<RegisterController>
     [Route("cancel")]
     public async Task<ApiResponse> Cancel([FromBody] CancelDto dto)
     {
-        return await _service.Cancel(dto);
+        try
+        {
+            return await _service.Cancel(dto);
+        }
+        catch (Exception ex)
+        {
+            return new GoodResponse(new UnexpectedErrorDto(ex));
+        }
     }
 }

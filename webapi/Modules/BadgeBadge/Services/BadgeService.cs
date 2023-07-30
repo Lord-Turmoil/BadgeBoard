@@ -260,6 +260,11 @@ public class BadgeService : BaseService, IBadgeService
             return new GoodResponse(new BadgeNotExistsDto());
         }
 
+        if (badge.UserId != user.Id)
+        {
+            return new GoodResponse(new NotYourBadgeDto());
+        }
+
         badge.Style = dto.Style;
         badge.IsPublic = dto.IsPublic;
 
@@ -290,10 +295,14 @@ public class BadgeService : BaseService, IBadgeService
         {
             return new GoodResponse(new BadgeNotExistsDto());
         }
-
         if (badge.Type != Badge.Types.Question)
         {
             return new GoodResponse(new WrongBadgeTypeDto());
+        }
+
+        if (badge.UserId != user.Id)
+        {
+            return new GoodResponse(new NotYourBadgeDto());
         }
 
         QuestionPayload? payload = await QuestionPayload.FindAsync(
@@ -353,6 +362,11 @@ public class BadgeService : BaseService, IBadgeService
         if (badge.Type != Badge.Types.Memory)
         {
             return new GoodResponse(new WrongBadgeTypeDto());
+        }
+
+        if (badge.UserId != user.Id)
+        {
+            return new GoodResponse(new NotYourBadgeDto());
         }
 
         MemoryPayload? payload = await MemoryPayload.FindAsync(

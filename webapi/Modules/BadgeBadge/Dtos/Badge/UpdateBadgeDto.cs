@@ -36,3 +36,15 @@ public class UpdateBadgeSuccessDto : ApiResponseData
     public string? Style { get; set; }
     public bool IsPublic { get; set; }
 }
+
+public class WrongBadgeTypeDto : OrdinaryDto
+{
+    public WrongBadgeTypeDto(string? message = "Wrong badge type")
+        : base(Errors.WrongBadgeType, message) { }
+}
+
+public class NotYourBadgeDto : OrdinaryDto
+{
+    public NotYourBadgeDto(string? message = "This is not your badge")
+        : base(Errors.NotYourBadge, message) { }
+}

@@ -41,4 +41,5 @@ public static class Errors
     public const int BadgeIsPrivate = 5004;
     public const int BadgeCorrupted = 5005;
     public const int WrongBadgeType = 5006;
+    public const int NotYourBadge = 5007;
 }

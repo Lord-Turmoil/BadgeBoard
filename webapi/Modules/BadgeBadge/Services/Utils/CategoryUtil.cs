@@ -96,7 +96,7 @@ public static class CategoryUtil
 
         IList<Badge> badges = await unitOfWork.GetRepository<Badge>()
             .GetAllAsync(predicate: x => x.CategoryId == category.Id);
-        List<DeleteBadgeErrorData> errors = BadgeUtil.EraseBadges(unitOfWork, badges, user, true);
+        List<DeleteBadgeErrorData> errors = await BadgeUtil.EraseBadges(unitOfWork, badges, user, true);
 
         unitOfWork.GetRepository<Category>().Delete(category);
         unitOfWork.GetRepository<CategoryOption>().Delete(category.CategoryOptionId);
@@ -125,7 +125,7 @@ public static class CategoryUtil
             }
 
             IList<Badge> badges = await badgeRepo.GetAllAsync(predicate: x => x.CategoryId == category.Id);
-            errors.AddRange(BadgeUtil.EraseBadges(unitOfWork, badges, user, true));
+            errors.AddRange(await BadgeUtil.EraseBadges(unitOfWork, badges, user, true));
             categoryRepo.Delete(category);
             optionRepo.Delete(category.CategoryOptionId);
         }

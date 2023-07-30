@@ -39,15 +39,17 @@ public static class BadgeUtil
     }
 
 
-    public static void EraseBadge(IUnitOfWork unitOfWork, Badge badge)
+    private static void _EraseBadge(IUnitOfWork unitOfWork, Badge badge, UnreadRecord unread)
     {
         if (badge.Type == Badge.Types.Question)
         {
             unitOfWork.GetRepository<QuestionPayload>().Delete(badge.PayloadId);
+            unread.QuestionCount--;
         }
         else
         {
             unitOfWork.GetRepository<MemoryPayload>().Delete(badge.PayloadId);
+            unread.MemoryCount--;
         }
         unitOfWork.GetRepository<Badge>().Delete(badge);
     }
@@ -75,30 +77,31 @@ public static class BadgeUtil
             badgeList.Add(badge);
         }
 
-        errors.AddRange(EraseBadges(unitOfWork, badgeList, user, force));
+        errors.AddRange(await EraseBadges(unitOfWork, badgeList, user, force));
 
         return errors;
     }
 
 
-    public static List<DeleteBadgeErrorData> EraseBadges(
+    public static async Task<List<DeleteBadgeErrorData>> EraseBadges(
         IUnitOfWork unitOfWork, IEnumerable<Badge> badges, User user, bool force = false)
     {
         var errors = new List<DeleteBadgeErrorData>();
+        user.Unread ??= await UnreadRecord.GetAsync(unitOfWork.GetRepository<UnreadRecord>(), user.UnreadRecordId);
 
         foreach (Badge badge in badges)
         {
             if (badge.UserId == user.Id)
             {
                 // delete badge of user him/her self
-                EraseBadge(unitOfWork, badge);
+                _EraseBadge(unitOfWork, badge, user.Unread);
             }
             else if (user.IsAdmin)
             {
                 // admin can delete other user's badge in force mode
                 if (force)
                 {
-                    EraseBadge(unitOfWork, badge);
+                    _EraseBadge(unitOfWork, badge, user.Unread);
                 }
                 else
                 {

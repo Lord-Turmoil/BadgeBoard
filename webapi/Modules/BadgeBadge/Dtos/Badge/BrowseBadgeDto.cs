@@ -3,6 +3,7 @@
 
 using System.Text.Json.Serialization;
 using BadgeBoard.Api.Extensions.Response;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;

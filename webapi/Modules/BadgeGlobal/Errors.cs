@@ -31,6 +31,8 @@ public static class Errors
     public const int CategoryMergeSelf = 4003;
     public const int CategoryNotMatchUser = 4004;
     public const int CategoryIsPrivate = 4005;
+    public const int BadgeTypeNotAllowed = 4006;
+    public const int AnonymousBadgeNotAllowed = 4007;
 
     // Badge
     public const int FailedToGetBadge = 5001;

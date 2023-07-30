@@ -51,6 +51,22 @@ public class BadgeService : BaseService, IBadgeService
             return new BadRequestResponse(new BadRequestDto("Sender inconsistent"));
         }
 
+        // get category
+        Category? category = null;
+        if (dto.Category != 0)
+        {
+            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category, true);
+            if (category == null)
+            {
+                return new GoodResponse(new CategoryNotExistsDto());
+            }
+
+            if (category.Option.AllowQuestion)
+            {
+                return new GoodResponse(new BadgeTypeNotAllowedDto(BadgeTypeNotAllowedDto.QuestionNotAllowedMessage));
+            }
+        }
+
         // get sender and receiver
         IRepository<User> userRepo = _unitOfWork.GetRepository<User>();
         User? sender = null;
@@ -63,6 +79,11 @@ public class BadgeService : BaseService, IBadgeService
             }
         }
 
+        if (sender == null && category is { Option.AllowAnonymity: false })
+        {
+            return new GoodResponse(new AnonymousBadgeNotAllowed());
+        }
+
         User receiver;
         try
         {
@@ -71,17 +92,6 @@ public class BadgeService : BaseService, IBadgeService
         catch
         {
             return new GoodResponse(new UserNotExistsDto());
-        }
-
-        // get category
-        Category? category = null;
-        if (dto.Category != 0)
-        {
-            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category);
-            if (category == null)
-            {
-                return new GoodResponse(new CategoryNotExistsDto());
-            }
         }
 
         // create new badge
@@ -132,6 +142,22 @@ public class BadgeService : BaseService, IBadgeService
             return new BadRequestResponse(new BadRequestDto("Sender inconsistent"));
         }
 
+        // get category
+        Category? category = null;
+        if (dto.Category != 0)
+        {
+            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category, true);
+            if (category == null)
+            {
+                return new GoodResponse(new CategoryNotExistsDto());
+            }
+
+            if (!category.Option.AllowMemory)
+            {
+                return new GoodResponse(new BadgeTypeNotAllowedDto(BadgeTypeNotAllowedDto.MemoryNotAllowedMessage));
+            }
+        }
+
         // get sender and receiver
         IRepository<User> userRepo = _unitOfWork.GetRepository<User>();
         User? sender = null;
@@ -143,6 +169,10 @@ public class BadgeService : BaseService, IBadgeService
                 return new GoodResponse(new UserNotExistsDto());
             }
         }
+        if (sender == null && category is { Option.AllowAnonymity: false })
+        {
+            return new GoodResponse(new AnonymousBadgeNotAllowed());
+        }
 
         User receiver;
         try
@@ -152,17 +182,6 @@ public class BadgeService : BaseService, IBadgeService
         catch
         {
             return new GoodResponse(new UserNotExistsDto());
-        }
-
-        // get category
-        Category? category = null;
-        if (dto.Category != 0)
-        {
-            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category);
-            if (category == null)
-            {
-                return new GoodResponse(new CategoryNotExistsDto());
-            }
         }
 
         // create new badge

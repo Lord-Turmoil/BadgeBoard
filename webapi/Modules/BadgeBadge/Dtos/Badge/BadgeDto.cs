@@ -12,6 +12,7 @@ public class BadgeDto
     public int Id { get; set; }
     public int Type { get; set; }
 
+    public bool IsPublic { get; set; }
     public bool IsChecked { get; set; }
 
     [JsonIgnore] public int Sender { get; set; }

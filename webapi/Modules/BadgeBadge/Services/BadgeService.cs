@@ -230,9 +230,8 @@ public class BadgeService : BaseService, IBadgeService
             return new GoodResponse(new UserNotExistsDto());
         }
 
-        var data = new DeleteBadgeSuccessDto {
-            Errors = await BadgeUtil.EraseBadgesAsync(_unitOfWork, dto.Badges, user, dto.Force)
-        };
+        var data = new DeleteBadgeSuccessDto();
+        data.Errors.AddRange(await BadgeUtil.EraseBadgesAsync(_unitOfWork, dto.Badges, user, dto.Force));
 
         await _unitOfWork.SaveChangesAsync();
 

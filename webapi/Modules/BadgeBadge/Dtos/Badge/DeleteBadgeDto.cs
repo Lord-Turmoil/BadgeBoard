@@ -33,5 +33,5 @@ public class DeleteBadgeErrorData
 
 public class DeleteBadgeSuccessDto : ApiResponseData
 {
-    public List<DeleteBadgeErrorData> Errors = new();
+    public List<DeleteBadgeErrorData> Errors { get; } = new();
 }

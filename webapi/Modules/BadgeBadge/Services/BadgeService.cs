@@ -292,6 +292,11 @@ public class BadgeService : BaseService, IBadgeService
             return new GoodResponse(new BadgeNotExistsDto());
         }
 
+        if (badge.Type != Badge.Types.Question)
+        {
+            return new GoodResponse(new WrongBadgeTypeDto());
+        }
+
         QuestionPayload? payload = await QuestionPayload.FindAsync(
             _unitOfWork.GetRepository<QuestionPayload>(), badge.PayloadId);
         if (payload == null)
@@ -344,6 +349,11 @@ public class BadgeService : BaseService, IBadgeService
         if (badge == null)
         {
             return new GoodResponse(new BadgeNotExistsDto());
+        }
+
+        if (badge.Type != Badge.Types.Memory)
+        {
+            return new GoodResponse(new WrongBadgeTypeDto());
         }
 
         MemoryPayload? payload = await MemoryPayload.FindAsync(

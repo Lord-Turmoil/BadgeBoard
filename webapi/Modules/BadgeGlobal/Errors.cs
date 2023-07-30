@@ -40,4 +40,5 @@ public static class Errors
     public const int PayloadNotExists = 5003;
     public const int BadgeIsPrivate = 5004;
     public const int BadgeCorrupted = 5005;
+    public const int WrongBadgeType = 5006;
 }

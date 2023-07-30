@@ -26,3 +26,9 @@ public class BadgeCorruptedDto : BadDto
     public BadgeCorruptedDto(string? message = "Badge corrupted", object? data = null)
         : base(Errors.BadgeCorrupted, message, data) { }
 }
+
+public class WrongBadgeTypeDto : OrdinaryDto
+{
+    public WrongBadgeTypeDto(string? message = "Wrong badge type")
+        : base(Errors.WrongBadgeType, message) { }
+}

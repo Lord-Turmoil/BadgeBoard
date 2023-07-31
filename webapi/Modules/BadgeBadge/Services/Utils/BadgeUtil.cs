@@ -123,4 +123,22 @@ public static class BadgeUtil
 
         return errors;
     }
+
+
+    // badge must be completely get (with category fully included)
+    public static bool IsAccessible(Badge badge)
+    {
+        return badge.IsPublic && (badge.Category == null || badge.Category.Option.IsPublic);
+    }
+    
+    public static bool IsAccessible(Badge badge, User user)
+    {
+        if (IsAccessible(badge))
+        {
+            return true;
+        }
+
+        // badge is private
+        return badge.UserId == user.Id || user.IsAdmin;
+    }
 }

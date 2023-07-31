@@ -12,6 +12,7 @@ using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Services;
 
@@ -23,13 +24,13 @@ public class BrowseService : BaseService, IBrowseService
 
     public async Task<ApiResponse> GetBadge(int badgeId)
     {
-        Badge? badge = await Badge.FindAsync(_unitOfWork.GetRepository<Badge>(), badgeId);
+        Badge? badge = await Badge.FindAsync(_unitOfWork.GetRepository<Badge>(), badgeId, true);
         if (badge == null)
         {
             return new GoodResponse(new BadgeNotExistsDto());
         }
 
-        if (!badge.IsPublic)
+        if (!BadgeUtil.IsAccessible(badge))
         {
             return new GoodResponse(new BadgeIsPrivateDto());
         }
@@ -54,13 +55,13 @@ public class BrowseService : BaseService, IBrowseService
             return new GoodResponse(new BadgeNotExistsDto());
         }
 
-        if (user.IsAdmin || badge.IsPublic || badge.UserId == user.Id)
+        if (!BadgeUtil.IsAccessible(badge, user))
         {
-            BadgeDto dto = await BadgeDtoUtil.GetBadgeDtoAsync(_unitOfWork, _mapper, badge);
-            return new GoodResponse(new GoodWithDataDto(dto));
+            return new GoodResponse(new BadgeIsPrivateDto());
         }
 
-        return new GoodResponse(new BadgeIsPrivateDto());
+        BadgeDto dto = await BadgeDtoUtil.GetBadgeDtoAsync(_unitOfWork, _mapper, badge);
+        return new GoodResponse(new GoodWithDataDto(dto));
     }
 
 
@@ -108,7 +109,7 @@ public class BrowseService : BaseService, IBrowseService
         }
         else
         {
-            predicate = x => x.IsPublic && x.UserId == dto.UserId;
+            predicate = x => x.UserId == dto.UserId && x.IsPublic;
         }
 
         BrowseBadgeSuccessDto data = await _GetBadgeDtosData(predicate);
@@ -201,7 +202,9 @@ public class BrowseService : BaseService, IBrowseService
     private async Task<BrowseBadgeSuccessDto> _GetBadgeDtosData(Expression<Func<Badge, bool>> predicate)
     {
         IList<Badge> badges = await _unitOfWork.GetRepository<Badge>().GetAllAsync(
-            predicate, source => source.OrderBy(x => x.CreatedTime));
+            predicate: predicate,
+            orderBy: source => source.OrderBy(x => x.CreatedTime),
+            include: source => source.Include(x => x.Category).ThenInclude(x => x.Option));
         IList<BadgeDto> badgeDtos = await BadgeDtoUtil.GetBadgeDtosAsync(_unitOfWork, _mapper, badges);
         return new BrowseBadgeSuccessDto {
             Count = badgeDtos.Count,

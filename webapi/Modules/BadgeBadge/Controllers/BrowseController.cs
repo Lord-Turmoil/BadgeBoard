@@ -114,7 +114,6 @@ public class BrowseController : BaseController<BrowseController>
         try
         {
             return await _service.GetBadgesOfCategory(new BrowseCategoryBadgeDto {
-                UserId = userId,
                 CategoryId = categoryId,
                 Timestamp = timestamp
             });
@@ -138,7 +137,6 @@ public class BrowseController : BaseController<BrowseController>
         {
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
             return await _service.GetBadgesOfCategory(id, new BrowseCategoryBadgeDto {
-                UserId = userId,
                 CategoryId = categoryId,
                 Timestamp = timestamp
             });

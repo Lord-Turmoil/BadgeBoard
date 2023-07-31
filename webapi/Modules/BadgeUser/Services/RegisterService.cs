@@ -75,7 +75,7 @@ public class RegisterService : BaseService, IRegisterService
 
         User user = await UserUtil.CreateUserAsync(_unitOfWork, dto);
         // this default category should not be deleted, unless user is.
-        await CategoryUtil.CreateCategoryAsync(_unitOfWork, "Default", user);
+        await CategoryUtil.CreateCategoryAsync(_unitOfWork, "Default", user, true);
 
         await _unitOfWork.SaveChangesAsync();
 

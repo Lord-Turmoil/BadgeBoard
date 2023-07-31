@@ -10,8 +10,6 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 
 public class BrowseBadgeDto : IApiRequestDto
 {
-    // target user id
-    public int UserId { get; set; }
     public string Timestamp { get; set; }
 
     [JsonIgnore] public DateTime BeforeTime { get; set; }
@@ -40,11 +38,14 @@ public class BrowseBadgeDto : IApiRequestDto
     }
 }
 
-public class BrowseAllBadgeDto : BrowseBadgeDto { }
+public class BrowseAllBadgeDto : BrowseBadgeDto
+{
+    // target user id
+    public int UserId { get; set; }
+}
 
 public class BrowseCategoryBadgeDto : BrowseBadgeDto
 {
-    // 0 means default
     public int CategoryId { get; set; }
 }
 

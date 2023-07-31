@@ -78,7 +78,7 @@ public class BrowseService : BaseService, IBrowseService
             return new GoodResponse(new UserNotExistsDto());
         }
 
-        BrowseBadgeSuccessDto data = await _GetBadgeDtosData(x => x.IsPublic && x.UserId == dto.UserId);
+        BrowseBadgeSuccessDto data = await _GetBadgeDtosData(x => x.IsPublic && x.UserId == dto.UserId, true);
         return new GoodResponse(new GoodWithDataDto(data));
     }
 
@@ -103,16 +103,19 @@ public class BrowseService : BaseService, IBrowseService
         }
 
         Expression<Func<Badge, bool>> predicate;
+        bool publicCategoryOnly;
         if (initiator == user || initiator.IsAdmin)
         {
             predicate = x => x.UserId == dto.UserId;
+            publicCategoryOnly = false;
         }
         else
         {
             predicate = x => x.UserId == dto.UserId && x.IsPublic;
+            publicCategoryOnly = true;
         }
 
-        BrowseBadgeSuccessDto data = await _GetBadgeDtosData(predicate);
+        BrowseBadgeSuccessDto data = await _GetBadgeDtosData(predicate, publicCategoryOnly);
         return new GoodResponse(new GoodWithDataDto(data));
     }
 
@@ -124,38 +127,20 @@ public class BrowseService : BaseService, IBrowseService
             return new BadRequestResponse(new BadRequestDto());
         }
 
-        User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), dto.UserId);
-        if (user == null)
+        Category? category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.CategoryId, true);
+        if (category == null)
         {
-            return new GoodResponse(new UserNotExistsDto());
+            return new GoodResponse(new CategoryNotExistsDto());
         }
 
-        Category? category = null;
-        if (dto.CategoryId != 0)
+        if (!CategoryUtil.IsAccessible(category))
         {
-            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.CategoryId, true);
-            if (category == null)
-            {
-                return new GoodResponse(new CategoryNotExistsDto());
-            }
+            return new GoodResponse(new CategoryIsPrivateDto());
         }
 
-        if (category != null)
-        {
-            if (category.UserId != user.Id)
-            {
-                return new GoodResponse(new CategoryNotMatchUserDto());
-            }
-
-            if (!category.Option.IsPublic)
-            {
-                return new GoodResponse(new CategoryIsPrivateDto());
-            }
-        }
-
-        // here, it is obvious that badges of category belong to the user
-        var dbCategoryId = category?.Id;
-        BrowseBadgeSuccessDto data = await _GetBadgeDtosData(x => x.CategoryId == dbCategoryId);
+        // here, it is obvious that badges of category belong to the user,
+        // and visibility of category is already checked.
+        BrowseBadgeSuccessDto data = await _GetBadgeDtosData(x => x.CategoryId == category.Id, false);
         return new GoodResponse(new GoodWithDataDto(data));
     }
 
@@ -167,44 +152,50 @@ public class BrowseService : BaseService, IBrowseService
             return new BadRequestResponse(new BadRequestDto());
         }
 
-        User? initiator = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
-        if (initiator == null)
+        User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
+        if (user == null)
         {
             return new GoodResponse(new UserNotExistsDto("Initiator not exist"));
         }
 
-        User? user = dto.UserId == id ? initiator : await User.FindAsync(_unitOfWork.GetRepository<User>(), dto.UserId);
-        if (user == null)
+        Category? category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.CategoryId, true);
+        if (category == null)
         {
-            return new GoodResponse(new UserNotExistsDto());
+            return new GoodResponse(new CategoryNotExistsDto());
         }
 
-        Category? category = null;
-
-
-        var dbCategoryId = category?.Id;
-        Expression<Func<Badge, bool>> predicate;
-        if (initiator.IsAdmin || category == null || category.UserId == initiator.Id)
+        if (!CategoryUtil.IsAccessible(category, user))
         {
-            predicate = x => x.CategoryId == dbCategoryId;
+            return new GoodResponse(new CategoryIsPrivateDto());
+        }
+
+        Expression<Func<Badge, bool>> predicate;
+        if (user.IsAdmin || category.UserId == user.Id)
+        {
+            predicate = x => x.CategoryId == category.Id;
         }
         else
         {
-            predicate = x => x.CategoryId == dbCategoryId && x.IsPublic;
+            predicate = x => x.CategoryId == category.Id && x.IsPublic;
         }
 
-        BrowseBadgeSuccessDto data = await _GetBadgeDtosData(predicate);
+        BrowseBadgeSuccessDto data = await _GetBadgeDtosData(predicate, false);
 
         return new GoodResponse(new GoodWithDataDto(data));
     }
 
 
-    private async Task<BrowseBadgeSuccessDto> _GetBadgeDtosData(Expression<Func<Badge, bool>> predicate)
+    private async Task<BrowseBadgeSuccessDto> _GetBadgeDtosData(Expression<Func<Badge, bool>> predicate, bool publicCategoryOnly)
     {
-        IList<Badge> badges = await _unitOfWork.GetRepository<Badge>().GetAllAsync(
+        IEnumerable<Badge> badges = await _unitOfWork.GetRepository<Badge>().GetAllAsync(
             predicate: predicate,
             orderBy: source => source.OrderBy(x => x.CreatedTime),
             include: source => source.Include(x => x.Category).ThenInclude(x => x.Option));
+        if (publicCategoryOnly)
+        {
+            badges = badges.Where(x => x.Category.Option.IsPublic);
+        }
+
         IList<BadgeDto> badgeDtos = await BadgeDtoUtil.GetBadgeDtosAsync(_unitOfWork, _mapper, badges);
         return new BrowseBadgeSuccessDto {
             Count = badgeDtos.Count,

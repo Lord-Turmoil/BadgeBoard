@@ -128,7 +128,7 @@ public class CategoryController : BaseController<CategoryController>
 
 
     [HttpGet]
-    [Route("get")]
+    [Route("anonymous/get")]
     public async Task<ApiResponse> GetCategory([FromQuery] int id)
     {
         try
@@ -143,7 +143,7 @@ public class CategoryController : BaseController<CategoryController>
 
 
     [HttpGet]
-    [Route("current")]
+    [Route("identified/get")]
     [Authorize]
     public async Task<ApiResponse> GetCategory([FromHeader] string authorization, [FromQuery] int id)
     {

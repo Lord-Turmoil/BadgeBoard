@@ -10,6 +10,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 public class BadgeDto
 {
     public int Id { get; set; }
+
     public int Type { get; set; }
 
     public bool IsPublic { get; set; }

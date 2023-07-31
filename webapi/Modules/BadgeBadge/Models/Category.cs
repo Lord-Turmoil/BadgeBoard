@@ -16,6 +16,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Models;
 public class Category : TimeRecordModel
 {
     [Key] public int Id { get; init; }
+    public bool IsDefault { get; set; }
 
     [Column(TypeName = "varchar(127)")]
     [Required]

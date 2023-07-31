@@ -124,11 +124,16 @@ public static class BadgeUtil
         return errors;
     }
 
+    private static async Task EraseBadges(
+        IUnitOfWork unitOfWork, IEnumerable<Badge> badges)
+    {
+        
+    }
 
     // badge must be completely get (with category fully included)
     public static bool IsAccessible(Badge badge)
     {
-        return badge.IsPublic && (badge.Category == null || badge.Category.Option.IsPublic);
+        return badge is { IsPublic: true, Category.Option.IsPublic: true };
     }
     
     public static bool IsAccessible(Badge badge, User user)

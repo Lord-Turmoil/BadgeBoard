@@ -52,19 +52,15 @@ public class BadgeService : BaseService, IBadgeService
         }
 
         // get category
-        Category? category = null;
-        if (dto.Category != 0)
+        Category? category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category, true);
+        if (category == null)
         {
-            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category, true);
-            if (category == null)
-            {
-                return new GoodResponse(new CategoryNotExistsDto());
-            }
+            return new GoodResponse(new CategoryNotExistsDto());
+        }
 
-            if (category.Option.AllowQuestion)
-            {
-                return new GoodResponse(new BadgeTypeNotAllowedDto(BadgeTypeNotAllowedDto.QuestionNotAllowedMessage));
-            }
+        if (category.Option.AllowQuestion)
+        {
+            return new GoodResponse(new BadgeTypeNotAllowedDto(BadgeTypeNotAllowedDto.QuestionNotAllowedMessage));
         }
 
         // get sender and receiver
@@ -143,19 +139,15 @@ public class BadgeService : BaseService, IBadgeService
         }
 
         // get category
-        Category? category = null;
-        if (dto.Category != 0)
+        Category? category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category, true);
+        if (category == null)
         {
-            category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category, true);
-            if (category == null)
-            {
-                return new GoodResponse(new CategoryNotExistsDto());
-            }
+            return new GoodResponse(new CategoryNotExistsDto());
+        }
 
-            if (!category.Option.AllowMemory)
-            {
-                return new GoodResponse(new BadgeTypeNotAllowedDto(BadgeTypeNotAllowedDto.MemoryNotAllowedMessage));
-            }
+        if (!category.Option.AllowMemory)
+        {
+            return new GoodResponse(new BadgeTypeNotAllowedDto(BadgeTypeNotAllowedDto.MemoryNotAllowedMessage));
         }
 
         // get sender and receiver
@@ -407,26 +399,16 @@ public class BadgeService : BaseService, IBadgeService
         }
 
         // Well, hope front end will handle requests that moves to itself.
-        var name = "Default";
-        if (dto.Category == 0)
+        Category? category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category);
+        if (category == null)
         {
-            badge.CategoryId = null;
+            return new GoodResponse(new CategoryNotExistsDto());
         }
-        else
-        {
-            Category? category = await Category.FindAsync(
-                _unitOfWork.GetRepository<Category>(), dto.Category);
-            if (category == null)
-            {
-                return new GoodResponse(new CategoryNotExistsDto());
-            }
 
-            badge.CategoryId = category.Id;
-            name = category.Name;
-        }
+        badge.CategoryId = category.Id;
 
         await _unitOfWork.SaveChangesAsync();
 
-        return new GoodResponse(new GoodDto($"Badge moved to {name}"));
+        return new GoodResponse(new GoodDto($"Badge moved to {category.Name}"));
     }
 }

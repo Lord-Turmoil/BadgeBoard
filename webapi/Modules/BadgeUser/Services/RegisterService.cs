@@ -6,6 +6,8 @@ using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
+using BadgeBoard.Api.Modules.BadgeBadge.Models;
+using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Services.Impl;
@@ -16,7 +18,8 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services;
 public class RegisterService : BaseService, IRegisterService
 {
     public RegisterService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider,
-        unitOfWork, mapper) { }
+        unitOfWork, mapper)
+    { }
 
 
     public ApiResponse SendCode(VerificationCodeDto dto)
@@ -70,16 +73,11 @@ public class RegisterService : BaseService, IRegisterService
             return new GoodResponse(new UserAlreadyExistsDto());
         }
 
-        try
-        {
-            await UserUtil.CreateUserAsync(_unitOfWork, dto);
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-            return new InternalServerErrorResponse(new InternalServerErrorDto("Failed to save user data"));
-        }
+        User user = await UserUtil.CreateUserAsync(_unitOfWork, dto);
+        // this default category should not be deleted, unless user is.
+        await CategoryUtil.CreateCategoryAsync(_unitOfWork, "Default", user);
+
+        await _unitOfWork.SaveChangesAsync();
 
         return new GoodResponse(new GoodDto("Welcome, my friend"));
     }
@@ -99,6 +97,7 @@ public class RegisterService : BaseService, IRegisterService
             if (user != null)
             {
                 UserUtil.EraseUser(_unitOfWork, user);
+                _CleanUpUser(user.Id);
             }
         }
 
@@ -106,5 +105,11 @@ public class RegisterService : BaseService, IRegisterService
 
 
         return new GoodResponse(new GoodDto("Users canceled"));
+    }
+
+
+    private void _CleanUpUser(int userId)
+    {
+        // TODO: handle this later...
     }
 }

@@ -3,10 +3,12 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
 using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeGlobal.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace BadgeBoard.Api.Modules.BadgeBadge.Models;
@@ -36,8 +38,8 @@ public class Badge : TimeRecordModel
     public bool IsChecked { get; set; } = false;
 
     // Foreign keys
-    public int? CategoryId { get; set; }
-    [ForeignKey(nameof(CategoryId))] public Category? Category { get; set; }
+    public int CategoryId { get; set; }
+    [ForeignKey(nameof(CategoryId))] public Category Category { get; set; }
 
     public int UserId { get; set; }
     [ForeignKey(nameof(UserId))] public User User { get; set; }
@@ -72,11 +74,17 @@ public class Badge : TimeRecordModel
     }
 
 
-    public static async Task<Badge?> FindAsync(IRepository<Badge> repo, int id)
+    public static async Task<Badge?> FindAsync(IRepository<Badge> repo, int id, bool include = false)
     {
+        if (include)
+        {
+            return await repo.GetFirstOrDefaultAsync(
+                predicate: x => x.Id == id,
+                include: source => source.Include(x => x.Category).ThenInclude(x => x.Option));
+
+        }
         return await repo.FindAsync(id);
     }
-
 
     public static class Types
     {

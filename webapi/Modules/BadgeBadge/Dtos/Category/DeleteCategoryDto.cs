@@ -8,7 +8,6 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 public class DeleteCategoryDto : IApiRequestDto
 {
     public List<int> Categories { get; set; }
-    public bool Merge { get; set; }
 
 
     public bool Verify()

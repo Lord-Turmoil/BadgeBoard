@@ -32,42 +32,42 @@ public static class CategoryUtil
     }
 
 
-    public static Category UpdateCategory(Category category, BaseCategoryDto dto)
+    public static Category UpdateCategory(Category category, BaseCategoryDto nullableDto)
     {
         var updated = false;
 
-        if (dto.Name != null)
+        if (nullableDto.Name != null)
         {
-            if (!dto.Name.Equals(category.Name))
+            if (!nullableDto.Name.Equals(category.Name))
             {
-                category.Name = dto.Name;
+                category.Name = nullableDto.Name;
                 updated = true;
             }
         }
 
-        if (dto.Option != null)
+        if (nullableDto.Option != null)
         {
-            if (dto.Option.IsPublic != category.Option.IsPublic)
+            if (nullableDto.Option.IsPublic != category.Option.IsPublic)
             {
-                category.Option.IsPublic = dto.Option.IsPublic;
+                category.Option.IsPublic = nullableDto.Option.IsPublic;
                 updated = true;
             }
 
-            if (dto.Option.AllowAnonymity != category.Option.AllowAnonymity)
+            if (nullableDto.Option.AllowAnonymity != category.Option.AllowAnonymity)
             {
-                category.Option.AllowAnonymity = dto.Option.AllowAnonymity;
+                category.Option.AllowAnonymity = nullableDto.Option.AllowAnonymity;
                 updated = true;
             }
 
-            if (dto.Option.AllowQuestion != category.Option.AllowQuestion)
+            if (nullableDto.Option.AllowQuestion != category.Option.AllowQuestion)
             {
-                category.Option.AllowQuestion = dto.Option.AllowQuestion;
+                category.Option.AllowQuestion = nullableDto.Option.AllowQuestion;
                 updated = true;
             }
 
-            if (dto.Option.AllowMemory != category.Option.AllowMemory)
+            if (nullableDto.Option.AllowMemory != category.Option.AllowMemory)
             {
-                category.Option.AllowMemory = dto.Option.AllowMemory;
+                category.Option.AllowMemory = nullableDto.Option.AllowMemory;
                 updated = true;
             }
         }
@@ -135,28 +135,22 @@ public static class CategoryUtil
 
 
     // src and dst should not be both null (although cause redundant work only)
-    public static async Task MergeCategoriesAsync(IUnitOfWork unitOfWork, Category? src, Category? dst)
+    public static async Task MergeCategoriesAsync(IUnitOfWork unitOfWork, Category src, Category dst)
     {
-        IRepository<Badge> repo = unitOfWork.GetRepository<Badge>();
+        if (src.Id == dst.Id)
+        {
+            // avoid self merge
+            return;
+        }
 
-        IList<Badge> badges;
-        if (src == null)
-        {
-            badges = await repo.GetAllAsync(predicate: x => x.CategoryId == null);
-        }
-        else
-        {
-            badges = await repo.GetAllAsync(predicate: x => x.CategoryId == src.Id);
-        }
+        IRepository<Badge> repo = unitOfWork.GetRepository<Badge>();
+        IList<Badge> badges = await repo.GetAllAsync(predicate: x => x.CategoryId == src.Id);
 
         foreach (Badge badge in badges)
         {
-            badge.CategoryId = dst?.Id;
+            badge.CategoryId = dst.Id;
         }
 
-        if (dst != null)
-        {
-            dst.UpdatedTime = DateTime.Now;
-        }
+        dst.UpdatedTime = DateTime.Now;
     }
 }

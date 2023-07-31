@@ -24,14 +24,17 @@ public interface ICategoryService : IService
 
 
     // Update category options. Won't affect current badges in it.
-    public Task<ApiResponse> UpdateCategory(int id, UpdateCategoryDto dto);
+    public Task<ApiResponse> UpdateCategory(int id, UpdateCategoryDto nullableDto);
 
 
     // Merge two categories, and abandon (delete) the merge source.
     // For now, will ignore target category options. :(
     public Task<ApiResponse> MergeCategory(int id, MergeCategoryDto dto);
+    
 
+    // This is not authorized. id is the target user
+    public Task<ApiResponse> GetCategories(int userId);
 
-    // This need no authorization, and id is the target user id.
-    public Task<ApiResponse> GetCategories(int id, bool authorized = false);
+    // This is authorized, id is the initiator, and userId is the target user
+    public Task<ApiResponse> GetCategories(int id, int userId);
 }

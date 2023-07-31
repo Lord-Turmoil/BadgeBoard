@@ -58,7 +58,6 @@ public class CategoryService : BaseService, ICategoryService
         CategoryUtil.UpdateCategory(category, dto);
         await _unitOfWork.SaveChangesAsync();
 
-
         CategoryDto? data = _mapper.Map<Category, CategoryDto>(category);
         return new GoodResponse(new GoodDto("New category options", data));
     }
@@ -92,10 +91,12 @@ public class CategoryService : BaseService, ICategoryService
                 continue;
             }
 
-            // do merge to default
-            if (dto.Merge)
+            if (category.IsDefault)
             {
-                await CategoryUtil.MergeCategoriesAsync(_unitOfWork, category, null);
+                data.Errors.Add(new DeleteCategoryErrorData {
+                    Id = categoryId,
+                    Message = "Cannot delete default category"
+                });
             }
 
             await CategoryUtil.EraseCategoryAsync(_unitOfWork, category, user);
@@ -168,24 +169,22 @@ public class CategoryService : BaseService, ICategoryService
         }
 
         IRepository<Category> repo = _unitOfWork.GetRepository<Category>();
-        Category? src;
-        Category? dst;
-        try
+        Category? src = await Category.FindAsync(repo, dto.SrcId);
+        if (src == null)
         {
-            src = dto.SrcId == 0 ? null : await Category.GetAsync(repo, dto.SrcId);
-            dst = dto.DstId == 0 ? null : await Category.GetAsync(repo, dto.DstId);
+            return new GoodResponse(new CategoryNotExistsDto("Source category not exists"));
         }
-        catch
+        Category? dst = await Category.FindAsync(repo, dto.DstId);
+        if (dst == null)
         {
-            return new GoodResponse(new CategoryNotExistsDto());
+            return new GoodResponse(new CategoryNotExistsDto("Destination category not exists"));
         }
 
         await CategoryUtil.MergeCategoriesAsync(_unitOfWork, src, dst);
-        if (dto.Delete && src != null)
+        if (dto.Delete && !src.IsDefault)
         {
             await CategoryUtil.EraseCategoryAsync(_unitOfWork, src, user);
         }
-
 
         await _unitOfWork.SaveChangesAsync();
 
@@ -193,8 +192,41 @@ public class CategoryService : BaseService, ICategoryService
     }
 
 
-    public async Task<ApiResponse> GetCategories(int id, bool authorized)
+    public async Task<ApiResponse> GetCategories(int userId)
     {
+        User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), userId);
+        if (user == null)
+        {
+            return new GoodResponse(new UserNotExistsDto());
+        }
+
+        IRepository<Category> repo = _unitOfWork.GetRepository<Category>();
+        IList<Category> categoryList = await repo.GetAllAsync(
+            predicate: x => x.UserId == userId,
+            include: source => source.Include(x => x.Option),
+            orderBy: source => source.OrderBy(x => x.Name));
+        var data = new GetCategorySuccessDto();
+        foreach (Category category in categoryList)
+        {
+            if (category.Option.IsPublic)
+            {
+                data.Categories.Add(_mapper.Map<Category, CategoryDto>(category));
+            }
+        }
+
+        return new GoodResponse(new GoodWithDataDto(data));
+    }
+
+
+    public async Task<ApiResponse> GetCategories(int id, int userId)
+    {
+        IRepository<User> userRepo = _unitOfWork.GetRepository<User>();
+        User? initiator = await User.FindAsync(userRepo, id);
+        if (initiator == null)
+        {
+            return new GoodResponse(new UserNotExistsDto("Initiator is missing"));
+        }
+
         User? user = await User.FindAsync(_unitOfWork.GetRepository<User>(), id);
         if (user == null)
         {
@@ -203,20 +235,17 @@ public class CategoryService : BaseService, ICategoryService
 
         IRepository<Category> repo = _unitOfWork.GetRepository<Category>();
         IList<Category> categoryList = await repo.GetAllAsync(
-            predicate: x => x.UserId == id,
+            predicate: x => x.UserId == userId,
             include: source => source.Include(x => x.Option),
             orderBy: source => source.OrderBy(x => x.Name));
 
-        var data = new GetCategoryDto();
+        var data = new GetCategorySuccessDto();
         foreach (Category category in categoryList)
         {
-            // skip private category
-            if (!authorized && !category.Option.IsPublic)
+            if (category.Option.IsPublic || category.UserId == id || user.IsAdmin)
             {
-                continue;
+                data.Categories.Add(_mapper.Map<Category, CategoryDto>(category));
             }
-
-            data.Categories.Add(_mapper.Map<Category, CategoryDto>(category));
         }
 
         return new GoodResponse(new GoodWithDataDto(data));

@@ -6,6 +6,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 public class CategoryDto
 {
     public int Id { get; set; }
+    public bool IsDefault { get; set; }
     public string Name { get; set; }
     public CategoryOptionDto Option { get; set; }
 }

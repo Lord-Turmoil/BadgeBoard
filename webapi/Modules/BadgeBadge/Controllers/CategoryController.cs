@@ -89,12 +89,12 @@ public class CategoryController : BaseController<CategoryController>
     [HttpPost]
     [Route("update")]
     [Authorize]
-    public async Task<ApiResponse> UpdateCategory([FromHeader] string authorization, [FromBody] UpdateCategoryDto dto)
+    public async Task<ApiResponse> UpdateCategory([FromHeader] string authorization, [FromBody] UpdateCategoryDto nullableDto)
     {
         try
         {
             var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
-            return await _service.UpdateCategory(id, dto);
+            return await _service.UpdateCategory(id, nullableDto);
         }
         catch (BadJwtTokenException)
         {
@@ -145,12 +145,12 @@ public class CategoryController : BaseController<CategoryController>
     [HttpGet]
     [Route("current")]
     [Authorize]
-    public async Task<ApiResponse> GetCurrentCategory([FromHeader] string authorization)
+    public async Task<ApiResponse> GetCategory([FromHeader] string authorization, [FromQuery] int id)
     {
         try
         {
-            var id = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
-            return await _service.GetCategories(id, true);
+            var initiatorId = TokenUtil.GetUserIdFromJwtBearerToken(authorization);
+            return await _service.GetCategories(initiatorId, id);
         }
         catch (BadJwtTokenException)
         {

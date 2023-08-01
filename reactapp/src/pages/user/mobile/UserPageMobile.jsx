@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import notifier from '~/services/notifier';
 import ExpandFab from '~/components/utility/ExpandFab';
 import InflateBox from '~/components/layout/InflateBox';
-import { useLocalUser, useUser } from '~/services/user/UserUtil';
+import { fetchUser, useLocalUser, useUser } from '~/services/user/UserUtil';
 
 import UserInfoPanel from '~/parts/UserPanel/UserInfoPanel/UserInfoPanel';
 
@@ -34,13 +34,28 @@ export default function UserPageMobile() {
     }, [visitor]);
 
     // current visiting user
-    const {
-        data: user,
-        setData: setUser,
-        loading: userLoading,
-        error: userError
-    } = useUser(uid ? uid : (visitor ? visitor.account.id : null));
+    const [user, setUser] = useState(null);
+    const [userError, setUserError] = useState(null);
 
+    // const {
+    //     data: user,
+    //     setData: setUser,
+    //     loading: userLoading,
+    //     error: userError
+    // } = useUser(uid ? uid : (visitor ? visitor.account.id : null));
+    useEffect(() => {
+        (async () => {
+            if (visitorLoading == true) {
+                return;
+            }
+            const [u, e] = await fetchUser(uid);
+            if (e) {
+                setUserError(e);
+            } else {
+                setUser(u);
+            }
+        })();
+    }, [visitorLoading]);
     useEffect(() => {
         console.log('🚀 > useEffect > user:', user);
     }, [user]);
@@ -55,10 +70,10 @@ export default function UserPageMobile() {
 
     // user change handling
     const onUserChange = (data) => {
-        setUser({ ...user, [data.key]: data.data });
+        setUser({ ...user, [data.key]: data.value});
     };
     const onVisitorChange = (data) => {
-        setVisitor({ ...visitor, [data.key]: data.data });
+        setVisitor({ ...visitor, [data.key]: data.value });
     };
 
     // expand toggle

@@ -52,6 +52,7 @@ export default function UserInfoPanel({
     };
 
     const onUserChangeInner = (data) => {
+        console.log("🚀 > onUserChangeInner > data:", data);
         user && onUserChange && onUserChange(data);
         visitor && onVisitorChange && onVisitorChange(data);
     };
@@ -60,6 +61,7 @@ export default function UserInfoPanel({
     const [enableEdit, setEnableEdit] = useState(false);
     const [avatarKey, setAvatarKey] = useState(0);
     const turnOnEdit = () => {
+        console.log("🚀 > turnOnEdit > user:", user);
         var flat = UserUtil.flat(user);
         setShadow(flat);
         setSex(UserUtil.getSexText(flat.sex));

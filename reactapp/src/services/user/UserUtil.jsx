@@ -184,3 +184,20 @@ export const useUser = (uid, callback = null) => {
 
     return { data, setData, loading, error };
 };
+
+export const fetchUser = async (uid) => {
+    var data = null;
+    var error = null;
+
+    try {
+        const dto = await api.get('user/user', { id: uid });
+        if (dto.meta.status != 0) {
+            throw new Error(dto.meta.message);
+        }
+        data = dto.data;
+    } catch (err) {
+        error = err;
+    }
+
+    return [data, error];
+}

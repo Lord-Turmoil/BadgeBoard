@@ -19,7 +19,7 @@ public class UnreadRecord
     public int MemoryCount { get; set; }
 
 
-    public static async Task<UnreadRecord> CreateAsync(
+    public static async ValueTask<UnreadRecord> CreateAsync(
         IRepository<UnreadRecord> repo,
         int questionCount = 0,
         int memoryCount = 0)
@@ -32,13 +32,13 @@ public class UnreadRecord
     }
 
 
-    public static async Task<UnreadRecord?> FindAsync(IRepository<UnreadRecord> repo, int id)
+    public static async ValueTask<UnreadRecord?> FindAsync(IRepository<UnreadRecord> repo, int id)
     {
         return await repo.FindAsync(id);
     }
 
 
-    public static async Task<UnreadRecord> GetAsync(IRepository<UnreadRecord> repo, int id)
+    public static async ValueTask<UnreadRecord> GetAsync(IRepository<UnreadRecord> repo, int id)
     {
         return await repo.FindAsync(id) ?? throw new MissingReferenceException("UnreadRecord");
     }

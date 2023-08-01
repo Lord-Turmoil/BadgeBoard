@@ -33,7 +33,7 @@ public class Category : TimeRecordModel
     [ForeignKey(nameof(CategoryOptionId))] public CategoryOption Option { get; set; }
 
 
-    public static async Task<Category> CreateAsync(
+    public static async ValueTask<Category> CreateAsync(
         IRepository<Category> repo,
         string Name,
         User user,
@@ -55,7 +55,7 @@ public class Category : TimeRecordModel
     }
 
 
-    public static async Task<Category> GetAsync(IRepository<Category> repo, int id, bool include = false)
+    public static async ValueTask<Category> GetAsync(IRepository<Category> repo, int id, bool include = false)
     {
         if (include)
         {
@@ -70,7 +70,7 @@ public class Category : TimeRecordModel
     }
 
 
-    public static async Task<Category?> FindAsync(IRepository<Category> repo, int id, bool include = false)
+    public static async ValueTask<Category?> FindAsync(IRepository<Category> repo, int id, bool include = false)
     {
         if (include)
         {
@@ -104,7 +104,7 @@ public class CategoryOption
     public bool AllowMemory { get; set; } = true;
 
 
-    public static async Task<CategoryOption> CreateAsync(IRepository<CategoryOption> repo)
+    public static async ValueTask<CategoryOption> CreateAsync(IRepository<CategoryOption> repo)
     {
         EntityEntry<CategoryOption> entry = await repo.InsertAsync(new CategoryOption());
         return entry.Entity;

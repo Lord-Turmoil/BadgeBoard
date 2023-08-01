@@ -47,7 +47,7 @@ public class User
     [ForeignKey(nameof(UnreadRecordId))] public UnreadRecord Unread { get; set; }
 
 
-    public static async Task<User> CreateAsync(
+    public static async ValueTask<User> CreateAsync(
         IRepository<User> repo,
         string username,
         UserAccount account,
@@ -66,13 +66,13 @@ public class User
     }
 
 
-    public static async Task<User> GetAsync(IRepository<User> repo, int id)
+    public static async ValueTask<User> GetAsync(IRepository<User> repo, int id)
     {
         return await repo.FindAsync(id) ?? throw new MissingReferenceException("User");
     }
 
 
-    public static async Task<User?> FindAsync(IRepository<User> repo, int id)
+    public static async ValueTask<User?> FindAsync(IRepository<User> repo, int id)
     {
         return await repo.FindAsync(id);
     }
@@ -84,7 +84,7 @@ public class User
     /// <param name="unitOfWork">Global unit of work</param>
     /// <param name="user">The user to include related entities</param>
     /// <returns></returns>
-    public static async Task<User> IncludeAsync(IUnitOfWork unitOfWork, User user)
+    public static async ValueTask<User> IncludeAsync(IUnitOfWork unitOfWork, User user)
     {
         user.Account = await UserAccount.GetAsync(unitOfWork.GetRepository<UserAccount>(), user.Id);
         user.Preference =
@@ -105,14 +105,14 @@ public class UserPreference
     public bool IsDefaultPublic { get; set; } = false;
 
 
-    public static async Task<UserPreference> CreateAsync(IRepository<UserPreference> repo)
+    public static async ValueTask<UserPreference> CreateAsync(IRepository<UserPreference> repo)
     {
         EntityEntry<UserPreference> entry = await repo.InsertAsync(new UserPreference());
         return entry.Entity;
     }
 
 
-    public static async Task<UserPreference> GetAsync(IRepository<UserPreference> repo, int id)
+    public static async ValueTask<UserPreference> GetAsync(IRepository<UserPreference> repo, int id)
     {
         return await repo.FindAsync(id) ?? throw new MissingReferenceException("Preference");
     }
@@ -145,14 +145,14 @@ public class UserInfo
     public int? Sex { get; set; }
 
 
-    public static async Task<UserInfo> CreateAsync(IRepository<UserInfo> repo)
+    public static async ValueTask<UserInfo> CreateAsync(IRepository<UserInfo> repo)
     {
         EntityEntry<UserInfo> entry = await repo.InsertAsync(new UserInfo());
         return entry.Entity;
     }
 
 
-    public static async Task<UserInfo> GetAsync(IRepository<UserInfo> repo, int id)
+    public static async ValueTask<UserInfo> GetAsync(IRepository<UserInfo> repo, int id)
     {
         return await repo.FindAsync(id) ?? throw new MissingReferenceException("UserInfo");
     }

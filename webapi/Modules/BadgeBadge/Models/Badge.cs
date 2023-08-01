@@ -44,7 +44,7 @@ public class Badge : TimeRecordModel
     [ForeignKey(nameof(UserId))] public User User { get; set; }
 
 
-    public static async Task<Badge> CreateAsync(
+    public static async ValueTask<Badge> CreateAsync(
         IRepository<Badge> repo,
         int type,
         int payload,
@@ -73,7 +73,7 @@ public class Badge : TimeRecordModel
     }
 
 
-    public static async Task<Badge?> FindAsync(IRepository<Badge> repo, int id, bool include = false)
+    public static async ValueTask<Badge?> FindAsync(IRepository<Badge> repo, int id, bool include = false)
     {
         if (include)
         {
@@ -110,7 +110,7 @@ public class QuestionPayload
     [Column(TypeName = "text")] public string? Answer { get; set; }
 
 
-    public static async Task<QuestionPayload> CreateAsync(
+    public static async ValueTask<QuestionPayload> CreateAsync(
         IRepository<QuestionPayload> repo,
         string question = "",
         string? answer = null)
@@ -123,13 +123,13 @@ public class QuestionPayload
     }
 
 
-    public static async Task<QuestionPayload> GetAsync(IRepository<QuestionPayload> repo, int id)
+    public static async ValueTask<QuestionPayload> GetAsync(IRepository<QuestionPayload> repo, int id)
     {
         return await repo.FindAsync(id) ?? throw new MissingReferenceException($"QuestionPayload {id}");
     }
 
 
-    public static async Task<QuestionPayload?> FindAsync(IRepository<QuestionPayload> repo, int id)
+    public static async ValueTask<QuestionPayload?> FindAsync(IRepository<QuestionPayload> repo, int id)
     {
         return await repo.FindAsync(id);
     }
@@ -144,20 +144,20 @@ public class MemoryPayload
     [Column(TypeName = "text")] public string Memory { get; set; } = "";
 
 
-    public static async Task<MemoryPayload> CreateAsync(IRepository<MemoryPayload> repo, string memory = "")
+    public static async ValueTask<MemoryPayload> CreateAsync(IRepository<MemoryPayload> repo, string memory = "")
     {
         EntityEntry<MemoryPayload> entry = await repo.InsertAsync(new MemoryPayload { Memory = memory });
         return entry.Entity;
     }
 
 
-    public static async Task<MemoryPayload> GetAsync(IRepository<MemoryPayload> repo, int id)
+    public static async ValueTask<MemoryPayload> GetAsync(IRepository<MemoryPayload> repo, int id)
     {
         return await repo.FindAsync(id) ?? throw new MissingReferenceException($"MemoryPayload {id}");
     }
 
 
-    public static async Task<MemoryPayload?> FindAsync(IRepository<MemoryPayload> repo, int id)
+    public static async ValueTask<MemoryPayload?> FindAsync(IRepository<MemoryPayload> repo, int id)
     {
         return await repo.FindAsync(id);
     }

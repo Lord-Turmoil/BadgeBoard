@@ -10,8 +10,6 @@ public class MergeCategoryDto : IApiRequestDto
     // 0 means default category
     public int SrcId { get; set; }
     public int DstId { get; set; }
-    public bool Delete { get; set; } // whether delete source
-
 
     public bool Verify()
     {

@@ -2,6 +2,7 @@
 // Licensed under the BSD 2-Clause License.
 
 using Arch.EntityFrameworkCore.UnitOfWork;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
@@ -81,12 +82,12 @@ public static class CategoryUtil
     }
 
 
-    public static async Task<List<DeleteBadgeErrorData>> EraseCategoryAsync(
+    public static async Task<List<DeleteErrorData>> EraseCategoryAsync(
         IUnitOfWork unitOfWork, Category category, User user)
     {
         if (category.UserId != user.Id)
         {
-            return new List<DeleteBadgeErrorData> {
+            return new List<DeleteErrorData> {
                 new() {
                     Id = 0,
                     Message = $"Category {category.Id} does not belong to user {user.Id}"
@@ -94,9 +95,8 @@ public static class CategoryUtil
             };
         }
 
-        IList<Badge> badges = await unitOfWork.GetRepository<Badge>()
-            .GetAllAsync(predicate: x => x.CategoryId == category.Id);
-        List<DeleteBadgeErrorData> errors = await BadgeUtil.EraseBadges(unitOfWork, badges, user, true);
+        IList<Badge> badges = await unitOfWork.GetRepository<Badge>().GetAllAsync(predicate: x => x.CategoryId == category.Id, disableTracking: false);
+        List<DeleteErrorData> errors = await BadgeUtil.EraseBadges(unitOfWork, badges, user, true);
 
         unitOfWork.GetRepository<Category>().Delete(category);
         unitOfWork.GetRepository<CategoryOption>().Delete(category.CategoryOptionId);
@@ -105,19 +105,19 @@ public static class CategoryUtil
     }
 
 
-    public static async Task<List<DeleteBadgeErrorData>> EraseCategoriesAsync(
+    public static async Task<List<DeleteErrorData>> EraseCategoriesAsync(
         IUnitOfWork unitOfWork, IEnumerable<Category> categories, User user)
     {
         IRepository<Badge> badgeRepo = unitOfWork.GetRepository<Badge>();
         IRepository<Category> categoryRepo = unitOfWork.GetRepository<Category>();
         IRepository<CategoryOption> optionRepo = unitOfWork.GetRepository<CategoryOption>();
-        var errors = new List<DeleteBadgeErrorData>();
+        var errors = new List<DeleteErrorData>();
 
         foreach (Category category in categories)
         {
             if (category.UserId != user.Id)
             {
-                errors.Add(new DeleteBadgeErrorData {
+                errors.Add(new DeleteErrorData {
                     Id = 0,
                     Message = $"Category {category.Id} does not belong to user {user.Id}"
                 });
@@ -144,7 +144,8 @@ public static class CategoryUtil
         }
 
         IRepository<Badge> repo = unitOfWork.GetRepository<Badge>();
-        IList<Badge> badges = await repo.GetAllAsync(predicate: x => x.CategoryId == src.Id);
+        // must disable tracking since they are not readonly
+        IList<Badge> badges = await repo.GetAllAsync(predicate: x => x.CategoryId == src.Id, disableTracking: false);
 
         foreach (Badge badge in badges)
         {

@@ -25,13 +25,7 @@ public class DeleteBadgeDto : IApiRequestDto
     }
 }
 
-public class DeleteBadgeErrorData
-{
-    public int Id { get; set; }
-    public string? Message { get; set; }
-}
-
 public class DeleteBadgeSuccessDto : ApiResponseData
 {
-    public List<DeleteBadgeErrorData> Errors { get; } = new();
+    public List<DeleteErrorData> Errors { get; } = new();
 }

@@ -2,6 +2,7 @@
 // Licensed under the BSD 2-Clause License.
 
 using Arch.EntityFrameworkCore.UnitOfWork;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
@@ -61,11 +62,11 @@ public static class BadgeUtil
     }
 
 
-    public static async Task<List<DeleteBadgeErrorData>> EraseBadgesAsync(
+    public static async Task<List<DeleteErrorData>> EraseBadgesAsync(
         IUnitOfWork unitOfWork, IEnumerable<int> badges, User user, bool force = false)
     {
         var badgeList = new List<Badge>();
-        var errors = new List<DeleteBadgeErrorData>();
+        var errors = new List<DeleteErrorData>();
         IRepository<Badge> repo = unitOfWork.GetRepository<Badge>();
 
         foreach (var badgeId in badges)
@@ -73,7 +74,7 @@ public static class BadgeUtil
             Badge? badge = await Badge.FindAsync(repo, badgeId);
             if (badge == null)
             {
-                errors.Add(new DeleteBadgeErrorData {
+                errors.Add(new DeleteErrorData {
                     Id = badgeId,
                     Message = "Badge does not exist"
                 });
@@ -89,10 +90,10 @@ public static class BadgeUtil
     }
 
 
-    public static async Task<List<DeleteBadgeErrorData>> EraseBadges(
+    public static async Task<List<DeleteErrorData>> EraseBadges(
         IUnitOfWork unitOfWork, IEnumerable<Badge> badges, User user, bool force = false)
     {
-        var errors = new List<DeleteBadgeErrorData>();
+        var errors = new List<DeleteErrorData>();
         user.Unread ??= await UnreadRecord.GetAsync(unitOfWork.GetRepository<UnreadRecord>(), user.UnreadRecordId);
 
         foreach (Badge badge in badges)
@@ -113,7 +114,7 @@ public static class BadgeUtil
                     }
                     else
                     {
-                        errors.Add(new DeleteBadgeErrorData {
+                        errors.Add(new DeleteErrorData {
                             Id = badge.Id,
                             Message = "Badge not checked yet"
                         });
@@ -121,7 +122,7 @@ public static class BadgeUtil
                 }
                 else
                 {
-                    errors.Add(new DeleteBadgeErrorData {
+                    errors.Add(new DeleteErrorData {
                         Id = badge.Id,
                         Message = "Not in force mode"
                     });
@@ -130,7 +131,7 @@ public static class BadgeUtil
             else
             {
                 // no permission
-                errors.Add(new DeleteBadgeErrorData {
+                errors.Add(new DeleteErrorData {
                     Id = badge.Id,
                     Message = "Permission denied"
                 });

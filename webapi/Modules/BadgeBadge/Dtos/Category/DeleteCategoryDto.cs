@@ -22,13 +22,7 @@ public class DeleteCategoryDto : IApiRequestDto
     }
 }
 
-public class DeleteCategoryErrorData
-{
-    public int Id { get; set; }
-    public string? Message { get; set; }
-}
-
 public class DeleteCategorySuccessDto : ApiResponseData
 {
-    public List<DeleteCategoryErrorData> Errors { get; set; } = new();
+    public List<DeleteErrorData> Errors { get; set; } = new();
 }

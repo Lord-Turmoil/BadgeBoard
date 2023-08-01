@@ -5,6 +5,7 @@ using Arch.EntityFrameworkCore.UnitOfWork;
 using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
+using BadgeBoard.Api.Modules.BadgeBadge.Dtos;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
@@ -84,22 +85,32 @@ public class CategoryService : BaseService, ICategoryService
             Category? category = await Category.FindAsync(repo, categoryId);
             if (category == null)
             {
-                data.Errors.Add(new DeleteCategoryErrorData {
+                data.Errors.Add(new DeleteErrorData {
                     Id = categoryId,
                     Message = "Not exists"
                 });
                 continue;
             }
 
+            if (!(category.UserId == id || user.IsAdmin))
+            {
+                data.Errors.Add(new DeleteErrorData {
+                    Id = categoryId,
+                    Message = "Cannot access category"
+                });
+                continue;
+            }
+
             if (category.IsDefault)
             {
-                data.Errors.Add(new DeleteCategoryErrorData {
+                data.Errors.Add(new DeleteErrorData {
                     Id = categoryId,
                     Message = "Cannot delete default category"
                 });
+                continue;
             }
 
-            await CategoryUtil.EraseCategoryAsync(_unitOfWork, category, user);
+            data.Errors.AddRange(await CategoryUtil.EraseCategoryAsync(_unitOfWork, category, user));
         }
 
         await _unitOfWork.SaveChangesAsync();
@@ -181,11 +192,6 @@ public class CategoryService : BaseService, ICategoryService
         }
 
         await CategoryUtil.MergeCategoriesAsync(_unitOfWork, src, dst);
-        if (dto.Delete && !src.IsDefault)
-        {
-            await CategoryUtil.EraseCategoryAsync(_unitOfWork, src, user);
-        }
-
         await _unitOfWork.SaveChangesAsync();
 
         return new GoodResponse(new GoodDto("Categories Merged"));

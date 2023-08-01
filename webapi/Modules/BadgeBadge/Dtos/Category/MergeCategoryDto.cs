@@ -11,6 +11,7 @@ public class MergeCategoryDto : IApiRequestDto
     public int SrcId { get; set; }
     public int DstId { get; set; }
 
+
     public bool Verify()
     {
         return true;

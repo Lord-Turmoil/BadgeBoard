@@ -185,6 +185,7 @@ public class CategoryService : BaseService, ICategoryService
         {
             return new GoodResponse(new CategoryNotExistsDto("Source category not exists"));
         }
+
         Category? dst = await Category.FindAsync(repo, dto.DstId);
         if (dst == null)
         {

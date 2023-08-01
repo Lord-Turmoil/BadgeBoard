@@ -57,10 +57,12 @@ public class BadgeService : BaseService, IBadgeService
         {
             return new GoodResponse(new CategoryNotExistsDto());
         }
+
         if (!category.Option.IsPublic && category.UserId != id)
         {
             return new GoodResponse(new CategoryIsPrivateDto());
         }
+
         if (!category.Option.AllowQuestion)
         {
             return new GoodResponse(new BadgeTypeNotAllowedDto(BadgeTypeNotAllowedDto.QuestionNotAllowedMessage));
@@ -152,6 +154,7 @@ public class BadgeService : BaseService, IBadgeService
         {
             return new GoodResponse(new CategoryIsPrivateDto());
         }
+
         if (!category.Option.AllowMemory)
         {
             return new GoodResponse(new BadgeTypeNotAllowedDto(BadgeTypeNotAllowedDto.MemoryNotAllowedMessage));
@@ -168,6 +171,7 @@ public class BadgeService : BaseService, IBadgeService
                 return new GoodResponse(new UserNotExistsDto());
             }
         }
+
         if (sender == null && category is { Option.AllowAnonymity: false })
         {
             return new GoodResponse(new AnonymousBadgeNotAllowed());
@@ -294,6 +298,7 @@ public class BadgeService : BaseService, IBadgeService
         {
             return new GoodResponse(new BadgeNotExistsDto());
         }
+
         if (badge.Type != Badge.Types.Question)
         {
             return new GoodResponse(new WrongBadgeTypeDto());

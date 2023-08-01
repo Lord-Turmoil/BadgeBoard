@@ -187,12 +187,13 @@ public class BrowseService : BaseService, IBrowseService
     }
 
 
-    private async Task<BrowseBadgeSuccessDto> _GetBadgeDtosData(Expression<Func<Badge, bool>> predicate, bool publicCategoryOnly)
+    private async Task<BrowseBadgeSuccessDto> _GetBadgeDtosData(Expression<Func<Badge, bool>> predicate,
+        bool publicCategoryOnly)
     {
         IEnumerable<Badge> badges = await _unitOfWork.GetRepository<Badge>().GetAllAsync(
             predicate: predicate,
-            orderBy: source => source.OrderBy(x => x.CreatedTime),
-            include: source => source.Include(x => x.Category).ThenInclude(x => x.Option));
+            source => source.OrderBy(x => x.CreatedTime),
+            source => source.Include(x => x.Category).ThenInclude(x => x.Option));
         if (publicCategoryOnly)
         {
             badges = badges.Where(x => x.Category.Option.IsPublic);

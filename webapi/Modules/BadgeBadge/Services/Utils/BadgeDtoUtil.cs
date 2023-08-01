@@ -129,7 +129,7 @@ public static class BadgeDtoUtil
         // category
         if (badge.CategoryId != null)
         {
-            Category category = await Category.GetAsync(categoryRepo, (int)badge.CategoryId);
+            Category category = await Category.GetAsync(categoryRepo, badge.CategoryId);
             dto.Category = mapper.Map<Category, CategoryBriefDto>(category);
         }
         else

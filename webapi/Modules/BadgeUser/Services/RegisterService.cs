@@ -6,7 +6,6 @@ using AutoMapper;
 using BadgeBoard.Api.Extensions.Module;
 using BadgeBoard.Api.Extensions.Response;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
-using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
@@ -18,8 +17,7 @@ namespace BadgeBoard.Api.Modules.BadgeUser.Services;
 public class RegisterService : BaseService, IRegisterService
 {
     public RegisterService(IServiceProvider provider, IUnitOfWork unitOfWork, IMapper mapper) : base(provider,
-        unitOfWork, mapper)
-    { }
+        unitOfWork, mapper) { }
 
 
     public ApiResponse SendCode(VerificationCodeDto dto)

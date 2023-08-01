@@ -3,7 +3,6 @@
 
 using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos;
-using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 using BadgeBoard.Api.Modules.BadgeBadge.Dtos.Category;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
@@ -12,7 +11,8 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 
 public static class CategoryUtil
 {
-    public static async Task<Category> CreateCategoryAsync(IUnitOfWork unitOfWork, string name, User user, bool isDefault = false)
+    public static async Task<Category> CreateCategoryAsync(IUnitOfWork unitOfWork, string name, User user,
+        bool isDefault = false)
     {
         var option = await CategoryOption.CreateAsync(unitOfWork.GetRepository<CategoryOption>());
         var category = await Category.CreateAsync(unitOfWork.GetRepository<Category>(), name, user, isDefault, option);
@@ -95,7 +95,8 @@ public static class CategoryUtil
             };
         }
 
-        IList<Badge> badges = await unitOfWork.GetRepository<Badge>().GetAllAsync(predicate: x => x.CategoryId == category.Id, disableTracking: false);
+        IList<Badge> badges = await unitOfWork.GetRepository<Badge>()
+            .GetAllAsync(predicate: x => x.CategoryId == category.Id, disableTracking: false);
         List<DeleteErrorData> errors = await BadgeUtil.EraseBadges(unitOfWork, badges, user, true);
 
         unitOfWork.GetRepository<Category>().Delete(category);
@@ -161,6 +162,7 @@ public static class CategoryUtil
     {
         return category.Option.IsPublic;
     }
+
 
     public static bool IsAccessible(Category category, User user)
     {

@@ -89,7 +89,8 @@ public class CategoryController : BaseController<CategoryController>
     [HttpPost]
     [Route("update")]
     [Authorize]
-    public async Task<ApiResponse> UpdateCategory([FromHeader] string authorization, [FromBody] UpdateCategoryDto nullableDto)
+    public async Task<ApiResponse> UpdateCategory([FromHeader] string authorization,
+        [FromBody] UpdateCategoryDto nullableDto)
     {
         try
         {

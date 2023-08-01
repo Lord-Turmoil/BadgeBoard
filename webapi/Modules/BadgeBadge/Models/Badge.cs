@@ -3,7 +3,6 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq.Expressions;
 using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeGlobal.Exceptions;
 using BadgeBoard.Api.Modules.BadgeGlobal.Models;
@@ -56,7 +55,7 @@ public class Badge : TimeRecordModel
         bool isLocked = false,
         bool isPublic = true)
     {
-        var timestamp = DateTime.Now;
+        DateTime timestamp = DateTime.Now;
         EntityEntry<Badge> entry = await repo.InsertAsync(new Badge {
             Type = type,
             PayloadId = payload,
@@ -81,10 +80,11 @@ public class Badge : TimeRecordModel
             return await repo.GetFirstOrDefaultAsync(
                 predicate: x => x.Id == id,
                 include: source => source.Include(x => x.Category).ThenInclude(x => x.Option));
-
         }
+
         return await repo.FindAsync(id);
     }
+
 
     public static class Types
     {

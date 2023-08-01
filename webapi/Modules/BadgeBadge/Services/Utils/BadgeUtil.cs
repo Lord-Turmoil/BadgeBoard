@@ -58,6 +58,7 @@ public static class BadgeUtil
                 unread.MemoryCount--;
             }
         }
+
         unitOfWork.GetRepository<Badge>().Delete(badge);
     }
 
@@ -141,17 +142,17 @@ public static class BadgeUtil
         return errors;
     }
 
-    private static async Task EraseBadges(
-        IUnitOfWork unitOfWork, IEnumerable<Badge> badges)
-    {
 
-    }
+    private static async Task EraseBadges(
+        IUnitOfWork unitOfWork, IEnumerable<Badge> badges) { }
+
 
     // badge must be completely get (with category fully included)
     public static bool IsAccessible(Badge badge)
     {
         return badge is { IsPublic: true, Category.Option.IsPublic: true };
     }
+
 
     public static bool IsAccessible(Badge badge, User user)
     {

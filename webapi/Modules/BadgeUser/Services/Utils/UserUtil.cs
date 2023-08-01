@@ -5,7 +5,6 @@ using Arch.EntityFrameworkCore.UnitOfWork;
 using BadgeBoard.Api.Modules.BadgeAccount.Models;
 using BadgeBoard.Api.Modules.BadgeAccount.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeBadge.Models;
-using BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 using BadgeBoard.Api.Modules.BadgeUser.Dtos;
 using BadgeBoard.Api.Modules.BadgeUser.Models;
 

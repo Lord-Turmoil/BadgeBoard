@@ -30,10 +30,11 @@ public interface ICategoryService : IService
     // Merge two categories, and abandon (delete) the merge source.
     // For now, will ignore target category options. :(
     public Task<ApiResponse> MergeCategory(int id, MergeCategoryDto dto);
-    
+
 
     // This is not authorized. id is the target user
     public Task<ApiResponse> GetCategories(int userId);
+
 
     // This is authorized, id is the initiator, and userId is the target user
     public Task<ApiResponse> GetCategories(int id, int userId);

@@ -83,12 +83,12 @@ class UserUtil {
     // data format
     static getSexText(no) {
         switch (no) {
-        case 1:
-            return 'Male';
-        case 2:
-            return 'Female';
-        default:
-            return 'Unknown';
+            case 1:
+                return 'Male';
+            case 2:
+                return 'Female';
+            default:
+                return 'Unknown';
         }
     }
 
@@ -97,12 +97,12 @@ class UserUtil {
             return 0;
         }
         switch (text.toLowerCase()) {
-        case 'male':
-            return 1;
-        case 'female':
-            return 2;
-        default:
-            return 0;
+            case 'male':
+                return 1;
+            case 'female':
+                return 2;
+            default:
+                return 0;
         }
     }
 }
@@ -117,13 +117,47 @@ export const useLocalUser = (update = null, callback = null) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-            let didCancel = false;
+        let didCancel = false;
 
-            setError(null);
+        setError(null);
+        (async () => {
+            try {
+                setLoading(true);
+                const dto = await api.get('user/current');
+                if (dto.meta.status != 0) {
+                    throw new Error(dto.meta.message);
+                }
+                setData(dto.data);
+                console.log('🚀 > dto.data:', dto.data);
+            } catch (err) {
+                setError(err);
+                callback && callback();
+            } finally {
+                setLoading(false);
+            }
+        })();
+        return () => {
+            didCancel = true;
+        };
+    }, [update]);
+
+    return { data, setData, loading, error };
+};
+
+export const useUser = (uid, callback = null) => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        let didCancel = false;
+
+        setError(null);
+        if (uid) {
             (async () => {
                 try {
                     setLoading(true);
-                    const dto = await api.get('user/current');
+                    const dto = await api.get('user/user', { id: uid });
                     if (dto.meta.status != 0) {
                         throw new Error(dto.meta.message);
                     }
@@ -136,50 +170,15 @@ export const useLocalUser = (update = null, callback = null) => {
                     setLoading(false);
                 }
             })();
-            return () => {
-                didCancel = true;
-            };
-        },
-        [update]);
-
-    return { data, setData, loading, error };
-};
-
-export const useUser = (uid, callback = null) => {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-            let didCancel = false;
-
-            setError(null);
-            if (uid) {
-                (async () => {
-                    try {
-                        setLoading(true);
-                        const dto = await api.get('user/user', { id: uid });
-                        if (dto.meta.status != 0) {
-                            throw new Error(dto.meta.message);
-                        }
-                        setData(dto.data);
-                        console.log('🚀 > dto.data:', dto.data);
-                    } catch (err) {
-                        setError(err);
-                        callback && callback();
-                    } finally {
-                        setLoading(false);
-                    }
-                })();
-            } else {
-                setData(null);
-                setLoading(false);
-                callback && callback();
-            }
-            return () => {
-                didCancel = true;
-            };
-        },
+        } else {
+            setData(null);
+            setLoading(false);
+            callback && callback();
+        }
+        return () => {
+            didCancel = true;
+        };
+    },
         [uid]);
 
     return { data, setData, loading, error };

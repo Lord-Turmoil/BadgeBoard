@@ -20,6 +20,7 @@ to update their copy in parent.
 export default function UserPageMobile() {
     const navigate = useNavigate();
     const { uid } = useParams('uid');
+    const [update, setUpdate] = useState("Static");
 
     // current logged in user
     const {
@@ -27,7 +28,7 @@ export default function UserPageMobile() {
         setData: setVisitor,
         loading: visitorLoading,
         error: visitorError
-    } = useLocalUser();
+    } = useLocalUser(update);
 
     useEffect(() => {
         console.log('🚀 > useEffect > visitor:', visitor);
@@ -44,10 +45,11 @@ export default function UserPageMobile() {
     //     error: userError
     // } = useUser(uid ? uid : (visitor ? visitor.account.id : null));
     useEffect(() => {
+        if (visitorLoading || visitor) {
+            return;
+        }
+        console.log("🚀 > useEffect > visitorLoading:", visitorLoading);
         (async () => {
-            if (visitorLoading == true) {
-                return;
-            }
             const [u, e] = await fetchUser(uid);
             if (e) {
                 setUserError(e);

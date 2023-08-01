@@ -1,0 +1,14 @@
+.CategorySelect {
+    flex: 1;
+    margin: 10px 0 10px 10px;
+}
+
+.CategorySelect .CategorySelect__loading {
+    position: relative;
+}
+
+.CategorySelect .CategorySelect__loading .CategorySelect__prompt {
+    font-size: 1.2em;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+}

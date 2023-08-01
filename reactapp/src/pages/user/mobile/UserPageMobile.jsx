@@ -13,6 +13,9 @@ import '~/parts/UserPanel/UserPanel.css'
 import './UserPageMobile.css'
 import UserBasicNav from '~/parts/UserPanel/UserNav/UserBasicNav/UserBasicNav';
 import _debounce from 'debounce';
+import { fetchCategories } from '~/services/user/CategoryUtil';
+import UserAdvancedNav from '~/parts/UserPanel/UserNav/UserAdvancedNav/UserAdvancedNav';
+import CategorySelect from '~/parts/UserPanel/CategorySelect/CategorySelect';
 
 /*
 Parent could not get states of child component, but can use callback
@@ -21,7 +24,7 @@ to update their copy in parent.
 export default function UserPageMobile() {
     const navigate = useNavigate();
     const { uid } = useParams('uid');
-    const [update, setUpdate] = useState("Static");
+    const [update, setUpdate] = useState("static");
 
     // current logged in user
     const {
@@ -39,12 +42,6 @@ export default function UserPageMobile() {
     const [user, setUser] = useState(null);
     const [userError, setUserError] = useState(null);
 
-    // const {
-    //     data: user,
-    //     setData: setUser,
-    //     loading: userLoading,
-    //     error: userError
-    // } = useUser(uid ? uid : (visitor ? visitor.account.id : null));
     useEffect(() => {
         if (visitorLoading || visitor) {
             return;
@@ -84,16 +81,39 @@ export default function UserPageMobile() {
     const toggleExpand = () => {
         setExpandOn(!expandOn);
     };
+
+    // user category
+    const [categories, setCategories] = useState(null);
+    const [categoryError, setCategoryError] = useState(null);
+    const [currentCategory, setCurrentCategory] = useState(null);
     useEffect(() => {
-        console.log("🚀 > useEffect > expandOn:", expandOn);
-    }, [expandOn]);
+        if (!user) {
+            return;
+        }
+        (async () => {
+            const [c, d, e] = await fetchCategories(uid, visitor ? visitor.account.id : null);
+            if (e) {
+                notifier.error(e);
+                setCategoryError(e);
+            } else {
+                setCategories(c);
+                setCurrentCategory(d);
+                console.log("🚀 > useEffect > c:", c);
+            }
+        })();
+    }, [user]);
 
     return (
         <div className="UserPanel UserPanel__mobile">
             <div className="nav-wrapper">
                 <ExpandFab open={expandOn} setOpen={setExpandOn} />
                 <div className="nav">
-                    <UserBasicNav user={visitor} />
+                    <UserAdvancedNav user={visitor}>
+                        <CategorySelect
+                            categories={categories}
+                            currentCategory={currentCategory}
+                            setCategory={setCurrentCategory} />
+                    </UserAdvancedNav>
                 </div>
             </div>
             <UserInfoPanel

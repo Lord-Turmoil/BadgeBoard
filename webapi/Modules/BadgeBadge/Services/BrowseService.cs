@@ -138,9 +138,10 @@ public class BrowseService : BaseService, IBrowseService
             return new GoodResponse(new CategoryIsPrivateDto());
         }
 
-        // here, it is obvious that badges of category belong to the user,
-        // and visibility of category is already checked.
-        BrowseBadgeSuccessDto data = await _GetBadgeDtosData(x => x.CategoryId == category.Id, false);
+        // here, the visibility of category is already checked.
+        BrowseBadgeSuccessDto data = await _GetBadgeDtosData(
+            x => x.CategoryId == category.Id && x.IsPublic,
+            false);
         return new GoodResponse(new GoodWithDataDto(data));
     }
 
@@ -170,7 +171,8 @@ public class BrowseService : BaseService, IBrowseService
         }
 
         Expression<Func<Badge, bool>> predicate;
-        if (user.IsAdmin || category.UserId == user.Id)
+        // Still, private badges may exists in public category!
+        if (category.UserId == user.Id || user.IsAdmin)
         {
             predicate = x => x.CategoryId == category.Id;
         }

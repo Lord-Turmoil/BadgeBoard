@@ -405,6 +405,11 @@ public class BadgeService : BaseService, IBadgeService
             return new GoodResponse(new BadgeNotExistsDto());
         }
 
+        if (badge.UserId != user.Id)
+        {
+            return new GoodResponse(new NotYourBadgeDto());
+        }
+
         // Well, hope front end will handle requests that moves to itself.
         Category? category = await Category.FindAsync(_unitOfWork.GetRepository<Category>(), dto.Category);
         if (category == null)

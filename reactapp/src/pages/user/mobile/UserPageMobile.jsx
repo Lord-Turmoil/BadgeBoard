@@ -30,9 +30,8 @@ export default function UserPageMobile() {
     } = useLocalUser();
 
     useEffect(() => {
-            console.log('🚀 > useEffect > visitor:', visitor);
-        },
-        [visitor]);
+        console.log('🚀 > useEffect > visitor:', visitor);
+    }, [visitor]);
 
     // current visiting user
     const {
@@ -43,18 +42,16 @@ export default function UserPageMobile() {
     } = useUser(uid ? uid : (visitor ? visitor.account.id : null));
 
     useEffect(() => {
-            console.log('🚀 > useEffect > user:', user);
-        },
-        [user]);
+        console.log('🚀 > useEffect > user:', user);
+    }, [user]);
 
     // user error handling
     useEffect(() => {
-            if (userError) {
-                notifier.error(userError.message);
-                setTimeout(() => { navigate('/404') }, 0);
-            }
-        },
-        [userError]);
+        if (userError) {
+            notifier.error(userError.message);
+            setTimeout(() => { navigate('/404') }, 0);
+        }
+    }, [userError]);
 
     // user change handling
     const onUserChange = (data) => {
@@ -73,9 +70,9 @@ export default function UserPageMobile() {
     return (
         <div className="UserPanel UserPanel__mobile">
             <div className="nav-wrapper">
-                <ExpandFab open={expandOn} onClick={toggleExpand}/>
+                <ExpandFab open={expandOn} onClick={toggleExpand} />
                 <div className="nav">
-                    <UserBasicNav user={visitor}/>
+                    <UserBasicNav user={visitor} />
                 </div>
             </div>
             <UserInfoPanel
@@ -84,7 +81,7 @@ export default function UserPageMobile() {
                 onUserChange={onUserChange}
                 onVisitorChange={onVisitorChange}
                 disabled={!expandOn}
-                onClose={() => { setExpandOn(false) }}/>
+                onClose={null} />
             <InflateBox sx={{ backgroundColor: 'lightBlue' }} overflow>
                 <h1>Hello</h1>
                 <h1>Hello</h1>

@@ -39,17 +39,23 @@ public static class BadgeUtil
     }
 
 
-    private static void _EraseBadge(IUnitOfWork unitOfWork, Badge badge, UnreadRecord unread)
+    private static void _EraseBadge(IUnitOfWork unitOfWork, Badge badge, UnreadRecord? unread)
     {
         if (badge.Type == Badge.Types.Question)
         {
             unitOfWork.GetRepository<QuestionPayload>().Delete(badge.PayloadId);
-            unread.QuestionCount--;
+            if (unread != null)
+            {
+                unread.QuestionCount--;
+            }
         }
         else
         {
             unitOfWork.GetRepository<MemoryPayload>().Delete(badge.PayloadId);
-            unread.MemoryCount--;
+            if (unread != null)
+            {
+                unread.MemoryCount--;
+            }
         }
         unitOfWork.GetRepository<Badge>().Delete(badge);
     }
@@ -101,7 +107,17 @@ public static class BadgeUtil
                 // admin can delete other user's badge in force mode
                 if (force)
                 {
-                    _EraseBadge(unitOfWork, badge, user.Unread);
+                    if (badge.IsChecked)
+                    {
+                        _EraseBadge(unitOfWork, badge, null);
+                    }
+                    else
+                    {
+                        errors.Add(new DeleteBadgeErrorData {
+                            Id = badge.Id,
+                            Message = "Badge not checked yet"
+                        });
+                    }
                 }
                 else
                 {
@@ -127,7 +143,7 @@ public static class BadgeUtil
     private static async Task EraseBadges(
         IUnitOfWork unitOfWork, IEnumerable<Badge> badges)
     {
-        
+
     }
 
     // badge must be completely get (with category fully included)
@@ -135,7 +151,7 @@ public static class BadgeUtil
     {
         return badge is { IsPublic: true, Category.Option.IsPublic: true };
     }
-    
+
     public static bool IsAccessible(Badge badge, User user)
     {
         if (IsAccessible(badge))

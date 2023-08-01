@@ -12,6 +12,7 @@ import UserInfoPanel from '~/parts/UserPanel/UserInfoPanel/UserInfoPanel';
 import '~/parts/UserPanel/UserPanel.css'
 import './UserPageMobile.css'
 import UserBasicNav from '~/parts/UserPanel/UserNav/UserBasicNav/UserBasicNav';
+import _debounce from 'debounce';
 
 /*
 Parent could not get states of child component, but can use callback
@@ -72,7 +73,7 @@ export default function UserPageMobile() {
 
     // user change handling
     const onUserChange = (data) => {
-        setUser({ ...user, [data.key]: data.value});
+        setUser({ ...user, [data.key]: data.value });
     };
     const onVisitorChange = (data) => {
         setVisitor({ ...visitor, [data.key]: data.value });
@@ -83,11 +84,14 @@ export default function UserPageMobile() {
     const toggleExpand = () => {
         setExpandOn(!expandOn);
     };
+    useEffect(() => {
+        console.log("🚀 > useEffect > expandOn:", expandOn);
+    }, [expandOn]);
 
     return (
         <div className="UserPanel UserPanel__mobile">
             <div className="nav-wrapper">
-                <ExpandFab open={expandOn} onClick={toggleExpand} />
+                <ExpandFab open={expandOn} setOpen={setExpandOn} />
                 <div className="nav">
                     <UserBasicNav user={visitor} />
                 </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import isEqual from 'lodash.isequal';
 
@@ -246,15 +246,12 @@ export default function UserInfoPanel({
     };
 
     // click away
-    var canClose = false;
     const onClickAway = () => {
-        if (!disabled && canClose) {
+        if (!disabled) {
             onClose && onClose();
-        } else {
-            canClose = true;
         }
     };
-
+    
     return (
         <ClickAwayListener onClickAway={onClickAway}>
             <div className={`UserInfoPanel${disabled ? '' : ' active'}`}>
@@ -265,7 +262,7 @@ export default function UserInfoPanel({
                             src={shadow && shadow.avatarUrl}
                             disabled={!enableEdit}
                             onAvatarChange={onAvatarChange}
-                            key={avatarKey}/>
+                            key={avatarKey} />
                     </div>
                     <div className="info-wrapper">
                         <SubtleInput
@@ -278,8 +275,8 @@ export default function UserInfoPanel({
                             defaultValue={shadow && shadow.username}
                             onChange={onUsernameChange}
                             variant="outlined"
-                            label="Username"/>
-                        <Divider sx={{ height: '1px', display: enableEdit ? 'none' : 'block' }}/>
+                            label="Username" />
+                        <Divider sx={{ height: '1px', display: enableEdit ? 'none' : 'block' }} />
                         <div className="info">
                             {enableEdit ?
                                 <div className="birthday">
@@ -299,22 +296,22 @@ export default function UserInfoPanel({
                                 </div>
                             }
                             <div className="motto" style={{ display: enableEdit ? 'none' : 'block' }}>
-                                <DriveFileRenameOutlineRoundedIcon sx={{ verticalAlign: 'bottom' }}/>{renderMotto(shadow && shadow.motto)}
+                                <DriveFileRenameOutlineRoundedIcon sx={{ verticalAlign: 'bottom' }} />{renderMotto(shadow && shadow.motto)}
                             </div>
                         </div>
                         <div style={{ display: enableEdit ? 'block' : 'none' }}>
                             <FormControl fullWidth sx={enableEdit ? { marginTop: '5px' } : null}>
                                 <FormLabel sx={{ fontSize: '0.8rem', paddingLeft: '14px' }}>Gender</FormLabel>
                                 <RadioGroup row sx={{ justifyContent: 'center' }} value={sex} onChange={(event) => { setSex(event.target.value); }}>
-                                    <FormControlLabel value="Unknown" control={<Radio color="error" />} label={<QuestionMarkRoundedIcon color="error" />}/>
-                                    <FormControlLabel value="Male" control={<Radio color="primary" />} label={<MaleRoundedIcon color="primary" />}/>
-                                    <FormControlLabel sx={{ marginRight: '0' }} value="Female" control={<Radio color="secondary" />} label={<FemaleRoundedIcon color="secondary" />}/>
+                                    <FormControlLabel value="Unknown" control={<Radio color="error" />} label={<QuestionMarkRoundedIcon color="error" />} />
+                                    <FormControlLabel value="Male" control={<Radio color="primary" />} label={<MaleRoundedIcon color="primary" />} />
+                                    <FormControlLabel sx={{ marginRight: '0' }} value="Female" control={<Radio color="secondary" />} label={<FemaleRoundedIcon color="secondary" />} />
                                 </RadioGroup>
                             </FormControl>
                         </div>
                     </div>
                 </div>
-                <Divider/>
+                <Divider />
                 {enableEdit ?
                     <div style={{ padding: '5px 10px' }}>
                         <TextField

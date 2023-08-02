@@ -9,11 +9,11 @@ export default function ExpandFab({ disabled = false, open = false, setOpen = nu
         setExpandOn(!expandOn);
     }
     return (
-        <Fab disabled={disabled} color="primary" onClick={handleClick}>
+        <Fab sx={{ flexShrink: 0 }} disabled={disabled} color="primary" onClick={handleClick}>
             <ExpandMoreRounded fontSize="large" sx={{
                 transition: 'transform 0.3s',
                 transform: open ? 'rotate(0deg)' : 'rotate(180deg)'
-            }}/>
+            }} />
         </Fab>
     );
 }

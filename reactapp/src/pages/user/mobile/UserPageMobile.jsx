@@ -86,6 +86,17 @@ export default function UserPageMobile() {
     const [categories, setCategories] = useState(null);
     const [categoryError, setCategoryError] = useState(null);
     const [currentCategory, setCurrentCategory] = useState(null);
+    const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null);
+    useEffect(() => {
+        if (categories && (currentCategoryIndex != null)) {
+            setCurrentCategory(categories[currentCategoryIndex]);
+        }
+    }, [currentCategoryIndex]);
+
+    useEffect(() => {
+        console.log("🚀 > useEffect > currentCategory:", currentCategory);
+    }, [currentCategory]);
+
     useEffect(() => {
         if (!user) {
             return;
@@ -97,8 +108,7 @@ export default function UserPageMobile() {
                 setCategoryError(e);
             } else {
                 setCategories(c);
-                setCurrentCategory(d);
-                console.log("🚀 > useEffect > c:", c);
+                setCurrentCategoryIndex(d);
             }
         })();
     }, [user]);
@@ -112,7 +122,7 @@ export default function UserPageMobile() {
                         <CategorySelect
                             categories={categories}
                             currentCategory={currentCategory}
-                            setCategory={setCurrentCategory} />
+                            setCategoryIndex={setCurrentCategoryIndex} />
                     </UserAdvancedNav>
                 </div>
             </div>

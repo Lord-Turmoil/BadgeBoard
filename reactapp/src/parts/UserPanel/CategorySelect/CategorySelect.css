@@ -1,6 +1,14 @@
 .CategorySelect {
     flex: 1;
-    margin: 10px 0 10px 10px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.CategorySelect .CategorySelect__chip {
+    width: 90%;
+    height: 80%;
 }
 
 .CategorySelect .CategorySelect__loading {

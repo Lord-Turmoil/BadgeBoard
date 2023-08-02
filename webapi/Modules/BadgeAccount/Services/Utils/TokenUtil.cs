@@ -24,8 +24,8 @@ public static class TokenUtil
 
         return new RefreshToken {
             Token = Convert.ToBase64String(randomNumber),
-            Expires = DateTime.UtcNow.AddDays(RefreshTokenExpire),
-            Created = DateTime.UtcNow
+            Expires = DateTime.Now.AddDays(RefreshTokenExpire),
+            Created = DateTime.Now
         };
     }
 
@@ -34,10 +34,9 @@ public static class TokenUtil
     {
         return new CookieOptions {
             HttpOnly = true,
-            Expires = DateTime.UtcNow.AddDays(RefreshTokenExpire)
+            Expires = DateTime.Now.AddDays(RefreshTokenExpire)
         };
     }
-
 
     public static int? TryGetUserIdFromJwtBearerToken(string token)
     {

@@ -109,6 +109,7 @@ public class LoginController : BaseController<LoginController>
                 return new ApiResponse(data.Status, new RevokeTokenFailedDto(data.Message));
             }
 
+            RemoveRefreshTokenInCookie();
             return new GoodResponse(new GoodDto(data.Message));
         }
         catch (Exception ex)
@@ -125,4 +126,10 @@ public class LoginController : BaseController<LoginController>
             token,
             TokenUtil.GetRefreshTokenCookieOptions());
     }
+
+    private void RemoveRefreshTokenInCookie()
+    {
+        Response.Cookies.Delete(TokenUtil.RefreshTokenCookiesName);
+    }
+
 }

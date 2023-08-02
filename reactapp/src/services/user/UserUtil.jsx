@@ -38,6 +38,7 @@ class UserUtil {
     }
 
     static drop() {
+        console.log("Dropping data");
         window.localStorage.removeItem('uid');
         window.localStorage.removeItem('user');
     }

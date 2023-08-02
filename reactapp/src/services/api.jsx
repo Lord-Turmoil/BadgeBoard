@@ -54,13 +54,13 @@ class Api {
 
     async refresh() {
         const dto = await this._post('auth/token/refresh');
+        console.log("🚀 > Api > refresh > dto.meta.status:", dto.meta.status);
         if (dto.meta.status == 0) {
-            this.saveToken();
-            window.localStorage.setItem('uid', dto.data.id);
-            return dto.data;
+            this.saveToken(dto.data.token);
+            return true;
         }
 
-        return null;
+        return false;
     }
 
     // single post
@@ -82,7 +82,7 @@ class Api {
             return dto;
         }
 
-        if (await this.refresh() == null) {
+        if (!await this.refresh()) {
             // failed to refresh
             return dto;
         }

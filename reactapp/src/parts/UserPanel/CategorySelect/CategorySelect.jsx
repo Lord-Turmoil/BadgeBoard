@@ -50,7 +50,7 @@ export default function CategorySelect({
             <div className="CategorySelect__chip" onClick={onClickSelect}>
                 {renderCategory(currentCategory)}
             </div>
-            <PopperMenu anchorEl={panelAnchor} open={panelOpen} onClose={onSelectPanelClose}>
+            <PopperMenu sx={{width: '70%'}} anchorEl={panelAnchor} open={panelOpen} onClose={onSelectPanelClose}>
                 {categories &&
                     categories.map((category, index) =>
                     (<MenuItem value={index} key={category.id} onClick={() => handleCategoryChange(index)}>

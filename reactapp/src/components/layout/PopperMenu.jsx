@@ -1,6 +1,7 @@
 import { ClickAwayListener, Grow, MenuList, Paper, Popper } from '@mui/material';
 
 export default function PopperMenu({
+    sx = null,
     open,
     onClose = null,
     anchorEl,
@@ -22,7 +23,7 @@ export default function PopperMenu({
     };
 
     return (
-        <Popper
+        <Popper sx={sx && { ...sx }}
             open={open}
             anchorEl={anchorEl}
             placement={placement}
@@ -35,7 +36,7 @@ export default function PopperMenu({
                     <Paper>
                         <ClickAwayListener onClickAway={handleClickAway}>
                             <MenuList autoFocusItem={open} onKeyDown={handleListKeyDown}>
-                                { children }
+                                {children}
                             </MenuList>
                         </ClickAwayListener>
                     </Paper>

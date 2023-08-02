@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -77,6 +77,7 @@ export default function UserPageMobile() {
 
     // expand toggle
     const [expandOn, setExpandOn] = useState(false);
+    const expandExclude = useRef(null);
     const toggleExpand = () => {
         setExpandOn(!expandOn);
     };
@@ -115,7 +116,7 @@ export default function UserPageMobile() {
     return (
         <div className="UserPanel UserPanel__mobile">
             <div className="nav-wrapper">
-                <ExpandFab open={expandOn} setOpen={setExpandOn} />
+                <ExpandFab ref={expandExclude} open={expandOn} setOpen={setExpandOn} />
                 <CategorySelect
                     categories={categories}
                     currentCategory={currentCategory}
@@ -128,7 +129,8 @@ export default function UserPageMobile() {
                 onUserChange={onUserChange}
                 onVisitorChange={onVisitorChange}
                 disabled={!expandOn}
-                onClose={null} />
+                onClose={() => setExpandOn(false)}
+                exclude={expandExclude.current} />
             <InflateBox sx={{ backgroundColor: 'lightBlue' }} overflow>
                 <h1>Hello</h1>
                 <h1>Hello</h1>

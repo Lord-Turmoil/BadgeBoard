@@ -41,7 +41,8 @@ export default function UserInfoPanel({
     onUserChange = null,
     onVisitorChange = null,
     disabled = true,
-    onClose = null
+    onClose = null,
+    exclude = null
 }) {
     // user related
     const isOwner = () => {
@@ -246,12 +247,18 @@ export default function UserInfoPanel({
     };
 
     // click away
-    const onClickAway = () => {
+    const onClickAway = (event) => {
+        if (event.type === 'touchend') {
+            return;
+        }
+        if (exclude && (exclude.isSameNode(event.target) || exclude.contains(event.target))) {
+            return;
+        }
         if (!disabled) {
             onClose && onClose();
         }
     };
-    
+
     return (
         <ClickAwayListener onClickAway={onClickAway}>
             <div className={`UserInfoPanel${disabled ? '' : ' active'}`}>

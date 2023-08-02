@@ -1,15 +1,17 @@
 import { ExpandLessRounded, ExpandMoreRounded } from '@mui/icons-material';
 import { Fab } from '@mui/material';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 
-export default function ExpandFab({ disabled = false, open = false, setOpen = null }) {
-    const [expandOn, setExpandOn] = useState(open);
+export function ExpandFab({
+    disabled = false,
+    open = false,
+    setOpen = null,
+}, ref) {
     const handleClick = () => {
-        setOpen(!expandOn);
-        setExpandOn(!expandOn);
+        setOpen(!open);
     }
     return (
-        <Fab sx={{ flexShrink: 0 }} disabled={disabled} color="primary" onClick={handleClick}>
+        <Fab ref={ref} sx={{ flexShrink: 0 }} disabled={disabled} color="primary" onClick={handleClick}>
             <ExpandMoreRounded fontSize="large" sx={{
                 transition: 'transform 0.3s',
                 transform: open ? 'rotate(0deg)' : 'rotate(180deg)'
@@ -17,3 +19,8 @@ export default function ExpandFab({ disabled = false, open = false, setOpen = nu
         </Fab>
     );
 }
+
+const forwardedRef = forwardRef(ExpandFab);
+
+// Exporting the wrapped component
+export default forwardedRef;

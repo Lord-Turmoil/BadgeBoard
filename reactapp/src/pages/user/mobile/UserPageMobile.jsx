@@ -11,10 +11,9 @@ import UserInfoPanel from '~/parts/UserPanel/UserInfoPanel/UserInfoPanel';
 
 import '~/parts/UserPanel/UserPanel.css'
 import './UserPageMobile.css'
-import UserBasicNav from '~/parts/UserPanel/UserNav/UserBasicNav/UserBasicNav';
+import UserBasicNav from '~/parts/UserPanel/UserNav/UserNav';
 import _debounce from 'debounce';
 import { fetchCategories } from '~/services/user/CategoryUtil';
-import UserAdvancedNav from '~/parts/UserPanel/UserNav/UserAdvancedNav/UserAdvancedNav';
 import CategorySelect from '~/parts/UserPanel/CategorySelect/CategorySelect';
 
 /*
@@ -117,14 +116,11 @@ export default function UserPageMobile() {
         <div className="UserPanel UserPanel__mobile">
             <div className="nav-wrapper">
                 <ExpandFab open={expandOn} setOpen={setExpandOn} />
-                <div className="nav">
-                    <UserAdvancedNav user={visitor}>
-                        <CategorySelect
-                            categories={categories}
-                            currentCategory={currentCategory}
-                            setCategoryIndex={setCurrentCategoryIndex} />
-                    </UserAdvancedNav>
-                </div>
+                <CategorySelect
+                    categories={categories}
+                    currentCategory={currentCategory}
+                    setCategoryIndex={setCurrentCategoryIndex} />
+                <UserBasicNav user={visitor} />
             </div>
             <UserInfoPanel
                 user={user}

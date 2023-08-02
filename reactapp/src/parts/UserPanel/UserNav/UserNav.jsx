@@ -12,14 +12,12 @@ import notifier from '~/services/notifier';
 import UserUtil from '~/services/user/UserUtil';
 import AvatarUtil from '~/services/user/AvatarUtil';
 
-import '../UserNav.css'
-import './UserAdvancedNav.css'
+import './UserNav.css'
 import { AppRegistrationRounded } from '@mui/icons-material';
 import PopperMenu from '~/components/layout/PopperMenu';
 
-export default function UserAdvancedNav({
-    user = null,
-    children
+export default function UserBasicNav({
+    user = null
 }) {
     const navigate = useNavigate();
 
@@ -54,10 +52,10 @@ export default function UserAdvancedNav({
     };
 
     return (
-        <div className="UserNav UserAdvancedNav">
+        <div className="UserNav">
             <Button sx={{ borderRadius: '50%' }} onClick={onClickAvatar}>
                 <Avatar
-                    sx={{ width: '50px', height: '50px' }}
+                    sx={{ width: '55px', height: '55px' }}
                     src={AvatarUtil.getUrlFromUser(user)}/>
             </Button>
             <PopperMenu anchorEl={menuAnchor} open={onlineOpen} onClose={onMenuClose} transformOrigin="right top">
@@ -89,7 +87,6 @@ export default function UserAdvancedNav({
                     <ListItemText>Login</ListItemText>
                 </MenuItem>
             </PopperMenu>
-            {children}
         </div>
     );
 };

@@ -1,12 +1,11 @@
 .user-main .nav-wrapper {
-    align-items: center;
     display: flex;
-    flex-direction: row;
-    height: var(--nav-height);
+    align-items: center;
     justify-content: center;
-    margin: var(--nav-margin);
     position: fixed;
+    height: var(--nav-height);
     width: calc(100% - var(--nav-margin) * 2);
+    margin: var(--nav-margin);
     z-index: 100;
 }
 
@@ -15,14 +14,4 @@
     border-radius: 50%;
     height: var(--nav-height);
     width: var(--nav-height);
-}
-
-.user-main .nav-wrapper .nav {
-    background-color: rgba(0, 200, 0, 0.5);
-    border-radius: var(--nav-radius);
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
-    flex: 1;
-    height: 100%;
-    margin-left: var(--nav-margin);
-    /* overflow: hidden; */
 }

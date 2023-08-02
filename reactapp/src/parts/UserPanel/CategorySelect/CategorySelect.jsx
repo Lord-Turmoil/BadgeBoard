@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import './CategorySelect.css';
-import { Height } from "@mui/icons-material";
+import { ExpandMoreRounded, Height } from "@mui/icons-material";
 import PopperMenu from "~/components/layout/PopperMenu";
 
 export default function CategorySelect({
@@ -11,10 +11,6 @@ export default function CategorySelect({
     currentCategory,
     setCategoryIndex
 }) {
-    const handleChange = (id) => {
-        setCategoryIndex && setCategoryIndex(id);
-    };
-
     const isReady = Boolean(categories && currentCategory);
 
     // select panel
@@ -23,19 +19,41 @@ export default function CategorySelect({
     const onSelectPanelClose = () => {
         setPanelAnchor(null);
     };
-    const onClickChip = (event) => {
+    const onClickSelect = (event) => {
         setPanelAnchor(event.currentTarget);
     };
+    const handleCategoryChange = (id) => {
+        (() => {
+            setCategoryIndex && setCategoryIndex(id);
+            onSelectPanelClose();
+        })();
+    };
+
+    // renderer
+    const renderCategory = (category) => {
+        if (category == null) {
+            return null;
+        }
+        return (
+            <div className="CategorySelect__select">
+                {category.option.isPublic ? <PublicRoundedIcon className="CategorySelect__icon" /> : <LockRoundedIcon className="CategorySelect__icon"/>}
+                <div className="CategorySelect__name">{category.name}</div>
+                <ExpandMoreRounded className="CategorySelect__expand" fontSize="large" sx={{
+                    transition: 'transform 0.3s',
+                    transform: panelOpen ? 'rotate(0deg)' : 'rotate(180deg)'
+                }} />
+            </div>
+        );
+    }
     return (
         <div className="CategorySelect">
-            <Chip className="CategorySelect__chip"
-                clickable
-                label={currentCategory && currentCategory.name}
-                onClick={onClickChip} />
+            <div className="CategorySelect__chip" onClick={onClickSelect}>
+                {renderCategory(currentCategory)}
+            </div>
             <PopperMenu anchorEl={panelAnchor} open={panelOpen} onClose={onSelectPanelClose}>
                 {categories &&
                     categories.map((category, index) =>
-                    (<MenuItem value={index} key={category.id} onClick={() => handleChange(index)}>
+                    (<MenuItem value={index} key={category.id} onClick={() => handleCategoryChange(index)}>
                         <ListItemIcon>
                             {category.option.isPublic ? <PublicRoundedIcon /> : <LockRoundedIcon />}
                         </ListItemIcon>

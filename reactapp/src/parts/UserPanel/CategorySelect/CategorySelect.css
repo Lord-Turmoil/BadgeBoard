@@ -1,14 +1,41 @@
 .CategorySelect {
     flex: 1;
     height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-basis: 100%;
+    overflow: hidden;
+}
+
+.CategorySelect .CategorySelect__chip {
+    width: 100%;
+    height: 80%;
+}
+
+.CategorySelect .CategorySelect__chip .CategorySelect__select {
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.CategorySelect .CategorySelect__chip {
-    width: 90%;
-    height: 80%;
+.CategorySelect .CategorySelect__chip .CategorySelect__select .CategorySelect__icon {
+    margin: 0 5px;
+}
+
+.CategorySelect .CategorySelect__chip .CategorySelect__select .CategorySelect__name {
+    max-width: 100%;
+    font-size: 1.3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.CategorySelect .CategorySelect__chip .CategorySelect__select .CategorySelect__expand {
+    margin-left: auto;
 }
 
 .CategorySelect .CategorySelect__loading {

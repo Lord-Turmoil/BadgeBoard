@@ -53,6 +53,23 @@ class Notifier {
             this.error(errorMsg ?? meta.message, dismiss, wait);
         }
     }
+
+    notify(type, msg, dismiss = false, wait = NOTIFY_WAIT) {
+        const a = alertify.notify(msg, type, wait);
+        if (dismiss) {
+            a.dismissOthers();
+        }
+    }
+
+    notifyWithCountDown(type, msg, duration, dismiss = false) {
+        if (duration <= 0) {
+            this.notify(type, msg, dismiss, NOTIFY_WAIT);
+        }
+        var a = alertify.notify(msg + ' (' + duration + 's)', type, duration + 1, function () { clearInterval(interval); });
+        var interval = setInterval(function () {
+            a.setContent(msg + ' (' + (--duration) + 's)');
+        }, 1000);
+    }
 }
 
 var notifier = new Notifier();

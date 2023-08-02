@@ -36,12 +36,17 @@ export default function UserBasicNav({
     const onClickLogout = async () => {
         var dto = await api._post('auth/token/revoke');
         notifier.auto(dto.meta, 'See you later then~');
+        if (dto.meta.status == 0) {
+            notifier.notifyWithCountDown('c-success', 'See ya later then ~', 5);
+        } else {
+            notifier.error(dto.meta.message);
+        }
         UserUtil.drop();
         api.dropToken();
         onMenuClose();
         setTimeout(() => {
             window.location.reload(false);
-        }, 3000);
+        }, 5000);
     };
 
     const onClickRefresh = async () => {

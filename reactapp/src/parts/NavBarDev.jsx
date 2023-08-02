@@ -3,6 +3,13 @@ import React from 'react';
 
 
 function NavBarDev() {
+    const getUserId = () => {
+        return window.localStorage.getItem("uid");
+    }
+    const getUserLink = () => {
+        const id = getUserId();
+        return "/user/" + id;
+    }
     return (
         <div id="nav-dev">
             <ul>
@@ -16,7 +23,7 @@ function NavBarDev() {
                     <Link href="/login">Login</Link>
                 </li>
                 <li>
-                    <Link href="/user/0">User 0</Link>
+                    <Link href={getUserLink()}>User {getUserId()}</Link>
                 </li>
                 <li>
                     <Link href="/404">404</Link>

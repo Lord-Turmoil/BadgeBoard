@@ -14,7 +14,7 @@ export default function SexBadge({ sex }) {
     }
 
     return (
-        <CornerBadge right bottom>
+        <CornerBadge className='SexBadge' right bottom size='25px' sx={{ backdropFilter: 'blur(1px)' }}>
             {renderSex(sex)}
         </CornerBadge>
     );

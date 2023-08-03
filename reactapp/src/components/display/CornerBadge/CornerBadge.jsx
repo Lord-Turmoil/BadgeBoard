@@ -4,6 +4,7 @@ import './CornerBadge.css';
 
 export default function CornerBadge({
     size,
+    className = null,
     sx = null,
     left = false,
     right = false,
@@ -22,8 +23,12 @@ export default function CornerBadge({
         return (isRight ? 'right' : 'left') + ' ' + (isTop ? 'top' : 'bottom');
     }
 
+    const getClassName = () => {
+        return (className ? (className + ' ') : '') + getPositionClass();
+    }
+
     return (
-        <div className={`CornerBadge ${getPositionClass()}`} style={sx}>
+        <div className={`CornerBadge ${getClassName()}`} style={{ ...sx, width: size, height: size }}>
             {children}
         </div>
     );

@@ -1,0 +1,119 @@
+.TitleBadge {
+    transform: translate(60%, 10%);
+}
+
+.TitleBadge .TitleBadge__badge {
+    font-family: 'Lucida Handwriting';
+    font-size: 0.9em;
+    position: relative;
+    border-radius: 5000px;
+    padding: 2px 5px 2px 3px;
+    cursor: default;
+}
+
+.TitleBadge .TitleBadge__badge::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    z-index: -1;
+    filter: blur(2px);
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    border-radius: 5000px;
+}
+
+.TitleBadge .TitleBadge__badge::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    z-index: -2;
+    filter: blur(3px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    border-radius: 5000px;
+    opacity: 0;
+}
+
+
+.TitleBadge .TitleBadge__badge.padawan::before {
+    background-image: linear-gradient(-45deg, #0fd850 0%, #f9f047 100%);
+    filter: none;
+}
+
+.TitleBadge .TitleBadge__badge.master {
+    padding: 2px 8px 2px 6px;
+}
+
+.TitleBadge .TitleBadge__badge.master::before {
+    background-image: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+    transition: opacity 0.3s;
+}
+
+.TitleBadge .TitleBadge__badge.master::after {
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    background-size: 400%;
+    animation: glowing 30s linear infinite;
+    transition: opacity 0.3s;
+}
+
+.TitleBadge .TitleBadge__badge.master:hover::before {
+    opacity: 0;
+}
+
+.TitleBadge .TitleBadge__badge.master:hover::after {
+    opacity: 0.5;
+}
+
+
+.TitleBadge .TitleBadge__badge.lord {
+    padding: 2px 10px 2px 8px;
+}
+
+.TitleBadge .TitleBadge__badge.lord span {
+    color: #efefef;
+    font-weight: bold;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.TitleBadge .TitleBadge__badge.lord:hover span {
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+}
+
+
+
+.TitleBadge .TitleBadge__badge.lord::before {
+    background-image: linear-gradient(45deg, #231557 0%, #44107A 29%, #FF1361 67%, #FFF800 100%);
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.TitleBadge .TitleBadge__badge.lord::after {
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    background-size: 400%;
+    animation: glowing 30s linear infinite;
+    transition: opacity 0.3s;
+}
+
+.TitleBadge .TitleBadge__badge.lord:hover::before {
+    opacity: 0;
+}
+
+.TitleBadge .TitleBadge__badge.lord:hover::after {
+    opacity: 0.5;
+}
+
+@keyframes glowing {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 400% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}

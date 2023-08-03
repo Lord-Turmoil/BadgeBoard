@@ -1,5 +1,14 @@
 .CornerBadge {
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5000px;
+}
+
+.CornerBadge svg {
+    vertical-align: middle;
 }
 
 .CornerBadge.right {

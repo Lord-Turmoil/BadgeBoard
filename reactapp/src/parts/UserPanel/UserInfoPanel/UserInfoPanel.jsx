@@ -27,6 +27,7 @@ import './UserInfoPanel.css'
 import AvatarField from '~/components/form/AvatarField/AvatarField';
 import CornerBadge from '~/components/display/CornerBadge/CornerBadge';
 import SexBadge from '~/components/display/SexBadge/SexBadge';
+import TitleBadge from '~/components/display/TitleBadge/TitleBadge';
 
 const MOTTO_MAX_LENGTH = 66;
 const MOTTO_MIN_LENGTH = 0;
@@ -274,6 +275,7 @@ export default function UserInfoPanel({
                                 onAvatarChange={onAvatarChange}
                                 key={avatarKey} />
                             <SexBadge sex={user && user.info.sex} />
+                            {enableEdit || <TitleBadge title={user && user.title} />}
                         </div>
                     </div>
                     <div className="info-wrapper">

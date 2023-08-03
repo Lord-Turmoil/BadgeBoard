@@ -5,12 +5,12 @@ import isEqual from 'lodash.isequal';
 import moment from 'moment/moment';
 import CakeRoundedIcon from '@mui/icons-material/CakeRounded';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import MaleRoundedIcon from '@mui/icons-material/MaleRounded';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import MaleRoundedIcon from '@mui/icons-material/MaleRounded';
 import FemaleRoundedIcon from '@mui/icons-material/FemaleRounded';
-import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
+import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
 import { Button, ClickAwayListener, Divider, FormControl, FormControlLabel, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material';
 
@@ -25,6 +25,8 @@ import notifier from '~/services/notifier';
 // import '~/assets/css/user.panel.define.css'
 import './UserInfoPanel.css'
 import AvatarField from '~/components/form/AvatarField/AvatarField';
+import CornerBadge from '~/components/display/CornerBadge/CornerBadge';
+import SexBadge from '~/components/display/SexBadge/SexBadge';
 
 const MOTTO_MAX_LENGTH = 66;
 const MOTTO_MIN_LENGTH = 0;
@@ -264,12 +266,15 @@ export default function UserInfoPanel({
             <div className={`UserInfoPanel${disabled ? '' : ' active'}`}>
                 <div className="primary">
                     <div className="avatar">
-                        <AvatarField
-                            size={100}
-                            src={user && user.avatarUrl}
-                            disabled={!enableEdit}
-                            onAvatarChange={onAvatarChange}
-                            key={avatarKey} />
+                        <div style={{ position: 'relative' }}>
+                            <AvatarField
+                                size={100}
+                                src={user && user.avatarUrl}
+                                disabled={!enableEdit}
+                                onAvatarChange={onAvatarChange}
+                                key={avatarKey} />
+                            <SexBadge sex={user && user.info.sex} />
+                        </div>
                     </div>
                     <div className="info-wrapper">
                         <SubtleInput

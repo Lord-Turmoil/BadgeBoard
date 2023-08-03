@@ -1,0 +1,19 @@
+.CornerBadge {
+    position: absolute;
+}
+
+.CornerBadge.right {
+    right: 0;
+}
+
+.CornerBadge.left {
+    left: 0;
+}
+
+.CornerBadge.top {
+    top: 0;
+}
+
+.CornerBadge.bottom {
+    bottom: 0;
+}

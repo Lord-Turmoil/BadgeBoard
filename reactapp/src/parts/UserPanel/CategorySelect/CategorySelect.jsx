@@ -36,7 +36,7 @@ export default function CategorySelect({
         }
         return (
             <div className="CategorySelect__select">
-                {category.option.isPublic ? <PublicRoundedIcon className="CategorySelect__icon" /> : <LockRoundedIcon className="CategorySelect__icon"/>}
+                {category.option.isPublic ? <PublicRoundedIcon className="CategorySelect__icon" /> : <LockRoundedIcon className="CategorySelect__icon" />}
                 <div className="CategorySelect__name">{category.name}</div>
                 <ExpandMoreRounded className="CategorySelect__expand" fontSize="large" sx={{
                     transition: 'transform 0.3s',
@@ -45,12 +45,13 @@ export default function CategorySelect({
             </div>
         );
     }
+
     return (
         <div className="CategorySelect">
-            <div className="CategorySelect__chip" onClick={onClickSelect}>
+            <div className="CategorySelect__category" onClick={onClickSelect}>
                 {renderCategory(currentCategory)}
             </div>
-            <PopperMenu sx={{width: '70%'}} anchorEl={panelAnchor} open={panelOpen} onClose={onSelectPanelClose}>
+            <PopperMenu sx={{ width: '70%' }} anchorEl={panelAnchor} open={panelOpen} onClose={onSelectPanelClose}>
                 {categories &&
                     categories.map((category, index) =>
                     (<MenuItem value={index} key={category.id} onClick={() => handleCategoryChange(index)}>
@@ -61,9 +62,7 @@ export default function CategorySelect({
                     </MenuItem>))
                 }
             </PopperMenu>
-            {isReady ?
-                null
-                :
+            {(!isReady) &&
                 <div className="CategorySelect__loading">
                     <p className="CategorySelect__prompt">Loading categories...</p>
                     <CircularProgress

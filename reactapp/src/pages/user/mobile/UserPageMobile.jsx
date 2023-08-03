@@ -15,6 +15,7 @@ import UserBasicNav from '~/parts/UserPanel/UserNav/UserNav';
 import _debounce from 'debounce';
 import { fetchCategories } from '~/services/user/CategoryUtil';
 import CategorySelect from '~/parts/UserPanel/CategorySelect/CategorySelect';
+import stall from '~/services/stall';
 
 /*
 Parent could not get states of child component, but can use callback
@@ -98,19 +99,19 @@ export default function UserPageMobile() {
     }, [currentCategory]);
 
     useEffect(() => {
-        if (!user) {
-            return;
+        if (user) {
+            (async () => {
+                const [c, d, e] = await stall(
+                    fetchCategories(user.account.id, visitor ? visitor.account.id : null), 3000);
+                if (e) {
+                    notifier.error(e);
+                    setCategoryError(e);
+                } else {
+                    setCategories(c);
+                    setCurrentCategoryIndex(d);
+                }
+            })();
         }
-        (async () => {
-            const [c, d, e] = await fetchCategories(uid, visitor ? visitor.account.id : null);
-            if (e) {
-                notifier.error(e);
-                setCategoryError(e);
-            } else {
-                setCategories(c);
-                setCurrentCategoryIndex(d);
-            }
-        })();
     }, [user]);
 
     return (

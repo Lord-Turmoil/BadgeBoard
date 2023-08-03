@@ -10,23 +10,23 @@
     overflow: hidden;
 }
 
-.CategorySelect .CategorySelect__chip {
+.CategorySelect .CategorySelect__category {
     width: 100%;
     height: 80%;
 }
 
-.CategorySelect .CategorySelect__chip .CategorySelect__select {
+.CategorySelect .CategorySelect__category .CategorySelect__select {
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.CategorySelect .CategorySelect__chip .CategorySelect__select .CategorySelect__icon {
+.CategorySelect .CategorySelect__category .CategorySelect__select .CategorySelect__icon {
     margin: 0 5px;
 }
 
-.CategorySelect .CategorySelect__chip .CategorySelect__select .CategorySelect__name {
+.CategorySelect .CategorySelect__category .CategorySelect__select .CategorySelect__name {
     max-width: 100%;
     font-size: 1.3em;
     overflow: hidden;
@@ -34,12 +34,17 @@
     white-space: nowrap;
 }
 
-.CategorySelect .CategorySelect__chip .CategorySelect__select .CategorySelect__expand {
+.CategorySelect .CategorySelect__category .CategorySelect__select .CategorySelect__expand {
     margin-left: auto;
 }
 
 .CategorySelect .CategorySelect__loading {
-    position: relative;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .CategorySelect .CategorySelect__loading .CategorySelect__prompt {

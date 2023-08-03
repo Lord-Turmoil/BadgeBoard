@@ -54,7 +54,6 @@ class Api {
 
     async refresh() {
         const dto = await this._post('auth/token/refresh');
-        console.log("🚀 > Api > refresh > dto.meta.status:", dto.meta.status);
         if (dto.meta.status == 0) {
             this.saveToken(dto.data.token);
             return true;

@@ -243,7 +243,7 @@ export default function UserInfoPanel({
 
     // avatar
     const onAvatarChange = (avatarUrl) => {
-        onUserChangeInner({ key: 'avatarUrl', data: avatarUrl });
+        onUserChangeInner({ key: 'avatarUrl', value: avatarUrl });
     };
 
     // click away
@@ -266,7 +266,7 @@ export default function UserInfoPanel({
                     <div className="avatar">
                         <AvatarField
                             size={100}
-                            src={shadow && shadow.avatarUrl}
+                            src={user && user.avatarUrl}
                             disabled={!enableEdit}
                             onAvatarChange={onAvatarChange}
                             key={avatarKey} />

@@ -114,7 +114,7 @@ export default function AvatarField({
 
     return (
         <div className="AvatarField">
-            <Avatar sx={{ width: size, height: size }} src={AvatarUtil.getUrl(imageData)} alt="Avatar"/>
+            <Avatar sx={{ width: size, height: size }} src={AvatarUtil.getUrl(src)} alt="Avatar"/>
             <div className={`AvatarField__mask${disabled ? '' : ' AvatarField__active'}`}>
                 <div className="AvatarField__upload" onClick={disabled ? null : onClickUpload}>
                     <CameraAltRoundedIcon/>

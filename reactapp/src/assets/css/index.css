@@ -3,12 +3,36 @@
     padding: 0;
 }
 
-a { text-decoration: none; }
+a {
+    text-decoration: none;
+}
 
-.font-fancy { font-family: 'Selima'; }
+.font-fancy {
+    font-family: 'Selima';
+}
 
-.font-hand { font-family: 'Lucida Handwriting'; }
+.font-hand {
+    font-family: 'Lucida Handwriting';
+}
 
-.font-ui { font-family: 'Segoe UI'; }
+.font-ui {
+    font-family: 'Segoe UI';
+}
 
-#root { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+#root {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.clearfix:before,
+.clearfix::after {
+    content: "";
+    display: table;
+}
+
+.clearfix::after {
+    clear: both;
+}
+
+.clearfix {
+    zoom: 1;
+}

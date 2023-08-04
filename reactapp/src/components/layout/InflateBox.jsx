@@ -19,7 +19,7 @@ export default function InflateBox({ children, overflow=false, sx={} }) {
         []);
 
     return (
-        <div className="Inflate_Box" style={{ ...sx, height: height, minHeight: minHeight }}>
+        <div className="Inflate_Box clearfix" style={{ ...sx, height: height, minHeight: minHeight }}>
             {children}
         </div>
     );

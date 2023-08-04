@@ -8,6 +8,7 @@
     align-items: center;
     flex-basis: 100%;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .CategorySelect .CategorySelect__category {

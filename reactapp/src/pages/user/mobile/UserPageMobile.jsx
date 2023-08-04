@@ -16,6 +16,9 @@ import _debounce from 'debounce';
 import { fetchCategories } from '~/services/user/CategoryUtil';
 import CategorySelect from '~/parts/UserPanel/CategorySelect/CategorySelect';
 import stall from '~/services/stall';
+import StickyNote from '~/components/display/StickyNote/StickyNote';
+import BadgeContainerMobile from '~/components/layout/BadgeContainer/BadgeContainerMobile';
+import UserPanelPadding from '~/parts/UserPanel/UserPanelPadding';
 
 /*
 Parent could not get states of child component, but can use callback
@@ -133,31 +136,16 @@ export default function UserPageMobile() {
                 onClose={() => setExpandOn(false)}
                 exclude={expandExclude.current} />
             <InflateBox sx={{ backgroundColor: 'lightBlue' }} overflow>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
-                <h1>Hello</h1>
+                <UserPanelPadding />
+                <BadgeContainerMobile>
+                    <StickyNote rotate={8}/>
+                    <StickyNote rotate={8}/>
+                    <StickyNote rotate={8}/>
+                    <StickyNote rotate={8}/>
+                    <StickyNote rotate={8}/>
+                    <StickyNote rotate={8}/>
+                    <StickyNote rotate={8}/>
+                </BadgeContainerMobile>
             </InflateBox>
         </div>
     );

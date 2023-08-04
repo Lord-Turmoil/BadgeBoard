@@ -16,7 +16,7 @@ import _debounce from 'debounce';
 import { fetchCategories } from '~/services/user/CategoryUtil';
 import CategorySelect from '~/parts/UserPanel/CategorySelect/CategorySelect';
 import stall from '~/services/stall';
-import StickyNote from '~/components/display/Note/StickyNote/StickyNote';
+import StickyNote from '~/components/display/Note/NoteContainer/NoteContainer';
 import BadgeContainerMobile from '~/components/layout/BadgeContainer/BadgeContainerMobile';
 import UserPanelPadding from '~/parts/UserPanel/UserPanelPadding';
 

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import './StickyNote.css';
+import './NoteContainer.css';
 
 export default function StickyNote({
     rotate = 0,
@@ -25,7 +25,7 @@ export default function StickyNote({
     const rotation = useRef(getRotation());
 
     return (
-        <div className="StickyNote" style={{ transform: rotation.current }}>
+        <div className="NoteContainer" style={{ transform: rotation.current }}>
             {children}
         </div>
     );

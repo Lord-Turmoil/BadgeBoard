@@ -1,4 +1,4 @@
-.StickyNote {
+.NoteContainer {
     box-sizing: border-box;
     width: 100%;
     max-width: 500px;
@@ -16,7 +16,7 @@
     color: #130d6b;
 }
 
-.StickyNote::before {
+.NoteContainer::before {
     content: "";
     display: block;
     position: absolute;
@@ -32,7 +32,7 @@
     transform: skewX(25deg);
 }
 
-.StickyNote::after {
+.NoteContainer::after {
     content: "";
     display: block;
     position: absolute;

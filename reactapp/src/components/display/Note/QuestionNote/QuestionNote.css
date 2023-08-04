@@ -1,9 +1,18 @@
+.QuestionNote .QuestionNote__question {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .QuestionNote .QuestionNote__question h3 {
     font-size: 1.1em;
 }
 
 .QuestionNote .QuestionNote__answer {
     max-height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .QuestionNote .QuestionNote__answer p {
@@ -18,4 +27,8 @@
 .QuestionNote .QuestionNote__answer p.empty {
     color: rgba(0, 0, 0, 0.6);
     font-style: italic;
+}
+
+.QuestionNote .QuestionNote__answer .QuestionNote__avatar {
+    margin-left: auto;
 }

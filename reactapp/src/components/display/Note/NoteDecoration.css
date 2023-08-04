@@ -1,0 +1,17 @@
+.Note .Note__boxWithSeparator {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.Note .Note__boxWithSeparator::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 75%;
+    height: 20px;
+    border-top: 3px solid #130d6b;
+    border-radius: 50%;
+    bottom: 0px;
+    left: 5%;
+    transform: translate(0, 120%);
+}

@@ -57,8 +57,8 @@ export default function UserBasicNav({
 
     return (
         <div className="UserNav">
-            <Button sx={{ borderRadius: '50%' }} onClick={onClickAvatar}>
-                <Avatar
+            <Button className='UserNav__button' sx={{ borderRadius: '50%' }} onClick={onClickAvatar}>
+                <Avatar className='UserNav__avatar'
                     sx={{ width: '55px', height: '55px' }}
                     src={AvatarUtil.getUrlFromUser(user)} />
             </Button>

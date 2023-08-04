@@ -4,6 +4,7 @@ import './NoteContainer.css';
 export default function StickyNote({
     rotate = 0,
     random = true,
+    variant= null,
     children
 }) {
     // if random is true, then will rotate at random degree, taking 'rotate' as
@@ -25,7 +26,7 @@ export default function StickyNote({
     const rotation = useRef(getRotation());
 
     return (
-        <div className="NoteContainer" style={{ transform: rotation.current }}>
+        <div className={`NoteContainer ${variant}`} style={{ transform: rotation.current }}>
             {children}
         </div>
     );

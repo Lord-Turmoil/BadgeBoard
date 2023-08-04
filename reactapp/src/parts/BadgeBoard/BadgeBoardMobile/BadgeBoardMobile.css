@@ -1,0 +1,19 @@
+.BadgeBoard.BadgeBoardMobile {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.BadgeBoard.BadgeBoardMobile .BadgeBoard__loading {
+    position: relative;
+    text-align: center;
+}
+
+.BadgeBoard.BadgeBoardMobile .BadgeBoard__loading h3 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.4em;
+}

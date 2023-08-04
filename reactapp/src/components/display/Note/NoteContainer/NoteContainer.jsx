@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import './NoteContainer.css';
 
-export default function StickyNote({
+export default function NoteContainer({
     rotate = 0,
     random = true,
     variant= null,

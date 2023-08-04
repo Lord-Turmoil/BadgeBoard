@@ -16,10 +16,8 @@ import _debounce from 'debounce';
 import { fetchCategories } from '~/services/user/CategoryUtil';
 import CategorySelect from '~/parts/UserPanel/CategorySelect/CategorySelect';
 import stall from '~/services/stall';
-import NoteContainer from '~/components/display/Note/NoteContainer/NoteContainer';
-import BadgeContainerMobile from '~/components/layout/BadgeContainer/BadgeContainerMobile';
 import UserPanelPadding from '~/parts/UserPanel/UserPanelPadding';
-import QuestionNote from '~/components/display/Note/QuestionNote/QuestionNote';
+import BadgeBoardMobile from '~/parts/BadgeBoard/BadgeBoardMobile/BadgeBoardMobile';
 
 /*
 Parent could not get states of child component, but can use callback
@@ -138,43 +136,7 @@ export default function UserPageMobile() {
                 exclude={expandExclude.current} />
             <InflateBox sx={{ backgroundColor: 'azure' }} overflow>
                 <UserPanelPadding />
-                <BadgeContainerMobile>
-                    <NoteContainer rotate={8}>
-                        <QuestionNote question='This is a short question' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-1'>
-                        <QuestionNote
-                            question='This is a long long long long long long long long long long long long question'
-                            answer='This is a good good good good good question' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-2'>
-                        <QuestionNote
-                            question='你有没有喜欢的人呀(❤ ω ❤)'
-                            answer='没有捏' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-3'>
-                        <QuestionNote
-                            question='你有没有喜欢的电影呀(❤ ω ❤)'
-                            answer='当然有啦，我最喜欢《星球大战》了！' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-4'>
-                        <QuestionNote
-                            question='你有没有喜欢的语言呀(❤ ω ❤)'
-                            answer='当然有啦，我最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最喜欢 C++ 了' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-5'>
-                    <QuestionNote
-                            question='你有没有喜欢的语言呀(❤ ω ❤)'
-                            answer='当然有啦，我最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最喜欢 C++ 了' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-6'>
-                    <QuestionNote
-                            question='你有没有喜欢的语言呀(❤ ω ❤)'
-                            answer='当然有啦，我最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最喜欢 C++ 了' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} />
-                    <NoteContainer rotate={8} />
-                </BadgeContainerMobile>
+                <BadgeBoardMobile />
             </InflateBox>
         </div>
     );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 // Anything between opening and closing tags goes into children prop.
-export default function InflateBox({ children, overflow=false, sx={} }) {
+export default function InflateBox({ children, overflow = false, sx = {} }) {
     const [height, setHeight] = useState(overflow ? 'auto' : '100%');
     const [minHeight, setMinHeight] = useState('100%');
 
@@ -12,14 +12,14 @@ export default function InflateBox({ children, overflow=false, sx={} }) {
     }
 
     useEffect(() => {
-            onResize();
-            window.removeEventListener('resize', onResize);
-            window.addEventListener('resize', onResize);
-        },
+        onResize();
+        window.removeEventListener('resize', onResize);
+        window.addEventListener('resize', onResize);
+    },
         []);
 
     return (
-        <div className="Inflate_Box clearfix" style={{ ...sx, height: height, minHeight: minHeight }}>
+        <div className="Inflate_Box clearfix" style={{ ...sx, position: 'relative', height: height, minHeight: minHeight }}>
             {children}
         </div>
     );

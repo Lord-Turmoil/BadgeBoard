@@ -3,7 +3,8 @@ import './StickyNote.css';
 
 export default function StickyNote({
     rotate = 0,
-    random = true
+    random = true,
+    children
 }) {
     // if random is true, then will rotate at random degree, taking 'rotate' as
     // max rotating angle. Else, will rotate at fixed degree as rotate.
@@ -25,7 +26,7 @@ export default function StickyNote({
 
     return (
         <div className="StickyNote" style={{ transform: rotation.current }}>
-
+            {children}
         </div>
     );
 };

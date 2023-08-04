@@ -2,7 +2,7 @@ import MaleRoundedIcon from '@mui/icons-material/MaleRounded';
 import FemaleRoundedIcon from '@mui/icons-material/FemaleRounded';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 
-import CornerBadge from "../CornerBadge/CornerBadge";
+import CornerBadge from "~/components/display/Badge/CornerBadge/CornerBadge"
 
 export default function SexBadge({ sex }) {
     const renderSex = (s) => {

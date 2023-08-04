@@ -1,4 +1,4 @@
-import CornerBadge from "../CornerBadge/CornerBadge";
+import CornerBadge from "~/components/display/Badge/CornerBadge/CornerBadge"
 
 import './TitleBadge.css';
 

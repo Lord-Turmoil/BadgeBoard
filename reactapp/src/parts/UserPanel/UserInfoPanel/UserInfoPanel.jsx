@@ -25,9 +25,8 @@ import notifier from '~/services/notifier';
 // import '~/assets/css/user.panel.define.css'
 import './UserInfoPanel.css'
 import AvatarField from '~/components/form/AvatarField/AvatarField';
-import CornerBadge from '~/components/display/CornerBadge/CornerBadge';
-import SexBadge from '~/components/display/SexBadge/SexBadge';
-import TitleBadge from '~/components/display/TitleBadge/TitleBadge';
+import SexBadge from '~/components/display/Badge/SexBadge/SexBadge';
+import TitleBadge from '~/components/display/Badge/TitleBadge/TitleBadge';
 
 const MOTTO_MAX_LENGTH = 66;
 const MOTTO_MIN_LENGTH = 0;

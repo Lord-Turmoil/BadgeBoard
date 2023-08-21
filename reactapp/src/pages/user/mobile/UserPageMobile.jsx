@@ -19,6 +19,7 @@ import stall from '~/services/stall';
 import UserPanelPadding from '~/parts/UserPanel/UserPanelPadding';
 import BadgeBoardMobile from '~/parts/BadgeBoard/BadgeBoardMobile/BadgeBoardMobile';
 import { getBadges } from '~/services/user/BadgeUtil';
+import ActionDial from '~/parts/ActionDial/ActionDial';
 
 /*
 Parent could not get states of child component, but can use callback
@@ -108,7 +109,7 @@ export default function UserPageMobile() {
     useEffect(() => {
         if (user) {
             (async () => {
-                const [c, d, e] = await fetchCategories(user.account.id, visitor ? visitor.account.id : null);
+                const [c, d, e] = await stall(fetchCategories(user.account.id, visitor ? visitor.account.id : null));
                 if (e) {
                     notifier.error(e);
                     setCategoryError(e);
@@ -178,8 +179,9 @@ export default function UserPageMobile() {
                 exclude={expandExclude.current} />
             <InflateBox sx={{ backgroundColor: 'azure' }} overflow>
                 <UserPanelPadding />
-                <BadgeBoardMobile badges={badges}/>
+                <BadgeBoardMobile badges={badges} />
             </InflateBox>
+            <ActionDial />
         </div>
     );
 }

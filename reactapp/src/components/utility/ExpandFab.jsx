@@ -11,7 +11,7 @@ export function ExpandFab({
         setOpen(!open);
     }
     return (
-        <Fab ref={ref} sx={{ flexShrink: 0 }} disabled={disabled} color="primary" onClick={handleClick}>
+        <Fab ref={ref} sx={{ flexShrink: 0, margin: '6px' }} disabled={disabled} color="primary" onClick={handleClick}>
             <ExpandMoreRounded fontSize="large" sx={{
                 transition: 'transform 0.3s',
                 transform: open ? 'rotate(0deg)' : 'rotate(180deg)'

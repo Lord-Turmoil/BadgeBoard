@@ -108,7 +108,7 @@ export default function UserPageMobile() {
     useEffect(() => {
         if (user) {
             (async () => {
-                const [c, d, e] = await stall(fetchCategories(user.account.id, visitor ? visitor.account.id : null), 1000);
+                const [c, d, e] = await fetchCategories(user.account.id, visitor ? visitor.account.id : null);
                 if (e) {
                     notifier.error(e);
                     setCategoryError(e);

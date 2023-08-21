@@ -33,7 +33,8 @@ export const getBadges = async (category, timestamp, initiator = null) => {
     var key = _getCategoryKey(category, initiator);
     var cache = getCache(key);
     var badges = cache;
-    if (!cache || cache.timestamp == null) {
+    // if (!cache || cache.timestamp == null) {
+    {
         var [data, error] = await fetchBadges(category, timestamp, initiator);
         if (error) {
             return [null, error];

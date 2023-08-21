@@ -27,8 +27,10 @@ export default function NoteContainer({
 
     const rotation = useRef(getRotation());
 
+    const animateStyle = "animate__animated animate__zoomIn animate__faster";
+
     return (
-        <div className={`NoteContainer animate__animated animate__zoomIn ${className ? className : ""} ${variant ? variant : ""}`}
+        <div className={`NoteContainer ${animateStyle} ${className ? className : ""} ${variant ? variant : ""}`}
             style={{ transform: rotation.current }}>
             {children}
         </div>

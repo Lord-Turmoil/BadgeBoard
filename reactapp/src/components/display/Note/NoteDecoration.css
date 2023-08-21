@@ -1,6 +1,6 @@
 .Note .Note__boxWithSeparator {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .Note .Note__boxWithSeparator::after {

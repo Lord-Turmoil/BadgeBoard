@@ -12,13 +12,13 @@ export default function QuestionNote({
 }) {
     return (
         <div className="Note QuestionNote">
-            <div className="QuestionNote__question Note__boxWithSeparator">
-                {sender && <Avatar src={AvatarUtil.getUrlFromUser(sender)} />}
+            <div className="QuestionNote__question Note__boxWithSeparator" style={{ marginBottom: "20px" }}>
+                {sender && <Avatar sx={{ mr: '5px' }} src={AvatarUtil.getUrlFromUser(sender)} />}
                 <h3>{question}</h3>
             </div>
             <div className="QuestionNote__answer">
                 <p className={answer ? null : 'empty'}>{answer ?? "Not answered yet..."}</p>
-                <Avatar className='QuestionNote__avatar' src={AvatarUtil.getUrlFromUser(receiver)} />
+                {answer && <Avatar className='QuestionNote__avatar' src={AvatarUtil.getUrlFromUser(receiver)} />}
             </div>
         </div>
     );

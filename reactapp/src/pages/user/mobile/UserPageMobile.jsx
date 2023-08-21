@@ -13,13 +13,14 @@ import '~/parts/UserPanel/UserPanel.css'
 import './UserPageMobile.css'
 import UserBasicNav from '~/parts/UserPanel/UserNav/UserNav';
 import _debounce from 'debounce';
-import { fetchCategories } from '~/services/user/CategoryUtil';
+import { fetchCategories } from '~/services/badge/CategoryUtil';
 import CategorySelect from '~/parts/UserPanel/CategorySelect/CategorySelect';
 import stall from '~/services/stall';
 import UserPanelPadding from '~/parts/UserPanel/UserPanelPadding';
 import BadgeBoardMobile from '~/parts/BadgeBoard/BadgeBoardMobile/BadgeBoardMobile';
-import { getBadges } from '~/services/user/BadgeUtil';
+import { getBadges } from '~/services/badge/BadgeUtil';
 import ActionDial from '~/parts/ActionDial/ActionDial';
+import { getActions } from '~/services/action/ActionUtil';
 
 /*
 Parent could not get states of child component, but can use callback
@@ -159,6 +160,12 @@ export default function UserPageMobile() {
         setBadgeBoardKey(badgeBoardKey + 1);
     }, [badges]);
 
+    // actions
+    const [actions, setActions] = useState([]);
+    useEffect(() => {
+        setActions(getActions(currentCategory, visitor));
+    }, [currentCategory, visitor]);
+
     return (
         <div className="UserPanel UserPanel__mobile">
             <div className="nav-wrapper">
@@ -181,7 +188,7 @@ export default function UserPageMobile() {
                 <UserPanelPadding />
                 <BadgeBoardMobile badges={badges} />
             </InflateBox>
-            <ActionDial />
+            <ActionDial actions={actions} />
         </div>
     );
 }

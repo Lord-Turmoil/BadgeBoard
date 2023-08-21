@@ -3,8 +3,8 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import EditIcon from '@mui/icons-material/Edit';
-import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
-import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
+
+import './ActionDial.css';
 
 export default function ActionDial({
     actions = null

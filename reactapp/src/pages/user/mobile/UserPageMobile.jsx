@@ -141,8 +141,7 @@ export default function UserPageMobile() {
             timestamp = badges.timestamp;
         }
         (async () => {
-            var [data, error] = await stall(
-                getBadges(currentCategory, timestamp, visitor), 1000);
+            var [data, error] = await getBadges(currentCategory, timestamp, visitor);
             if (error) {
                 notifier.error(e);
                 setBadgeError(error);

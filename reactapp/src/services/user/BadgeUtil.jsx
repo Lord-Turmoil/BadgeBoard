@@ -20,18 +20,25 @@ export const saveBadges = (category, badges, initiator = null) => {
     window.sessionStorage.setItem(key, value);
 }
 
+const getCache = (key) => {
+    var value = window.sessionStorage.getItem(key);
+    if (value) {
+        return JSON.parse(value);
+    } else {
+        return null;
+    }
+}
+
 export const getBadges = async (category, timestamp, initiator = null) => {
     var key = _getCategoryKey(category, initiator);
-    var cache = window.sessionStorage.getItem(key);
-    var badges = null;
-    if (!cache) {
+    var cache = getCache(key);
+    var badges = cache;
+    if (!cache || cache.timestamp == null) {
         var [data, error] = await fetchBadges(category, timestamp, initiator);
         if (error) {
             return [null, error];
         }
         badges = data;
-    } else {
-        badges = JSON.parse(cache);
     }
     if (badges) {
         console.log("🚀 > getBadges > badges:", badges);

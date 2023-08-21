@@ -31,7 +31,7 @@ export default function BadgeBoardMobile({
             return <div></div>
         }
     }
-    const renderBadge = (badge) => {
+    const renderBadge = (badge, index) => {
         return (
             <NoteContainer rotate={8} variant={badge.style} key={badge.id}>
                 {renderPayload(badge)}
@@ -44,7 +44,7 @@ export default function BadgeBoardMobile({
             {badges ?
                 <div className="BadgeBoard__board">
                     {badges.badges.map((badge, index) => {
-                        return renderBadge(badge);
+                        return renderBadge(badge, index);
                     })}
                 </div>
                 :

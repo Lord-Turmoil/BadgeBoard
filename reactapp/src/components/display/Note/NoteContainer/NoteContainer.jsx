@@ -1,10 +1,12 @@
 import { useRef } from 'react';
 import './NoteContainer.css';
+import 'animate.css';
 
 export default function NoteContainer({
     rotate = 0,
     random = true,
-    variant= null,
+    variant = null,
+    className = null,
     children
 }) {
     // if random is true, then will rotate at random degree, taking 'rotate' as
@@ -26,7 +28,8 @@ export default function NoteContainer({
     const rotation = useRef(getRotation());
 
     return (
-        <div className={`NoteContainer ${variant}`} style={{ transform: rotation.current }}>
+        <div className={`NoteContainer animate__animated animate__zoomIn ${className ? className : ""} ${variant ? variant : ""}`}
+            style={{ transform: rotation.current }}>
             {children}
         </div>
     );

@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import BadgeContainerMobile from "~/components/layout/BadgeContainer/BadgeContainerMobile";
 import NoteContainer from '~/components/display/Note/NoteContainer/NoteContainer';
 import QuestionNote from '~/components/display/Note/QuestionNote/QuestionNote';
@@ -22,43 +22,30 @@ export default function BadgeBoardMobile({
         setLoadingCount(loadingCount >= 3 ? 0 : loadingCount + 1);
     }, 500);
 
+    const renderPayload = (badge) => {
+        if (badge.type == 1) {
+            return (<QuestionNote question={badge.payload.question} answer={badge.payload.answer} />)
+        } else if (badge.type == 2) {
+            return <div></div>;
+        } else {
+            return <div></div>
+        }
+    }
+    const renderBadge = (badge) => {
+        return (
+            <NoteContainer rotate={8} variant={badge.style} key={badge.id}>
+                {renderPayload(badge)}
+            </NoteContainer>
+        );
+    }
+
     return (
-        <BadgeContainerMobile className='BadgeBoard BadgeBoardMobile'>
+        <BadgeContainerMobile className={`BadgeBoard BadgeBoardMobile${badges ? "" : " loading"}`}>
             {badges ?
                 <div className="BadgeBoard__board">
-                    <NoteContainer rotate={8}>
-                        <QuestionNote question='This is a short question' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-1'>
-                        <QuestionNote
-                            question='This is a long long long long long long long long long long long long question'
-                            answer='This is a good good good good good question' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-2'>
-                        <QuestionNote
-                            question='你有没有喜欢的人呀(❤ ω ❤)'
-                            answer='没有捏' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-3'>
-                        <QuestionNote
-                            question='你有没有喜欢的电影呀(❤ ω ❤)'
-                            answer='当然有啦，我最喜欢《星球大战》了！' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-4'>
-                        <QuestionNote
-                            question='你有没有喜欢的语言呀(❤ ω ❤)'
-                            answer='当然有啦，我最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最喜欢 C++ 了' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-5'>
-                        <QuestionNote
-                            question='你有没有喜欢的语言呀(❤ ω ❤)'
-                            answer='当然有啦，我最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最喜欢 C++ 了' />
-                    </NoteContainer>
-                    <NoteContainer rotate={8} variant='style-6'>
-                        <QuestionNote
-                            question='你有没有喜欢的语言呀(❤ ω ❤)'
-                            answer='当然有啦，我最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最最喜欢 C++ 了' />
-                    </NoteContainer>
+                    {badges.badges.map((badge, index) => {
+                        return renderBadge(badge);
+                    })}
                 </div>
                 :
                 <div className="BadgeBoard__loading">

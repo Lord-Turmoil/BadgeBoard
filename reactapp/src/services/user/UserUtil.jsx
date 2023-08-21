@@ -21,22 +21,6 @@ class UserUtil {
         window.localStorage.setItem('uid', uid);
     }
 
-    static savePreference(preference) {
-        const user = this.get();
-        if (user != null) {
-            user.preference = preference;
-            this.save(user);
-        }
-    }
-
-    static saveInfo(info) {
-        const user = this.get();
-        if (user != null) {
-            user.info = info;
-            this.save(user);
-        }
-    }
-
     static drop() {
         console.log("Dropping data");
         window.localStorage.removeItem('uid');

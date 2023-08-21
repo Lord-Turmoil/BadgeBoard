@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import notifier from '~/services/notifier';
 import ExpandFab from '~/components/utility/ExpandFab';
@@ -18,6 +18,7 @@ import CategorySelect from '~/parts/UserPanel/CategorySelect/CategorySelect';
 import stall from '~/services/stall';
 import UserPanelPadding from '~/parts/UserPanel/UserPanelPadding';
 import BadgeBoardMobile from '~/parts/BadgeBoard/BadgeBoardMobile/BadgeBoardMobile';
+import { getBadges } from '~/services/user/BadgeUtil';
 
 /*
 Parent could not get states of child component, but can use callback
@@ -27,6 +28,9 @@ export default function UserPageMobile() {
     const navigate = useNavigate();
     const { uid } = useParams('uid');
     const [update, setUpdate] = useState("static");
+    const [searchParams, setSearchParams] = useSearchParams('category');
+
+    const initCategoryId = searchParams.get('category');
 
     // current logged in user
     const {
@@ -93,6 +97,7 @@ export default function UserPageMobile() {
     useEffect(() => {
         if (categories && (currentCategoryIndex != null)) {
             setCurrentCategory(categories[currentCategoryIndex]);
+            setSearchParams({ ...searchParams, 'category': categories[currentCategoryIndex].id });
         }
     }, [currentCategoryIndex]);
 
@@ -103,18 +108,56 @@ export default function UserPageMobile() {
     useEffect(() => {
         if (user) {
             (async () => {
-                const [c, d, e] = await stall(
-                    fetchCategories(user.account.id, visitor ? visitor.account.id : null), 3000);
+                const [c, d, e] = await stall(fetchCategories(user.account.id, visitor ? visitor.account.id : null), 1000);
                 if (e) {
                     notifier.error(e);
                     setCategoryError(e);
                 } else {
                     setCategories(c);
-                    setCurrentCategoryIndex(d);
+                    var index = d;
+                    if (initCategoryId) {
+                        for (var i = 0; i < c.length; i++) {
+                            if (c[i].id == initCategoryId) {
+                                index = i;
+                                break;
+                            }
+                        }
+                    }
+                    setCurrentCategoryIndex(index);
                 }
             })();
         }
     }, [user]);
+
+    // badges
+    const [badges, setBadges] = useState(null);
+    const [badgeError, setBadgeError] = useState(null);
+    useEffect(() => {
+        if (!currentCategory) {
+            return;
+        }
+        var timestamp = null;
+        if (badges) {
+            timestamp = badges.timestamp;
+        }
+        (async () => {
+            var [data, error] = await stall(
+                getBadges(currentCategory, timestamp, visitor), 1000);
+            if (error) {
+                notifier.error(e);
+                setBadgeError(error);
+            } else {
+                setBadges(data);
+            }
+        })();
+    }, [currentCategory]);
+
+    const [badgeBoardKey, setBadgeBoardKey] = useState(0);
+
+    useEffect(() => {
+        console.log("🚀 > useEffect > badges:", badges);
+        setBadgeBoardKey(badgeBoardKey + 1);
+    }, [badges]);
 
     return (
         <div className="UserPanel UserPanel__mobile">
@@ -136,7 +179,7 @@ export default function UserPageMobile() {
                 exclude={expandExclude.current} />
             <InflateBox sx={{ backgroundColor: 'azure' }} overflow>
                 <UserPanelPadding />
-                <BadgeBoardMobile />
+                <BadgeBoardMobile badges={badges}/>
             </InflateBox>
         </div>
     );

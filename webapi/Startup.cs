@@ -34,7 +34,7 @@ public class Startup
         services.RegisterModules();
 
         // Controllers
-        services.AddControllers();
+        services.AddControllers().AddNewtonsoftJson();
 
         // Swagger service
         services.AddSwaggerGen(c => {

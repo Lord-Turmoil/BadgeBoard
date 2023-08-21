@@ -192,7 +192,7 @@ public class BrowseService : BaseService, IBrowseService
     {
         IEnumerable<Badge> badges = await _unitOfWork.GetRepository<Badge>().GetAllAsync(
             predicate: predicate,
-            source => source.OrderBy(x => x.CreatedTime),
+            source => source.OrderByDescending(x => x.CreatedTime),
             source => source.Include(x => x.Category).ThenInclude(x => x.Option));
         if (publicCategoryOnly)
         {
@@ -200,8 +200,15 @@ public class BrowseService : BaseService, IBrowseService
         }
 
         IList<BadgeDto> badgeDtos = await BadgeDtoUtil.GetBadgeDtosAsync(_unitOfWork, _mapper, badges);
+        string? Timestamp = null;
+        if (badgeDtos.Count > 0)
+        {
+            Timestamp = badgeDtos.Last().Timestamp;
+        }
+
         return new BrowseBadgeSuccessDto {
             Count = badgeDtos.Count,
+            Timestamp = Timestamp,
             Badges = badgeDtos
         };
     }

@@ -108,7 +108,7 @@ public class BrowseController : BaseController<BrowseController>
     [Route("anonymous/category/{categoryId}")]
     public async Task<ApiResponse> GetBadgesOfCategory(
         int categoryId,
-        [FromQuery] string timestamp)
+        [FromQuery] string? timestamp)
     {
         try
         {
@@ -129,7 +129,7 @@ public class BrowseController : BaseController<BrowseController>
     public async Task<ApiResponse> GetBadgesOfCategory(
         int categoryId,
         [FromHeader] string authorization,
-        [FromQuery] string timestamp)
+        [FromQuery] string? timestamp)
     {
         try
         {

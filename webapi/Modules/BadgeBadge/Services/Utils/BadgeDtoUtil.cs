@@ -15,7 +15,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Services.Utils;
 
 public static class BadgeDtoUtil
 {
-    private const string TimestampFormat = "yyyy-MM-dd HH:mm:ss.ffffff";
+    private const string TimestampFormat = "yyyy-MM-dd-HH:mm:ss.ffffff";
 
 
     public static async Task<BadgeDto> GetQuestionBadgeDtoAsync(

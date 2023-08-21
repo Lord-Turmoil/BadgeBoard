@@ -9,7 +9,7 @@ namespace BadgeBoard.Api.Modules.BadgeBadge.Dtos.Badge;
 
 public class BrowseBadgeDto : IApiRequestDto
 {
-    public string Timestamp { get; set; }
+    public string? Timestamp { get; set; }
 
     [JsonIgnore] public DateTime BeforeTime { get; set; }
     [JsonIgnore] private bool BadTimestamp { get; set; }
@@ -23,14 +23,22 @@ public class BrowseBadgeDto : IApiRequestDto
 
     public virtual IApiRequestDto Format()
     {
-        try
+        if (Timestamp != null)
         {
-            BeforeTime = BadgeDtoUtil.ParseTimestamp(Timestamp);
-            BadTimestamp = false;
+            try
+            {
+                BeforeTime = BadgeDtoUtil.ParseTimestamp(Timestamp);
+                BadTimestamp = false;
+            }
+            catch (FormatException)
+            {
+                BadTimestamp = true;
+            }
         }
-        catch (FormatException)
+        else
         {
-            BadTimestamp = true;
+            BadTimestamp = false;
+            BeforeTime = DateTime.Now;
         }
 
         return this;
@@ -51,5 +59,6 @@ public class BrowseCategoryBadgeDto : BrowseBadgeDto
 public class BrowseBadgeSuccessDto : ApiResponseData
 {
     public int Count { get; set; }
+    public string? Timestamp { get; set; }
     public IList<BadgeDto> Badges { get; set; }
 }

@@ -210,7 +210,7 @@ public class CategoryService : BaseService, ICategoryService
         IRepository<Category> repo = _unitOfWork.GetRepository<Category>();
         IList<Category> categoryList = await repo.GetAllAsync(
             predicate: x => x.UserId == userId,
-            include: source => source.Include(x => x.Option),
+            include: source => source.Include(x => x.Option).Include(x => x.User),
             orderBy: source => source.OrderBy(x => x.Name));
         var data = new GetCategorySuccessDto();
         foreach (Category category in categoryList)
@@ -243,7 +243,7 @@ public class CategoryService : BaseService, ICategoryService
         IRepository<Category> repo = _unitOfWork.GetRepository<Category>();
         IList<Category> categoryList = await repo.GetAllAsync(
             predicate: x => x.UserId == userId,
-            include: source => source.Include(x => x.Option),
+            include: source => source.Include(x => x.Option).Include(x => x.User),
             orderBy: source => source.OrderBy(x => x.Name));
 
         var data = new GetCategorySuccessDto();

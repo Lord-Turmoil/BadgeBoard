@@ -1,0 +1,9 @@
+.MemoryNote.Note__Thumbnail .MemoryNote__memory {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.MemoryNote.Note__Thumbnail .MemoryNote__memory h3 {
+    font-size: 1.1em;
+}

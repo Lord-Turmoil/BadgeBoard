@@ -15,7 +15,7 @@
     align-items: center;
 }
 
-.QuestionNote .QuestionNote__answer p {
+.QuestionNote.Note__Thumbnail .QuestionNote__answer p {
     display: -webkit-box;
     font-size: 1em;
     text-overflow: ellipsis;
@@ -24,11 +24,11 @@
     -webkit-box-orient: vertical;
 }
 
-.QuestionNote .QuestionNote__answer p.empty {
+.QuestionNote.Note__Thumbnail .QuestionNote__answer p.empty {
     color: rgba(0, 0, 0, 0.6);
     font-style: italic;
 }
 
-.QuestionNote .QuestionNote__answer .QuestionNote__avatar {
+.QuestionNote.Note__Thumbnail .QuestionNote__answer .QuestionNote__avatar {
     margin-left: 5px;
 }

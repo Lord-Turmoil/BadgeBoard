@@ -1,4 +1,4 @@
-import './QuestionNote.css';
+import './QuestionNoteThumbnail.css';
 import '../NoteDecoration.css';
 import { Avatar } from '@mui/material';
 import AvatarUtil from '~/services/user/AvatarUtil';
@@ -11,7 +11,7 @@ export default function QuestionNote({
     receiver = null
 }) {
     return (
-        <div className="Note QuestionNote">
+        <div className="Note QuestionNote Note__Thumbnail">
             <div className="QuestionNote__question Note__boxWithSeparator" style={{ marginBottom: "20px" }}>
                 {sender && <Avatar sx={{ mr: '5px' }} src={AvatarUtil.getUrlFromUser(sender)} />}
                 <h3>{question}</h3>

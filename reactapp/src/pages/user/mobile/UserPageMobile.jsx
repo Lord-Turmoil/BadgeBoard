@@ -19,8 +19,9 @@ import stall from '~/services/stall';
 import UserPanelPadding from '~/parts/UserPanel/UserPanelPadding';
 import BadgeBoardMobile from '~/parts/BadgeBoard/BadgeBoardMobile/BadgeBoardMobile';
 import { getBadges } from '~/services/badge/BadgeUtil';
-import ActionDial from '~/parts/ActionDial/ActionDial';
+import BadgeActionDial from '~/parts/BadgeAction/BadgeActionDial';
 import { getActions } from '~/services/action/ActionUtil';
+import NoteModal from '~/components/display/BadgeNote/NoteModal/NoteModal';
 
 /*
 Parent could not get states of child component, but can use callback
@@ -133,7 +134,9 @@ export default function UserPageMobile() {
 
     // badges
     const [badges, setBadges] = useState(null);
+    const [currentBadge, setCurrentBadge] = useState(null);
     const [badgeError, setBadgeError] = useState(null);
+
     useEffect(() => {
         if (!currentCategory) {
             return;
@@ -147,24 +150,33 @@ export default function UserPageMobile() {
             if (error) {
                 notifier.error(error);
                 setBadgeError(error);
+                setBadges(null);
             } else {
                 setBadges(data);
             }
         })();
     }, [currentCategory]);
 
-    const [badgeBoardKey, setBadgeBoardKey] = useState(0);
+    const noteModalOpen = Boolean(currentBadge);
 
     useEffect(() => {
-        console.log("🚀 > useEffect > badges:", badges);
-        setBadgeBoardKey(badgeBoardKey + 1);
-    }, [badges]);
+        console.log("🚀 > useEffect > currentBadge:", currentBadge);
+    }, [currentBadge]);
 
     // actions
-    const [actions, setActions] = useState([]);
-    useEffect(() => {
-        setActions(getActions(currentCategory, visitor));
-    }, [currentCategory, visitor]);
+    const [addQuestionModalOpen, setAddQuestionModalOpen] = useState(false);
+    const [addMemoryModalOpen, setAddMemoryModalOpen] = useState(false);
+    const [addCategoryModalOpen, setAddCategoryModalOpen] = useState(false);
+    const [editCategoryModalOpen, setEditCategoryModalOpen] = useState(false);
+
+    const actions = getActions(
+        currentCategory,
+        visitor,
+        () => { setAddQuestionModalOpen(true) },
+        () => { setAddMemoryModalOpen(true) },
+        () => { setAddCategoryModalOpen(true) },
+        () => { setEditCategoryModalOpen(true) }
+    );
 
     return (
         <div className="UserPanel UserPanel__mobile">
@@ -186,9 +198,16 @@ export default function UserPageMobile() {
                 exclude={expandExclude.current} />
             <InflateBox sx={{ backgroundColor: 'azure' }} overflow>
                 <UserPanelPadding />
-                <BadgeBoardMobile badges={badges} />
+                <BadgeBoardMobile badges={badges} onClickBadge={setCurrentBadge} />
             </InflateBox>
-            <ActionDial actions={actions} />
+            <BadgeActionDial user={user} visitor={visitor} category={currentCategory} actions={actions} />
+            <NoteModal
+                open={noteModalOpen}
+                onClose={() => setCurrentBadge(null)}
+                badge={currentBadge}
+                categories={categories}
+                user={visitor}
+            />
         </div>
     );
 }

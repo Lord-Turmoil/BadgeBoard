@@ -1,11 +1,13 @@
 import { useRef } from 'react';
 import './NoteContainer.css';
 import 'animate.css';
+import '~/assets/css/note-style.css';
 
 export default function NoteContainer({
     rotate = 0,
     random = true,
     variant = null,
+    onClick = null,
     className = null,
     children
 }) {
@@ -30,8 +32,9 @@ export default function NoteContainer({
     const animateStyle = "animate__animated animate__zoomIn animate__faster";
 
     return (
-        <div className={`NoteContainer ${animateStyle} ${className ? className : ""} ${variant ? variant : ""}`}
-            style={{ transform: rotation.current }}>
+        <div className={`NoteContainer StyledNote ${animateStyle} ${className ? className : ""} ${variant ? variant : ""}`}
+            style={{ transform: rotation.current }}
+            onClick={onClick}>
             {children}
         </div>
     );

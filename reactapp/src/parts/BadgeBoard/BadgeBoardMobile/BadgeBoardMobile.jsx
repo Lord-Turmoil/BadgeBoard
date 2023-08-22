@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import BadgeContainerMobile from "~/components/layout/BadgeContainer/BadgeContainerMobile";
-import NoteContainer from '~/components/display/Note/NoteContainer/NoteContainer';
-import QuestionNote from '~/components/display/Note/QuestionNote/QuestionNote';
+import NoteContainer from '~/components/display/BadgeNote/NoteContainer/NoteContainer';
+import QuestionNote from '~/components/display/BadgeNote/Note/QuestionNote/QuestionNoteThumbnail';
 import { CircularProgress } from "@mui/material";
 
 import './BadgeBoardMobile.css';
 import useInterval from "~/services/hook/useInterval";
-import MemoryNote from "~/components/display/Note/MemoryNote/MemoryNote";
-import EmptyNote from "~/components/display/Note/EmptyNote/EmptyNote";
+import MemoryNote from "~/components/display/BadgeNote/Note/MemoryNote/MemoryNoteThumbnail";
+import EmptyNote from "~/components/display/BadgeNote/Note/EmptyNote/EmptyNoteThumbnail";
 
 export default function BadgeBoardMobile({
-    badges = null
+    badges = null,
+    onClickBadge = null
 }) {
     const [loadingText, setLoadingText] = useState();
     const [loadingCount, setLoadingCount] = useState(0);
@@ -43,7 +44,11 @@ export default function BadgeBoardMobile({
     }
     const renderBadge = (badge, index) => {
         return (
-            <NoteContainer rotate={6} variant={badge.style} key={badge.id}>
+            <NoteContainer
+                rotate={6}
+                variant={badge.style}
+                onClick={() => onClickBadge(badge)}
+                key={badge.id} >
                 {renderPayload(badge)}
             </NoteContainer>
         );
@@ -69,7 +74,7 @@ export default function BadgeBoardMobile({
                 :
                 <div className="BadgeBoard__board">
                     {
-                        badges.badges.map((badge, index) => {
+                        badges && badges.badges.map((badge, index) => {
                             return renderBadge(badge, index);
                         })
                     }

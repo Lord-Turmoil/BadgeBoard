@@ -1,0 +1,55 @@
+.StyledNote {
+    background-color: #ffa;
+}
+
+.StyledNote::before {
+    background-color: #ffa;
+}
+
+.StyledNote.style-1 {
+    background-color: #ADFF2F;
+}
+
+.StyledNote.style-1::before {
+    background-color: #ADFF2F;
+}
+
+.StyledNote.style-2 {
+    background-color: #FDCED6;
+}
+
+.StyledNote.style-2::before {
+    background-color: #FDCED6;
+}
+
+.StyledNote.style-3 {
+    background-color: #B0E2FF;
+}
+
+.StyledNote.style-3::before {
+    background-color: #B0E2FF;
+}
+
+.StyledNote.style-4 {
+    background-image: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+}
+
+.StyledNote.style-4::before {
+    background-color: #96e6a1;
+}
+
+.StyledNote.style-5 {
+    background-image: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+}
+
+.StyledNote.style-5::before {
+    background-color: #fee140;
+}
+
+.StyledNote.style-6 {
+    background-image: linear-gradient(-225deg, #B6CEE8 0%, #F578DC 100%);
+}
+
+.StyledNote.style-6::before {
+    background-color: #F578DC;
+}

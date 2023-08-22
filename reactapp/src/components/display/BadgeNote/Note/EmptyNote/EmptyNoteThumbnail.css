@@ -1,10 +1,10 @@
-.EmptyNote .EmptyNote__text {
+.EmptyNote.Note__Thumbnail .EmptyNote__text {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.EmptyNote .EmptyNote__text h3 {
+.EmptyNote.Note__Thumbnail .EmptyNote__text h3 {
     font-size: 1.1em;
     opacity: 0.6;
     font-style: italic;

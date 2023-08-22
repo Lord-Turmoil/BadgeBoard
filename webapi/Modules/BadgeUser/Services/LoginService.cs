@@ -152,7 +152,9 @@ public class LoginService : BaseService, ILoginService
         IRepository<User> repo = _unitOfWork.GetRepository<User>();
 
         // Get oldToken owner
-        User? user = await repo.GetFirstOrDefaultAsync(predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
+        User? user = await repo.GetFirstOrDefaultAsync(
+            predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken),
+            disableTracking: false);
         if (user == null)
         {
             return new TokenResponseData {
@@ -218,7 +220,8 @@ public class LoginService : BaseService, ILoginService
         IRepository<User> repo = _unitOfWork.GetRepository<User>();
 
         User? user = await repo.GetFirstOrDefaultAsync(
-            predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken));
+            predicate: x => x.RefreshTokens.Any(t => t.Token == oldToken),
+            disableTracking: false);
         if (user == null)
         {
             return new RevokeTokenData {

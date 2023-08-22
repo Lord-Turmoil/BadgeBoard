@@ -64,7 +64,11 @@ export const fetchBadges = async (category, timestamp, initiator = null) => {
         } else {
             dto = await api.get(url);
         }
-        data = dto.data;
+        if (dto.meta.status == 0) {
+            data = dto.data;
+        } else {
+            throw dto.meta.message;
+        }
     } catch (err) {
         error = err;
     }

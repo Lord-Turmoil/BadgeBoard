@@ -145,7 +145,7 @@ export default function UserPageMobile() {
         (async () => {
             var [data, error] = await getBadges(currentCategory, timestamp, visitor);
             if (error) {
-                notifier.error(e);
+                notifier.error(error);
                 setBadgeError(error);
             } else {
                 setBadges(data);

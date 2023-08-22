@@ -54,7 +54,7 @@ export const fetchBadges = async (category, timestamp, initiator = null) => {
     var data = null;
     var error = null;
 
-    var url = initiator ? "badge/browse/identified/category/" : "/api/badge/browse/anonymous/category/";
+    var url = initiator ? "badge/browse/identified/category/" : "badge/browse/anonymous/category/";
     url += category.id;
 
     try {

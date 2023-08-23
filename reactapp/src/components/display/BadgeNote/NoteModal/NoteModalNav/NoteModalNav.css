@@ -1,0 +1,26 @@
+.NoteModalNav {
+    position: relative;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.NoteModalNav::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 80%;
+    height: 20px;
+    border-top: 3px solid #130d6b;
+    border-radius: 50%;
+    bottom: 10px;
+    left: 5%;
+    transform: translate(0, 120%);
+}
+
+.NoteModalNav .NoteModalNav__actionWrapper {
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+}

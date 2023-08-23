@@ -2,6 +2,7 @@ import { Box, Modal } from "@mui/material";
 import './NoteModal.css'
 import '~/assets/css/note-style.css';
 import 'animate.css';
+import NoteModalNav from "./NoteModalNav/NoteModalNav";
 
 const style = {
     position: 'absolute',
@@ -15,13 +16,16 @@ export default function NoteModal({
     open = false,
     onClose = null,
     badge = null,
+    onBadgeChange = null,
     categories = null, // move
     user = null,       // whether editable
 }) {
+    const isOwner = Boolean((badge && user) && badge.receiver == user.account.id);
+
     return (
         <Modal open={open} onClose={onClose} className="NoteModal">
             <div className={`NoteModal__note StyledNote ${badge && badge.style}`} style={style}>
-                <h1>HELLO</h1>
+                <NoteModalNav badge={badge} onBadgeChange={onBadgeChange} isOwner={isOwner} />
             </div>
         </Modal>
     );

@@ -14,26 +14,28 @@ export default function NoteModalNav({
     return (
         <div className="NoteModalNav">
             <NoteModalTitle badge={badge} />
-            <div className="NoteModalNav__actionWrapper">
-                <div className="NoteModalNav__action NoteModalNav__button">
-                    <Checkbox
-                        size="large"
-                        color='error'
-                        icon={<VisibilityIcon />}
-                        checkedIcon={<VisibilityOffIcon />}
-                    />
+            {isOwner &&
+                <div className="NoteModalNav__actionWrapper">
+                    <div className="NoteModalNav__action NoteModalNav__button">
+                        <Checkbox
+                            sx={{ '& .MuiSvgIcon-root': { fontSize: 34 } }}
+                            color='error'
+                            icon={<VisibilityIcon />}
+                            checkedIcon={<VisibilityOffIcon />}
+                        />
+                    </div>
+                    <div className="NoteModalNav__action NoteModalNav__button">
+                        <IconButton aria-label="delete" size="large">
+                            <DriveFileMoveRoundedIcon fontSize="inherit" />
+                        </IconButton>
+                    </div>
+                    <div className="NoteModalNav__action NoteModalNav__button">
+                        <IconButton aria-label="delete" size="large">
+                            <DeleteForeverRoundedIcon fontSize="inherit" />
+                        </IconButton>
+                    </div>
                 </div>
-                <div className="NoteModalNav__action NoteModalNav__button">
-                    <IconButton aria-label="delete" size="large">
-                        <DriveFileMoveRoundedIcon fontSize="inherit" />
-                    </IconButton>
-                </div>
-                <div className="NoteModalNav__action NoteModalNav__button">
-                    <IconButton aria-label="delete" size="large">
-                        <DeleteForeverRoundedIcon fontSize="inherit" />
-                    </IconButton>
-                </div>
-            </div>
+            }
         </div >
     );
 };

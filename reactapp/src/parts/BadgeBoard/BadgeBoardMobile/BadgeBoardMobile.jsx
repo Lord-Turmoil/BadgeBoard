@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import BadgeContainerMobile from "~/components/layout/BadgeContainer/BadgeContainerMobile";
-import NoteContainer from '~/components/display/BadgeNote/NoteContainer/NoteContainer';
-import QuestionNote from '~/components/display/BadgeNote/Note/QuestionNote/QuestionNoteThumbnail';
+
 import { CircularProgress } from "@mui/material";
+import useInterval from "~/services/hook/useInterval";
+import NoteContainer from '~/components/display/BadgeNote/NoteContainer/NoteContainer';
+import EmptyNote from "~/components/display/BadgeNote/Note/EmptyNote/EmptyNoteThumbnail";
+import BadgeContainerMobile from "~/components/layout/BadgeContainer/BadgeContainerMobile";
+import MemoryNote from "~/components/display/BadgeNote/Note/MemoryNote/MemoryNoteThumbnail";
+import QuestionNote from '~/components/display/BadgeNote/Note/QuestionNote/QuestionNoteThumbnail';
 
 import './BadgeBoardMobile.css';
-import useInterval from "~/services/hook/useInterval";
-import MemoryNote from "~/components/display/BadgeNote/Note/MemoryNote/MemoryNoteThumbnail";
-import EmptyNote from "~/components/display/BadgeNote/Note/EmptyNote/EmptyNoteThumbnail";
 
 export default function BadgeBoardMobile({
     badges = null,

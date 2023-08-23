@@ -1,4 +1,4 @@
-import './QuestionNoteThumbnail.css';
+import './QuestionNote.css';
 import '../NoteDecoration.css';
 import { Avatar } from '@mui/material';
 import AvatarUtil from '~/services/user/AvatarUtil';

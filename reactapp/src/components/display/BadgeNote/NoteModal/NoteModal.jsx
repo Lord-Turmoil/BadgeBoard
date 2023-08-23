@@ -26,6 +26,7 @@ export default function NoteModal({
         <Modal open={open} onClose={onClose} className="NoteModal">
             <div className={`NoteModal__note StyledNote ${badge && badge.style}`} style={style}>
                 <NoteModalNav badge={badge} onBadgeChange={onBadgeChange} isOwner={isOwner} />
+                
             </div>
         </Modal>
     );

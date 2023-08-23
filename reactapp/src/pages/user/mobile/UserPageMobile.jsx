@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
@@ -22,6 +22,8 @@ import { getBadges } from '~/services/badge/BadgeUtil';
 import BadgeActionDial from '~/parts/BadgeAction/BadgeActionDial';
 import { getActions } from '~/services/action/ActionUtil';
 import NoteModal from '~/components/display/BadgeNote/NoteModal/NoteModal';
+import badgeReducer from '~/services/hook/badgeReducer';
+import categoryReducer from '~/services/hook/categoryReducer';
 
 /*
 Parent could not get states of child component, but can use callback
@@ -93,7 +95,7 @@ export default function UserPageMobile() {
     };
 
     // user category
-    const [categories, setCategories] = useState(null);
+    const [categories, categoryDispatch] = useReducer(categoryReducer, null);
     const [categoryError, setCategoryError] = useState(null);
     const [currentCategory, setCurrentCategory] = useState(null);
     const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null);
@@ -116,7 +118,7 @@ export default function UserPageMobile() {
                     notifier.error(e);
                     setCategoryError(e);
                 } else {
-                    setCategories(c);
+                    categoryDispatch({ type: "set", value: c });
                     var index = d;
                     if (initCategoryId) {
                         for (var i = 0; i < c.length; i++) {
@@ -133,7 +135,7 @@ export default function UserPageMobile() {
     }, [user]);
 
     // badges
-    const [badges, setBadges] = useState(null);
+    const [badges, badgeDispatch] = useReducer(badgeReducer, null);
     const [currentBadge, setCurrentBadge] = useState(null);
     const [badgeError, setBadgeError] = useState(null);
 
@@ -150,9 +152,9 @@ export default function UserPageMobile() {
             if (error) {
                 notifier.error(error);
                 setBadgeError(error);
-                setBadges(null);
+                badgeDispatch({ type: "set", value: null });
             } else {
-                setBadges(data);
+                badgeDispatch({ type: "set", value: data });
             }
         })();
     }, [currentCategory]);
@@ -205,6 +207,7 @@ export default function UserPageMobile() {
                 open={noteModalOpen}
                 onClose={() => setCurrentBadge(null)}
                 badge={currentBadge}
+                onBadgeChange={badgeDispatch}
                 categories={categories}
                 user={visitor}
             />

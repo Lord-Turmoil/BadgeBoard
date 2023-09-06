@@ -1,4 +1,4 @@
-import { Checkbox, IconButton } from '@mui/material';
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from '@mui/material';
 import './NoteModalNav.css';
 import NoteModalTitle from './NoteModalTitle/NoteModalTitle';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
@@ -52,7 +52,17 @@ export default function NoteModalNav({
     }
 
     // edit: deletion
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+
     const onDelete = async (event) => {
+        setDeleteConfirmOpen(true);
+    }
+
+    const onCloseDeleteConfirm = () => {
+        setDeleteConfirmOpen(false);
+    }
+
+    const onClickConfirmDelete = async () => {
         const badgeAction = {
             type: "delete",
             value: {
@@ -66,10 +76,12 @@ export default function NoteModalNav({
         }
 
         onBadgeChange && onBadgeChange(badgeAction);
+        onCloseDeleteConfirm();
+        onClose && onClose();
+    }
 
-        setTimeout(() => {
-            onClose && onClose();
-        }, 800);
+    const onClickCancelDelete = () => {
+        onCloseDeleteConfirm();
     }
 
     async function deleteBadge(id) {
@@ -108,6 +120,18 @@ export default function NoteModalNav({
                     </div>
                 </div>
             }
+            <Dialog open={deleteConfirmOpen} onClose={onCloseDeleteConfirm}>
+                <DialogTitle>Delete Badge?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Deletion of badges CANNOT be undone, think twice. ⚠️
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={onClickConfirmDelete}>Proceed</Button>
+                    <Button onClick={onClickCancelDelete} autoFocus>Cancel</Button>
+                </DialogActions>
+            </Dialog>
         </div >
     );
 };

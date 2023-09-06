@@ -12,30 +12,32 @@ import notifier from '~/services/notifier';
 export default function NoteModalNav({
     badge = null,
     onBadgeChange = null,
-    isOwner = false
+    isOwner = false,
+    onClose = null,
 }) {
+    // edit: isPublic (visibility)
     const isVisible = badge ? badge.isPublic : false;
-
     const [visibilityChecked, setVisibilityChecked] = useState(isVisible);
     const onChangeVisibility = async (event) => {
         const checked = !visibilityChecked;
-        const newBadge = {
-            id: badge.id,
-            badge: {
-                ...badge,
-                isPublic: checked
+        const badgeAction = {
+            type: "update",
+            value: {
+                id: badge.id,
+                badge: {
+                    ...badge,
+                    isPublic: checked
+                }
             }
-        }
-        const status = await changeBadgeVisibility(newBadge.badge);
+        };
+
+        const status = await changeBadgeVisibility(badgeAction.value.badge);
         if (!status) {
             return;
         }
 
         setVisibilityChecked(checked);
-        onBadgeChange && onBadgeChange({
-            type: "update",
-            value: newBadge
-        });
+        onBadgeChange && onBadgeChange(badgeAction);
     }
 
     async function changeBadgeVisibility(b) {
@@ -46,6 +48,36 @@ export default function NoteModalNav({
         })
         console.log("🚀 > changeBadgeVisibility > dto:", dto);
         notifier.auto(dto.meta, "Visibility changed", "Failed to change visibility");
+        return dto.meta.status == 0;
+    }
+
+    // edit: deletion
+    const onDelete = async (event) => {
+        const badgeAction = {
+            type: "delete",
+            value: {
+                id: badge.id
+            }
+        };
+
+        const status = await deleteBadge(badgeAction.value.id);
+        if (!status) {
+            return;
+        }
+
+        onBadgeChange && onBadgeChange(badgeAction);
+
+        setTimeout(() => {
+            onClose && onClose();
+        }, 800);
+    }
+
+    async function deleteBadge(id) {
+        const dto = await api.post("badge/delete", {
+            badges: [id],
+            force: false
+        });
+        notifier.auto(dto.meta, "Badge deleted", "Failed to delete badge");
         return dto.meta.status == 0;
     }
 
@@ -70,7 +102,7 @@ export default function NoteModalNav({
                         </IconButton>
                     </div>
                     <div className="NoteModalNav__action NoteModalNav__button">
-                        <IconButton aria-label="delete" size="large">
+                        <IconButton aria-label="delete" size="large" onClick={onDelete}>
                             <DeleteForeverRoundedIcon fontSize="inherit" />
                         </IconButton>
                     </div>

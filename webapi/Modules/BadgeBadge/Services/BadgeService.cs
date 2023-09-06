@@ -268,8 +268,15 @@ public class BadgeService : BaseService, IBadgeService
             return new GoodResponse(new NotYourBadgeDto());
         }
 
-        badge.Style = dto.Style;
-        badge.IsPublic = dto.IsPublic;
+        if (dto.Style != null)
+        {
+            badge.Style = dto.Style;
+        }
+
+        if (dto.IsPublic != null)
+        {
+            badge.IsPublic = (bool)dto.IsPublic;
+        }
 
         await _unitOfWork.SaveChangesAsync();
         var data = new UpdateBadgeSuccessDto {

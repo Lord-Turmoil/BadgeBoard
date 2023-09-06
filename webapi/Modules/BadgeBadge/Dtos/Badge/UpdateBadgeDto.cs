@@ -10,17 +10,12 @@ public class UpdateBadgeDto : IApiRequestDto
 {
     public int Id { get; set; }
     public string? Style { get; set; }
-    public bool IsPublic { get; set; }
+    public bool? IsPublic { get; set; }
 
 
     public bool Verify()
     {
-        if (Style is { Length: > Globals.MaxStyleLength })
-        {
-            return false;
-        }
-
-        return true;
+        return Style is not { Length: > Globals.MaxStyleLength };
     }
 
 

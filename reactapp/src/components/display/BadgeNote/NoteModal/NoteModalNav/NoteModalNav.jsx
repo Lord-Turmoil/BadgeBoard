@@ -5,12 +5,50 @@ import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import DriveFileMoveRoundedIcon from '@mui/icons-material/DriveFileMoveRounded';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useState } from 'react';
+import api from '~/services/api';
+import notifier from '~/services/notifier';
 
 export default function NoteModalNav({
     badge = null,
     onBadgeChange = null,
     isOwner = false
 }) {
+    const isVisible = badge ? badge.isPublic : false;
+
+    const [visibilityChecked, setVisibilityChecked] = useState(isVisible);
+    const onChangeVisibility = async (event) => {
+        const checked = !visibilityChecked;
+        const newBadge = {
+            id: badge.id,
+            badge: {
+                ...badge,
+                isPublic: checked
+            }
+        }
+        const status = await changeBadgeVisibility(newBadge.badge);
+        if (!status) {
+            return;
+        }
+
+        setVisibilityChecked(checked);
+        onBadgeChange && onBadgeChange({
+            type: "update",
+            value: newBadge
+        });
+    }
+
+    async function changeBadgeVisibility(b) {
+        const dto = await api.post("badge/update", {
+            id: b.id,
+            style: null,
+            isPublic: b.isPublic
+        })
+        console.log("🚀 > changeBadgeVisibility > dto:", dto);
+        notifier.auto(dto.meta, "Visibility changed", "Failed to change visibility");
+        return dto.meta.status == 0;
+    }
+
     return (
         <div className="NoteModalNav">
             <NoteModalTitle badge={badge} />
@@ -22,6 +60,8 @@ export default function NoteModalNav({
                             color='error'
                             icon={<VisibilityIcon />}
                             checkedIcon={<VisibilityOffIcon />}
+                            checked={!visibilityChecked}
+                            onChange={onChangeVisibility}
                         />
                     </div>
                     <div className="NoteModalNav__action NoteModalNav__button">

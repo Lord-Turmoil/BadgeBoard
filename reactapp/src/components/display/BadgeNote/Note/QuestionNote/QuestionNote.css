@@ -6,6 +6,8 @@
 
 .QuestionNote .QuestionNote__question h3 {
     font-size: 1.1em;
+    font-weight: lighter;
+    text-align: left;
 }
 
 .QuestionNote .QuestionNote__answer {
@@ -24,11 +26,15 @@
     -webkit-box-orient: vertical;
 }
 
-.QuestionNote.Note__Thumbnail .QuestionNote__answer p.empty {
+.QuestionNote .QuestionNote__answer p.empty {
     color: rgba(0, 0, 0, 0.6);
     font-style: italic;
 }
 
-.QuestionNote.Note__Thumbnail .QuestionNote__answer .QuestionNote__avatar {
+.QuestionNote .QuestionNote__answer .QuestionNote__avatar {
     margin-left: 5px;
+}
+
+.QuestionNote.Note__Complete {
+    margin: 20px auto;
 }

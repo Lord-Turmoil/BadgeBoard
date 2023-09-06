@@ -3,6 +3,8 @@ import './NoteModal.css'
 import '~/assets/css/note-style.css';
 import 'animate.css';
 import NoteModalNav from "./NoteModalNav/NoteModalNav";
+import MemoryNoteComplete from "../Note/MemoryNote/MemoryNoteComplete";
+import QuestionNoteComplete from "../Note/QuestionNote/QuestionNoteComplete";
 
 const style = {
     position: 'absolute',
@@ -22,11 +24,25 @@ export default function NoteModal({
 }) {
     const isOwner = Boolean((badge && user) && badge.receiver == user.account.id);
 
+    const renderBadge = (b) => {
+        if (!b) {
+            return null;
+        }
+        if (b.type == 1) {
+            return (<QuestionNoteComplete badge={b} />);
+        } else if (b.type == 2) {
+            return (<MemoryNoteComplete badge={b} />);
+        } else {
+            console.log("Invalid type");
+            return null;
+        }
+    }
+
     return (
         <Modal open={open} onClose={onClose} className="NoteModal">
             <div className={`NoteModal__note StyledNote ${badge && badge.style}`} style={style}>
                 <NoteModalNav badge={badge} onBadgeChange={onBadgeChange} isOwner={isOwner} />
-                
+                {renderBadge(badge)}
             </div>
         </Modal>
     );

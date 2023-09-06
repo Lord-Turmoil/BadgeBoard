@@ -12,6 +12,7 @@ import './BadgeBoardMobile.css';
 
 export default function BadgeBoardMobile({
     badges = null,
+    onBadgesChange = null,
     onClickBadge = null
 }) {
     const [loadingText, setLoadingText] = useState();
@@ -44,6 +45,10 @@ export default function BadgeBoardMobile({
         }
     }
     const renderBadge = (badge, index) => {
+        if (badge == null) {
+            return null;
+        }
+        
         return (
             <NoteContainer
                 rotate={6}
@@ -75,7 +80,7 @@ export default function BadgeBoardMobile({
                 :
                 <div className="BadgeBoard__board">
                     {
-                        badges && badges.badges.map((badge, index) => {
+                        badges && badges.map((badge, index) => {
                             return renderBadge(badge, index);
                         })
                     }

@@ -4,6 +4,12 @@
     align-items: center;
 }
 
-.MemoryNote.Note__Thumbnail .MemoryNote__memory h3 {
+.MemoryNote .MemoryNote__memory h3 {
     font-size: 1.1em;
+    font-weight: lighter;
+    text-align: left;
+}
+
+.MemoryNote.Note__Complete .MemoryNote__memory {
+    margin: 20px auto;
 }

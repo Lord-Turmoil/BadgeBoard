@@ -14,6 +14,16 @@ action: {
 }
 
 action: {
+    type: "update",
+    value: {
+        id: badge.id,
+        badge: {
+            ...badge
+        }
+    }
+}
+
+action: {
     type: "delete",
     value: {
         id: badge.id
@@ -50,12 +60,23 @@ export default function badgeReducer(state, action) {
     if (action == null) {
         return state;
     }
+    console.log("🚀 > badgeReducer > state:", state);
+    console.log("🚀 > badgeReducer > action:", action);
+
     var value = action.value;
     switch (action.type) {
         case "set":
             return value;
         case "add":
             return [...state, value];
+        case "update":
+            return state.map((badge) => {
+                if (badge.id == value.id) {
+                    return value.badge;
+                } else {
+                    return badge;
+                }
+            });
         case "delete":
             return state.map((badge) => {
                 if (badge.id == value.id) {

@@ -99,6 +99,8 @@ export default function UserPageMobile() {
     const [categoryError, setCategoryError] = useState(null);
     const [currentCategory, setCurrentCategory] = useState(null);
     const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null);
+    const [lastTimestamp, setLastTimestamp] = useState(null);
+
     useEffect(() => {
         if (categories && (currentCategoryIndex != null)) {
             setCurrentCategory(categories[currentCategoryIndex]);
@@ -135,7 +137,7 @@ export default function UserPageMobile() {
     }, [user]);
 
     // badges
-    const [badges, badgeDispatch] = useReducer(badgeReducer, null);
+    const [badges, dispatchBadgeAction] = useReducer(badgeReducer, null);
     const [currentBadge, setCurrentBadge] = useState(null);
     const [badgeError, setBadgeError] = useState(null);
 
@@ -152,9 +154,10 @@ export default function UserPageMobile() {
             if (error) {
                 notifier.error(error);
                 setBadgeError(error);
-                badgeDispatch({ type: "set", value: null });
+                dispatchBadgeAction({ type: "set", value: null });
             } else {
-                badgeDispatch({ type: "set", value: data });
+                dispatchBadgeAction({ type: "set", value: data.badges });
+                setLastTimestamp(data.timestamp);
             }
         })();
     }, [currentCategory]);
@@ -207,7 +210,7 @@ export default function UserPageMobile() {
                 open={noteModalOpen}
                 onClose={() => setCurrentBadge(null)}
                 badge={currentBadge}
-                onBadgeChange={badgeDispatch}
+                onBadgeChange={dispatchBadgeAction}
                 categories={categories}
                 user={visitor}
             />
